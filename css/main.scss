@@ -1,14 +1,16 @@
-:root {
-	--color-gray: #898989;
-	--color-hover: #990000;
-}
+@use "sass:map";
 
-@font-face { font-family: "AjarSans";  src: url("font/Ajar Sans/AjarSans-Regular.ttf"); format("truetype"); font-weight: normal; font-style: normal; }
+$colors: (
+	gray: #898989,
+	hover: #990000
+);
+
+@font-face { font-family: AjarSans;  src: url("font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
 html { height: 100%; font-family: AjarSans, sans-serif; }
 body { margin: 0; height: 100%; }
 a { cursor: pointer; }
-a:hover { color: var(--color-hover); }
+a:hover { color: map-get($colors, hover); }
 
 .layout { display: flex; flex-direction: column; min-height: 100%; }
 .layout > .block.menu { flex: none; }
@@ -20,8 +22,8 @@ a:hover { color: var(--color-hover); }
 .view.site.menu > .list > a:not(:last-child) { margin-right: 20px; }
 .view.site.menu > .more { flex: none; display: flex; align-items: center; overflow: hidden; }
 .view.site.menu > .more > div { position: relative; width: 40px; height: 40px; cursor: pointer; background-color: #e1e1e1; }
-.view.site.menu > .more > div > div { position: absolute; left: 0; width: 40px; height: 4px; background-color: var(--color-gray); }
-.view.site.menu > .more > div:hover > div { background-color: var(--color-hover); }
+.view.site.menu > .more > div > div { position: absolute; left: 0; width: 40px; height: 4px; background-color: map-get($colors, gray); }
+.view.site.menu > .more > div:hover > div { background-color: map-get($colors, hover); }
 .view.site.menu > .more > div > div:nth-child(1) { top: 6px; /*transform: rotate(45deg); top: 18px;*/ }
 .view.site.menu > .more > div > div:nth-child(2) { top: 18px; }
 .view.site.menu > .more > div > div:nth-child(3) { top: 30px; }
