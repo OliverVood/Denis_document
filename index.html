@@ -5,7 +5,8 @@
 		<meta charset = "utf-8">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 		<link type = "text/css" rel = "stylesheet" href = "css/main.css">
-		<script src = "js/test.js"></script>
+		<script type = "text/javascript" src="https://res.cc.local/plugins/jquery-3.5.1.min.js"></script>
+		<script type = "text/javascript" src = "js/main.js"></script>
 	</head>
 	<body>
 		<div class = "layout">
@@ -17,7 +18,7 @@
 						<a>Contacts</a>
 					</div>
 					<div class = "more">
-						<div>
+						<div onclick = "$ui_menu.Open();">
 							<div></div>
 							<div></div>
 							<div></div>
@@ -29,4 +30,10 @@
 			<div class = "block footer">Footer</div>
 		</div>
 	</body>
+	<script>
+		let $ui_menu;
+		$(function() {
+			$ui_menu = new UISite.Site.Menu();
+		});
+	</script>
 </html>

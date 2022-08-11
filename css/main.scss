@@ -8,7 +8,13 @@ $colors: (
 @font-face { font-family: AjarSans;  src: url("font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
 html { height: 100%; font-family: AjarSans, sans-serif; }
-body { margin: 0; height: 100%; }
+body {
+	margin: 0; height: 100%; background-image: url("img/1639189468-1001-www.lookw.ru.jpg");
+	&.blur {
+		&:before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-image: url("img/1639189468-1001-www.lookw.ru.jpg"); filter: blur(4px);  }
+		> .layout { filter: blur(4px); }
+	}
+}
 a {
 	cursor: pointer;
 	&:hover { color: map-get($colors, hover); }
@@ -43,6 +49,29 @@ a {
 				&:nth-child(3) { top: 30px; }
 			}
 			&:hover > div { background-color: map-get($colors, hover); }
+		}
+	}
+}
+
+.view.site.full_menu {
+	position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: #FFFFFF80;
+	&:before { content: ""; position: absolute; top: 10px; right: 10px; bottom: 10px; left: 10px; background-image: url("img/fill.png"); background-color: #00000033; opacity: 0.5; }
+	> .close { position: absolute; top: 60px; right: 60px; width: 40px; height: 40px; background-color: #7e7e7e; }
+	> .menu {
+		color: #fff;
+		&.m1 { position: absolute;
+			width: 300px;
+			left: 50%;
+			margin-left: -150px;
+			height: 300px;
+			top: 50px;
+			border-radius: 50%;
+			background-color: map-get($colors, hover);
+			> div:first-child { text-transform: uppercase;
+				text-align: center;
+				padding-top: 70px;
+				font-weight: 600;
+				font-size: 20px; }
 		}
 	}
 }
