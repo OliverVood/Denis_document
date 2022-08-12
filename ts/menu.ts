@@ -29,16 +29,38 @@ namespace UISite {
 				this.jq_wrap.append(
 					this.jq_close,
 					this.jq_menu_1.append(
-						$('<div/>').text('Личный кабинет'),
 						$('<div/>').append(
-							$('<div/>').text('Личные данные'),
-							$('<div/>').text('Ещё что'),
-							$('<div/>').text('Пустое меню'),
-							$('<div/>').text('Выход')
+							$('<div/>').text('Личный кабинет'),
+							$('<div/>').append(
+								$('<div/>').text('Личные данные'),
+								$('<div/>').text('Ещё что'),
+								$('<div/>').text('Пустое меню'),
+								$('<div/>').text('Выход')
+							)
 						)
 					),
-					this.jq_menu_2,
-					this.jq_menu_3
+					this.jq_menu_2.append(
+						$('<div/>').append(
+							$('<div/>').text('Документы'),
+							$('<div/>').append(
+								$('<div/>').text('Управление товарами'),
+								$('<div/>').text('Вава'),
+								$('<div/>').text('Пустое меню'),
+								$('<div/>').text('Выход')
+							)
+						)
+					),
+					this.jq_menu_3.append(
+						$('<div/>').append(
+							$('<div/>').text('Меню оки-доки'),
+							$('<div/>').append(
+								$('<div/>').text('Личные данные'),
+								$('<div/>').text('Ещё что'),
+								$('<div/>').text('Пустое меню'),
+								$('<div/>').text('Выход')
+							)
+						)
+					)
 				);
 			}
 
