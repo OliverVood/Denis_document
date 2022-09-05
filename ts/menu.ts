@@ -16,7 +16,7 @@ namespace UISite {
 			constructor() {
 				/*  */
 				this.jq_body = $('body');
-				this.jq_wrap = $('<div/>', {class: 'view site full_menu'});
+				this.jq_wrap = $('<div/>', {class: 'view proj full_menu'});
 				this.jq_close = $('<div/>', {class: 'close'});
 				this.jq_menu_1 = $('<div/>', {class: 'menu m1'});
 				this.jq_menu_2 = $('<div/>', {class: 'menu m2'});
