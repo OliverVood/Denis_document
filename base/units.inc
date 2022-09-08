@@ -6,8 +6,8 @@
 		private static array $names = [];
 		private static array $ids = [];
 
-		private string $name = '';
-		private int $id = 0;
+		private string $name;
+		private int $id;
 
 		public function __construct(int $id, string $name) {
 			$this->id = $id;
@@ -32,7 +32,7 @@
 		 * @return Units
 		 */
 		public static function GetByName(string $name): Units {
-			return self::$ids[$name];
+			return self::$names[$name];
 		}
 
 	}

@@ -5,9 +5,9 @@
 	use Base\Units\Units;
 	use Base\Units\Objects;
 
-	require DIR_UNITS . 'users/consts.inc';
+	require DIR_UNITS . 'catalogs/consts.inc';
 
-	class Users extends Units implements Consts\Users {
+	class Catalogs extends Units implements Consts\Catalogs {
 		use Objects;
 
 		public function __construct() {
@@ -16,9 +16,13 @@
 		}
 
 		public function test() {
-			echo '1234 ';
+			echo '4321 ';
+		}
+
+		public function test1() {
+			echo 'dfdf ';
 		}
 
 	}
 
-	Users::init();
+	Catalogs::init();

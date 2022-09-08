@@ -49,31 +49,42 @@
 			return $this->errno;
 		}
 
-		public function Insert(array $data, string $tablename): int {
-			$fields = '`' . implode('`, `', array_keys($data)) . '`';
-			$values = '\'' . implode('\', \'', $data) . '\'';
-
-			$result = $this->db->query("INSERT INTO `{$tablename}` ({$fields}) VALUES ({$values})");
-
-			return $result ? $this->db->insert_id : 0;
+		public function Insert(string $tablename, array $data): int {
+			return $this->db->query($this->ConstructQueryInsert($tablename, $data)) ? $this->db->insert_id : 0;
 		}
 
-		public function Update(array $data, string $where, string $tablename): bool {
-			$update = [];
-			foreach ($data as $field => $value) $update[] = "`{$field}` = '{$value}'";
-			$updateStr = implode(', ', $update);
-
-			return $this->db->query("UPDATE `{$tablename}` SET {$updateStr}" . ($where ? " WHERE {$where}" : ''));
+		public function Update(string $tablename, array $data, string $where): bool {
+			return $this->db->query($this->ConstructQueryUpdate($tablename, $data, $where));
 		}
 
-		public function Delete()
+		public function Delete(string $tablename, string $where)
 		{
 			// TODO: function Delete() method.
 		}
 
-		public function Select()
+		public function Select(string $query)
 		{
 			// TODO: function Select() method.
+		}
+
+		public function ConstructQueryInsert(string $tablename, array $data): string {
+			$fields = '`' . implode('`, `', array_keys($data)) . '`';
+			$values = '\'' . implode('\', \'', $data) . '\'';
+
+			return "INSERT INTO `{$tablename}` ({$fields}) VALUES ({$values})";
+		}
+
+		public function ConstructQueryUpdate(string $tablename, array $data, string $where): string {
+			$update = [];
+			foreach ($data as $field => $value) $update[] = "`{$field}` = '{$value}'";
+			$updateStr = implode(', ', $update);
+
+			return "UPDATE `{$tablename}` SET {$updateStr}" . ($where ? " WHERE {$where}" : '');
+		}
+
+		public function ConstructQueryDelete(string $tablename, string $where): string {
+			// TODO: Implement СonstructQueryDelete() method.
+			return '';
 		}
 
 	}

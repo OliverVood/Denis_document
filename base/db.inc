@@ -22,8 +22,12 @@
 		}
 
 		abstract public static function Connect($hostname = null, $user = null, $password = null, $dbname = null, $port = null, $socket = null);
-		abstract public function Insert(array $data, string $tablename);
-		abstract public function Update(array $data, string $where, string $tablename);
-		abstract public function Delete();
-		abstract public function Select();
+		abstract public function Insert(string $tablename, array $data);
+		abstract public function Update(string $tablename, array $data, string $where);
+		abstract public function Delete(string $tablename, string $where);
+		abstract public function Select(string $query);
+
+		abstract protected function ConstructQueryInsert(string $tablename, array $data): string;
+		abstract protected function ConstructQueryUpdate(string $tablename, array $data, string $where): string;
+		abstract protected function ConstructQueryDelete(string $tablename, string $where): string;
 	}
