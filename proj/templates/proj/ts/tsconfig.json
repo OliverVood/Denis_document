@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
 	"module": "none",
-	"target": "ES2021",
+	"target": "esnext",
 	"lib" : ["ESNext", "DOM"],
 	"sourceMap": true,
 	"alwaysStrict": true,
