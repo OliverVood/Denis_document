@@ -74,28 +74,6 @@
 		}
 
 		/**
-		 * Возвращает одну запись резельтата запроса в виде ассоциативного массива
-		 * @return array|null
-		 */
-		public function Fetch(): array|null {
-			if (!$this->result) return null;
-			return $this->result->fetch_assoc();
-		}
-
-		/**
-		 * Возвращает записи резельтата запроса в виде массива
-		 * @return array|null
-		 */
-		public function FetchAll(): ?array {
-			$out = [];
-			while ($fitch = $this->Fetch()) {
-				$out[] = $fitch;
-			}
-
-			return $out;
-		}
-
-		/**
 		 * Вставка записи
 		 * @param string $tablename - Имя таблицы
 		 * @param array $data - Данные
@@ -202,6 +180,28 @@
 			$orderStr = !is_null($order) ? " ORDER BY {$order}" : '';
 			$limitStr = !is_null($limit) ? " LIMIT {$limit}" : '';
 			return "SELECT {$fieldsStr} FROM `{$tablename}`{$whereStr}{$orderStr}{$limitStr}";
+		}
+
+		/**
+		 * Возвращает одну запись резельтата запроса в виде ассоциативного массива
+		 * @return array|null
+		 */
+		public function Fetch(): array|null {
+			if (!$this->result) return null;
+			return $this->result->fetch_assoc();
+		}
+
+		/**
+		 * Возвращает записи резельтата запроса в виде массива
+		 * @return array|null
+		 */
+		public function FetchAll(): ?array {
+			$out = [];
+			while ($fitch = $this->Fetch()) {
+				$out[] = $fitch;
+			}
+
+			return $out;
 		}
 
 	}

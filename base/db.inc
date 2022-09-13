@@ -22,14 +22,17 @@
 		}
 
 		abstract public static function Connect(?string $hostname, ?string $user, ?string $password, ?string $dbname, string|int|null $port, ?string $socket);
+
 		abstract public function Query(string $text);
 		abstract public function GetQueryList(): array;
-		abstract public function Fetch(): ?array;
-		abstract public function FetchAll(): ?array;
+
 		abstract public function Insert(string $tablename, array $data): int;
 		abstract public function Update(string $tablename, array $data, ?string $where): bool;
 		abstract public function Delete(string $tablename, ?string $where): bool;
 		abstract public function Select(string $tablename, ?array $fields, ?string $where, ?string $order, ?string $limit, ?array $calc);
+
+		abstract public function Fetch(): ?array;
+		abstract public function FetchAll(): ?array;
 
 		abstract protected function ConstructQueryInsert(string $tablename, array $data): string;
 		abstract protected function ConstructQueryUpdate(string $tablename, array $data, string $where): string;
