@@ -7,16 +7,22 @@
 		protected ?string $dbname;
 		protected array $structure;
 
-		public function __construct($name, $dbname) {
+		protected function __construct($name, $dbname) {
 			$this->name = $name;
 			$this->dbname = $dbname;
 			$this->structure = [];
 		}
 
-		abstract public function Chek();
+		protected function Append(Field $field) {
+			$name = $field->GetName();
+			if (isset($this->structure[$name])) die('Table structure error! Field already exists.');
+			$this->structure[$name] = $field;
+		}
+
+		abstract public function Check();
 		abstract public function Make();
 
-		abstract public function ID(string $name);
+		abstract public function id(string $name);
 		abstract public function bool(string $name);
 		abstract public function int8(string $name);
 		abstract public function int16(string $name);
@@ -33,6 +39,6 @@
 		abstract public function timestamp(string $name, bool $update = false);
 		abstract public function enum(string $name, array $enum);
 		abstract public function set(string $name, array $set);
-		abstract public function string(string $name, $length);
+		abstract public function string(string $name, int $length);
 		abstract public function text(string $name);
 	}

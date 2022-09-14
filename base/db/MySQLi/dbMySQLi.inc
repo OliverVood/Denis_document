@@ -8,7 +8,6 @@
 		private \mysqli $db;
 		private int $errno = 0;
 		private array $history = [];
-		private bool|mysqli_result $result;
 
 		private function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
 			parent::__construct($host, $username, $password, $dbname, $port, $socket);
@@ -31,9 +30,9 @@
 		 * @param string|null $dbname - Имя базы данных
 		 * @param string|int|null $port - Порт
 		 * @param string|null $socket - Сокет
-		 * @return MySQLi
+		 * @return self
 		 */
-		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) :self {
+		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): self {
 			return new self($hostname, $user, $password, $dbname);
 		}
 
@@ -60,9 +59,8 @@
 		 */
 		public function Query(string $text): bool|mysqli_result {
 			$this->history[] = $text;
-			$this->result = $this->db->query($text);
 
-			return $this->result;
+			return $this->db->query($text);
 		}
 
 		/**
@@ -184,20 +182,22 @@
 
 		/**
 		 * Возвращает одну запись резельтата запроса в виде ассоциативного массива
+		 * @param $result - Результат запроса
 		 * @return array|null
 		 */
-		public function Fetch(): array|null {
-			if (!$this->result) return null;
-			return $this->result->fetch_assoc();
+		public function Fetch($result): array|null {
+			if (!$result) return null;
+			return $result->fetch_assoc();
 		}
 
 		/**
 		 * Возвращает записи резельтата запроса в виде массива
+		 * @param $result - Результат запроса
 		 * @return array|null
 		 */
-		public function FetchAll(): ?array {
+		public function FetchAll($result): ?array {
 			$out = [];
-			while ($fitch = $this->Fetch()) {
+			while ($fitch = $this->Fetch($result)) {
 				$out[] = $fitch;
 			}
 

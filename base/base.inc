@@ -1,7 +1,10 @@
 <?php
 
 	require 'functions.inc';
-	require 'db.inc';
-	require 'db_MySQLi.inc';
-	require 'units.inc';
+
+	require 'db/db.inc';
+	require 'db/table.inc';
+	require 'db/field.inc';
+
 	require 'objects.inc';
+	require 'units.inc';
