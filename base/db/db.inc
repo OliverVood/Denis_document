@@ -34,7 +34,7 @@
 		abstract public function Select(string $tablename, ?array $fields, ?string $where, ?string $order, ?string $limit, ?array $calc);
 
 		abstract public function Fetch($result): ?array;
-		abstract public function FetchAll($result): ?array;
+		abstract public function FetchAll($result, ?callable $func = null): ?array;
 
 		abstract protected function ConstructQueryInsert(string $tablename, array $data): string;
 		abstract protected function ConstructQueryUpdate(string $tablename, array $data, string $where): string;
@@ -47,7 +47,23 @@
 		}
 
 		public function Check() {
+			$result = $this->Query("SELECT `table_name`, `engine` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
+			$tables = $this->FetchAll($result);
+			Debug($tables);
 			foreach ($this->tables as $table) $table->Check();
+//SHOW DATABASES; - список баз данных
+//SHOW TABLES [FROM db_name]; -  список таблиц в базе
+//SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database_name';
+//SHOW COLUMNS FROM таблица [FROM db_name]; - список столбцов в таблице
+//SHOW CREATE TABLE table_name; - показать структуру таблицы в формате "CREATE TABLE"
+//SHOW INDEX FROM tbl_name; - список индексов
+//SHOW GRANTS FOR user [FROM db_name]; - привилегии для пользователя.
+//
+//
+//SHOW VARIABLES; - значения системных переменных
+//SHOW [FULL] PROCESSLIST; - статистика по mysqld процессам
+//SHOW STATUS; - общая статистика
+//SHOW TABLE STATUS [FROM db_name]; - статистика по всем таблицам в базе
 		}
 
 		public function Make() {

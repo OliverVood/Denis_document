@@ -191,11 +191,12 @@
 		}
 
 		/**
-		 * Возвращает записи резельтата запроса в виде массива
+		 * Возвращает записи результата запроса в виде массива
 		 * @param $result - Результат запроса
+		 * @param callable|null $func - Результат запроса
 		 * @return array|null
 		 */
-		public function FetchAll($result): ?array {
+		public function FetchAll($result, ?callable $func = null): ?array {
 			$out = [];
 			while ($fitch = $this->Fetch($result)) {
 				$out[] = $fitch;
