@@ -6,5 +6,5 @@
 	require 'db/table.inc';
 	require 'db/field.inc';
 
-	require 'objects.inc';
+	require 'instance.inc';
 	require 'units.inc';

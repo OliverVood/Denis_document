@@ -3,16 +3,15 @@
 	namespace PROJ\Units;
 
 	use Base\Units\Units;
-	use Base\Units\Objects;
+	use Base\Units\Instance;
 
 	require DIR_UNITS . 'users/consts.inc';
 
 	class Users extends Units implements Consts\Users {
-		use Objects;
+		use Instance;
 
 		public function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			self::$object = $this;
 		}
 
 		public function test() {

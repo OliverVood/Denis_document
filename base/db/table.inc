@@ -13,6 +13,8 @@
 			$this->structure = [];
 		}
 
+		public function GetName(): string { return $this->name; }
+
 		protected function Append(Field $field) {
 			$name = $field->GetName();
 			if (isset($this->structure[$name])) die('Table structure error! Field already exists.');

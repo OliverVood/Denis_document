@@ -25,6 +25,9 @@
 
 		abstract public static function Connect(?string $hostname, ?string $user, ?string $password, ?string $dbname, string|int|null $port, ?string $socket);
 
+		abstract public function Check();
+		abstract public function Make();
+
 		abstract public function Query(string $text);
 		abstract public function GetQueryList(): array;
 
@@ -44,30 +47,6 @@
 		public function PushTables($table, ...$tables) {
 			$args = func_get_args();
 			foreach ($args as $arg) $this->tables[] = $arg;
-		}
-
-		public function Check() {
-			$result = $this->Query("SELECT `table_name`, `engine` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
-			$tables = $this->FetchAll($result);
-			Debug($tables);
-			foreach ($this->tables as $table) $table->Check();
-//SHOW DATABASES; - список баз данных
-//SHOW TABLES [FROM db_name]; -  список таблиц в базе
-//SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database_name';
-//SHOW COLUMNS FROM таблица [FROM db_name]; - список столбцов в таблице
-//SHOW CREATE TABLE table_name; - показать структуру таблицы в формате "CREATE TABLE"
-//SHOW INDEX FROM tbl_name; - список индексов
-//SHOW GRANTS FOR user [FROM db_name]; - привилегии для пользователя.
-//
-//
-//SHOW VARIABLES; - значения системных переменных
-//SHOW [FULL] PROCESSLIST; - статистика по mysqld процессам
-//SHOW STATUS; - общая статистика
-//SHOW TABLE STATUS [FROM db_name]; - статистика по всем таблицам в базе
-		}
-
-		public function Make() {
-			foreach ($this->tables as $table) $table->Make();
 		}
 
 	}
