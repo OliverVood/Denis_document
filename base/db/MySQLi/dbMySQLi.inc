@@ -206,45 +206,29 @@
 		}
 
 		public function Check() {
-			$result = $this->Query("SELECT `table_name` AS `name`, `engine` AS `engine` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
-
 			$tables = [];
 
+			/* Get tables DB */
+			$result = $this->Query("SELECT `table_name` AS `name`, `engine` AS `engine` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
 			$tables_db = $this->FetchAll($result, function(& $items, $item) use (& $tables) {
 				$items[$item['name']] = $item['engine'];
 				if (!in_array($item['name'], $tables)) $tables[] = $item['name'];
 			});
 
+			/* Get tables structure */
 			$tables_sr = [];
 			foreach ($this->tables as $table) {
 				$name = $table->GetName();
-				$tables_sr[$name] = null;
+				$tables_sr[$name] = [];
 				if (!in_array($name, $tables)) $tables[] = $name;
 			}
 
+			/* Check tables */
 			foreach ($tables as $table) {
-				if (!isset($tables_db[$table])) echo 'Нет в БД', $table;
-				if (!isset($tables_st[$table])) echo 'Лишняя таблица в БД', $table;
+				if (!isset($tables_db[$table])) echo "Нет в БД `{$table}`.<br>";
+				else if (!isset($tables_sr[$table])) echo "Лишняя таблица в БД `{$table}`.<br>";
+				else $this->GetTable($table)->Check();
 			}
-
-			Debug($tables_db);
-			Debug($tables_sr);
-			Debug($tables);
-
-//			foreach ($this->tables as $table) $table->Check();
-			//SHOW DATABASES; - список баз данных
-			//SHOW TABLES [FROM db_name]; - список таблиц в базе
-			//SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'your_database_name';
-			//SHOW COLUMNS FROM таблица [FROM db_name]; - список столбцов в таблице
-			//SHOW CREATE TABLE table_name; - показать структуру таблицы в формате "CREATE TABLE"
-			//SHOW INDEX FROM tbl_name; - список индексов
-			//SHOW GRANTS FOR user [FROM db_name]; - привилегии для пользователя.
-			//
-			//
-			//SHOW VARIABLES; - значения системных переменных
-			//SHOW [FULL] PROCESSLIST; - статистика по mysqld процессам
-			//SHOW STATUS; - общая статистика
-			//SHOW TABLE STATUS [FROM db_name]; - статистика по всем таблицам в базе
 		}
 
 		public function Make() {

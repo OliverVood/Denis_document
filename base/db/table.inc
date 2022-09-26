@@ -3,22 +3,16 @@
 	namespace Base\DB;
 
 	abstract class Table {
-		protected string $name;
+		protected $db;
 		protected ?string $dbname;
+		protected string $name;
 		protected array $structure;
 
-		protected function __construct($name, $dbname) {
+		protected function __construct($name, $db) {
+			$this->db = $db;
+			$this->dbname = $db->GetName();
 			$this->name = $name;
-			$this->dbname = $dbname;
 			$this->structure = [];
-		}
-
-		public function GetName(): string { return $this->name; }
-
-		protected function Append(Field $field) {
-			$name = $field->GetName();
-			if (isset($this->structure[$name])) die('Table structure error! Field already exists.');
-			$this->structure[$name] = $field;
 		}
 
 		abstract public function Check();
@@ -43,4 +37,13 @@
 		abstract public function set(string $name, array $set);
 		abstract public function string(string $name, int $length);
 		abstract public function text(string $name);
+
+		public function GetName(): string { return $this->name; }
+
+		protected function PushField(Field $field) {
+			$name = $field->GetName();
+			if (isset($this->structure[$name])) die('Table structure error! Field already exists.');
+			$this->structure[$name] = $field;
+		}
+
 	}

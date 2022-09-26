@@ -4,7 +4,7 @@
 
 	use Base\DB;
 
-	class FieldTimestamp extends DB\Field {
+	class FieldTimestampMySQLi extends DB\FieldMySQLi {
 		private bool $update;
 
 		public function __construct(string $name, bool $update) {
@@ -12,5 +12,8 @@
 
 			$this->update = $update;
 		}
+
+		public function Check(?array $old) { echo "Check field $this->type<br>"; }
+		public function Make() { echo "Make field $this->type<br>"; }
 
 	}

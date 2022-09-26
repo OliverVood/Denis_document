@@ -9,7 +9,7 @@
 
 	$db = DB\DBMySQLi::Connect('localhost', 'admin', '123', 'documents');
 	if (!$db->State()) die('MySQLi database connection error! Code: ' . $db->GetErrorCode());
-	$table = new DB\TableMySQLi('test', 'documents');
+	$table = new DB\TableMySQLi('test', $db);
 	$table->id('id');
 	$table->bool('bool');
 	$table->int8('int8');
@@ -30,7 +30,7 @@
 	$table->string('string', 50);
 	$table->text('text');
 
-	$table2 = new DB\TableMySQLi('test2', 'documents');
+	$table2 = new DB\TableMySQLi('test3', $db);
 	$table2->id('id');
 	$table2->bool('bool');
 	$table2->int8('int8');
@@ -48,7 +48,7 @@
 
 	$db->PushTables($table, $table2);
 	$db->Check();
-	$db->Make();
+//	$db->Make();
 //	$id = $db->Insert('test', ['name' => 'fdf"/s\'dfd']);
 //	$id = $db->Update('test', ['name' => 'asda"/s\'dfdsdasd'], '`id` = 4');
 	$result = $db->Select('test', ['id', 'name'], '`id` < 10', '`name` DESC', '3, 5', ['NOW() as `a`', 'NOW() as `b`']);

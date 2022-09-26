@@ -44,9 +44,17 @@
 		abstract protected function ConstructQueryDelete(string $tablename, ?string $where): string;
 		abstract protected function ConstructQuerySelect(string $tablename, ?array $fields, ?string $where, ?string $order, ?string $limit, ?array $calc): string;
 
+		public function GetName(): ?string {
+			return $this->dbname;
+		}
+
 		public function PushTables($table, ...$tables) {
 			$args = func_get_args();
-			foreach ($args as $arg) $this->tables[] = $arg;
+			foreach ($args as $arg) $this->tables[$arg->GetName()] = $arg;
+		}
+
+		public function GetTable(string $tablename) {
+			return $this->tables[$tablename];
 		}
 
 	}
