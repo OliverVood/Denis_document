@@ -225,8 +225,8 @@
 
 			/* Check tables */
 			foreach ($tables as $table) {
-				if (!isset($tables_db[$table])) echo "Нет в БД `{$table}`.<br>";
-				else if (!isset($tables_sr[$table])) echo "Лишняя таблица в БД `{$table}`.<br>";
+				if (!isset($tables_db[$table])) echo "В БД нет таблицы <b>`{$table}</b>`.<br>";
+				else if (!isset($tables_sr[$table])) echo "Лишняя таблица в БД <b>`{$table}`</b>.<br>";
 				else $this->GetTable($table)->Check();
 			}
 		}

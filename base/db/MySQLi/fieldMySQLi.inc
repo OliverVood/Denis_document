@@ -3,11 +3,26 @@
 	namespace Base\DB;
 
 	abstract class FieldMySQLi extends Field {
+		/** @var TableMySQLi $table */
 
 		abstract public function Check(?array $old);
 		abstract public function Make();
 
-//		InfoFieldToStructure();
+		protected function DefinitionType(?array $fieldDataDB): ?array {
+			$out = ['type' => null, 'string' => ''];
+			if ($fieldDataDB['Key'] === "PRI") return ['type' => 'id', 'str' => static::DataToFormatCreate($fieldDataDB)];
+//			else ()
+//	SHOW COLUMNS FROM `test` FROM `documents`;
+//	id	bigint unsigned	NO	PRI NULL auto_increment
+//	name	varchar(50)	NO NULL
+//	aaa	bigint	YES NULL
+//	bbb	bigint	YES NULL
+//	asd	varchar(10)	NO NULL
+//	dsa	varchar(10)	YES NULL
+//	ddd	varchar(10)	YES
+
+			return $out;
+		}
 
 	}
 

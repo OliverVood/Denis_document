@@ -4,7 +4,7 @@
 
 	abstract class Table {
 		protected $db;
-		protected ?string $dbname;
+		protected string $dbname;
 		protected string $name;
 		protected array $structure;
 

@@ -51,8 +51,10 @@
 //	$db->Make();
 //	$id = $db->Insert('test', ['name' => 'fdf"/s\'dfd']);
 //	$id = $db->Update('test', ['name' => 'asda"/s\'dfdsdasd'], '`id` = 4');
-	$result = $db->Select('test', ['id', 'name'], '`id` < 10', '`name` DESC', '3, 5', ['NOW() as `a`', 'NOW() as `b`']);
-	$response = $db->FetchAll($result);
+	$res = $db->Query("SHOW CREATE TABLE `test`");
+	Debug($db->FetchAll($res));
+//	$result = $db->Select('test', ['id', 'name'], '`id` < 10', '`name` DESC', '3, 5', ['NOW() as `a`', 'NOW() as `b`']);
+//	$response = $db->FetchAll($result);
 //	$response2 = $db->Fetch();
 //	$response3 = $db->Fetch();
 //	$response4 = $db->Fetch();
