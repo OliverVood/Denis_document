@@ -15,7 +15,7 @@
 			$this->name = $name;
 		}
 
-		abstract public function Check(?array $old);
+		abstract public function Check(?array $data_field_db);
 		abstract public function Make();
 
 		public function GetName() {

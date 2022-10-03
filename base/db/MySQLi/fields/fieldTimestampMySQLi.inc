@@ -13,7 +13,6 @@
 			$this->update = $update;
 		}
 
-		public function Check(?array $old) { echo "Проверка поля <b>`{$this->name}`</b><br>"; }
-		public function Make() { echo "Make field $this->type<br>"; }
+		protected function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
 
 	}

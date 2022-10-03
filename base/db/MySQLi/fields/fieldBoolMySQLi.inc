@@ -9,8 +9,16 @@
 			parent::__construct('bool', $name, $table);
 		}
 
-		public function Check(?array $old) { echo "Проверка поля <b>`{$this->name}`</b><br>"; }
+		static protected function DataToCreationFormat($data): string {
+			$pieces = [];
+			$pieces['name'] = "`{$data['Field']}`";
+			$pieces['type'] = $data['Type'];
+			$pieces['null'] = ($data['Null'] === 'YES') ? 'NULL' : 'NOT NULL';
+			$pieces['default'] = "DEFAULT '{$data['Default']}'";
 
-		public function Make() { echo "Make field $this->type<br>"; }
+			return implode(' ', $pieces);
+		}
+
+		protected function CreationFormat(): string { return "`{$this->name}` tinyint(1) NOT NULL DEFAULT '0'"; }
 
 	}

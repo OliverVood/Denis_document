@@ -5,24 +5,30 @@
 	abstract class FieldMySQLi extends Field {
 		/** @var TableMySQLi $table */
 
-		abstract public function Check(?array $old);
-		abstract public function Make();
+		public function Check(?array $data_field_db) {
+			echo "Проверка поля <b>`{$this->name}`</b><br>";
+			$instance_field = null;
+			if ($data_field_db['Key'] === 'PRI') $str_db = FieldIDMySQLi::DataToCreationFormat($data_field_db);
+			else if ($data_field_db['Type'] === 'tinyint(1)') $str_db = FieldBoolMySQLi::DataToCreationFormat($data_field_db);
+			$str_st = $this->CreationFormat();
 
-		protected function DefinitionType(?array $fieldDataDB): ?array {
-			$out = ['type' => null, 'string' => ''];
-			if ($fieldDataDB['Key'] === "PRI") return ['type' => 'id', 'str' => static::DataToFormatCreate($fieldDataDB)];
-//			else ()
-//	SHOW COLUMNS FROM `test` FROM `documents`;
-//	id	bigint unsigned	NO	PRI NULL auto_increment
-//	name	varchar(50)	NO NULL
-//	aaa	bigint	YES NULL
-//	bbb	bigint	YES NULL
-//	asd	varchar(10)	NO NULL
-//	dsa	varchar(10)	YES NULL
-//	ddd	varchar(10)	YES
+			echo $str_db, '<br>';
+			echo $str_st, '<br>';
+//			if (($str_st !== $str_db) || ($old['Key'] !== "PRI")) echo "Edit field <b>`{$this->name}`</b>: {$str_db}<br>";
+			//$a = 'tinyint(1)';
+//			$matches = null;
+//			preg_match('/(tinyint)\(([0-9])/', $a, $matches);
+//			Debug($matches);
 
-			return $out;
+//			else if () {
+//				$matches = null;
+//				preg_match('/^tinyint\(d+\)$/', $fieldDataDB['Type'], $matches);
+//			}
+//			return $out;
+//		}
 		}
+
+		public function Make() { echo "Make field $this->type<br>"; }
 
 	}
 
