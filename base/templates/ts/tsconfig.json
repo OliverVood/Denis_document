@@ -5,7 +5,6 @@
 	"lib" : ["ESNext", "DOM"],
 	"sourceMap": true,
 	"alwaysStrict": true,
-//	"outFile": "../js/main.js",
 	"rootDirs": ["./"],
   	"outDir": "../js"
   },

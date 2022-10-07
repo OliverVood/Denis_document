@@ -13,6 +13,15 @@
 			$this->set = $set;
 		}
 
+		static protected function DataToCreationFormat($data): string {
+			$pieces = [];
+			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
+			$pieces['type'] = $data['COLUMN_TYPE'];
+			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
+
+			return implode(' ', $pieces);
+		}
+
 		protected function CreationFormat(): string { return "`{$this->name}` set('" . implode("','", $this->set) . "') NOT NULL"; }
 
 	}

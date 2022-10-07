@@ -9,12 +9,12 @@
 			parent::__construct('id', $name, $table);
 		}
 
-		static protected function DataToCreationFormat($date): string {
+		static protected function DataToCreationFormat($data): string {
 			$pieces = [];
-			$pieces['name'] = "`{$date['Field']}`";
-			$pieces['type'] = $date['Type'];
-			$pieces['null'] = ($date['Null'] === 'YES') ? 'NULL' : 'NOT NULL';
-			if (strripos($date['Extra'], 'auto_increment') !== false) $pieces['ai'] =  'AUTO_INCREMENT';
+			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
+			$pieces['type'] = $data['COLUMN_TYPE'];
+			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
+			if (strripos($data['EXTRA'], 'auto_increment') !== false) $pieces['ai'] =  'AUTO_INCREMENT';
 
 			return implode(' ', $pieces);
 		}
