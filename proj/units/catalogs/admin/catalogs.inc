@@ -3,7 +3,7 @@
 	namespace PROJ\Units;
 
 	use Base\Units\Units;
-	use Base\Units\Instance;
+	use Base\Instance;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
 

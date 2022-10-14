@@ -205,7 +205,8 @@
 			return $out;
 		}
 
-		public function Check() {
+		public function Check(): array {
+			$out = [];
 			$tables = [];
 
 			/* Get tables DB */
@@ -225,10 +226,14 @@
 
 			/* Check tables */
 			foreach ($tables as $table) {
-				if (!isset($tables_db[$table])) echo "В БД нет таблицы <b>`{$table}</b>`.<br>";
-				else if (!isset($tables_sr[$table])) echo "Лишняя таблица в БД <b>`{$table}`</b>.<br>";
-				else $this->GetTable($table)->Check();
+				$s = ['state' => 1, 'name' => $table];
+				if (!isset($tables_db[$table])) $s['state'] = -1;//echo "В БД нет таблицы <b>`{$table}</b>`.<br>";
+				else if (!isset($tables_sr[$table])) $s['state'] = -2;//echo "Лишняя таблица в БД <b>`{$table}`</b>.<br>";
+				else { $res = $this->GetTable($table)->Check(); if ($res['state'] < 0) $s['state'] = -3; $s['fields'] = $res['fields']; }
+				$out[] = $s;
 			}
+
+			return $out;
 		}
 
 		public function Make() {

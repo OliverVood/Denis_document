@@ -8,3 +8,7 @@
 
 	require 'instance.inc';
 	require 'units.inc';
+
+	require 'template/layout.inc';
+	require 'template/section.inc';
+	require 'template/view.inc';

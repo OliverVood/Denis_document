@@ -6,7 +6,7 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Document</title>
 		<script type = "text/javascript" src = "https://code.jquery.com/jquery-3.6.1.min.js"></script>
-		<script type = "text/javascript" src = "/base/templates/js/common.js"></script>
+		<script type = "text/javascript" src = "/base/template/js/common.js"></script>
 	</head>
 	<body>
 		<button onclick = "Base.Common.RequestData('check.php');">Check</button>

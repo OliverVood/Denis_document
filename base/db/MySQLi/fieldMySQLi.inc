@@ -5,9 +5,7 @@
 	abstract class FieldMySQLi extends Field {
 		/** @var TableMySQLi $table */
 
-		public function Check(?array $data_field_db) : array {
-			echo "Проверка поля <b>`{$this->name}`</b><br>";
-			$instance_field = null;
+		public function Check(?array $data_field_db) : ?array {
 			$hash = MD5($data_field_db['DATA_TYPE'] . $data_field_db['COLUMN_TYPE'] . $data_field_db['COLUMN_KEY']);
 			$str_db = match ($hash) {
 				'c548aac1c21add2c654f222d56e428de' => FieldIDMySQLi::DataToCreationFormat($data_field_db),
@@ -35,12 +33,10 @@
 			};
 			$str_st = $this->CreationFormat();
 
-//			echo $str_db, '<br>';
-//			echo $str_st, '<br>';
-			if ($str_db !== $str_st) return ['state' => -1, 'name' => $this->name, 'details' => $str_st];
-			if (is_null($str_db)) return ['state' => -2, 'name' => $this->name];
+			if ($str_db !== $str_st) return ['state' => -3, 'name' => $this->name, 'details' => $str_st];
+			if (is_null($str_db)) return ['state' => -4, 'name' => $this->name];
 
-			return ['state' => 1];
+			return ['state' => 1, $this->name];
 		}
 
 		public function Make() {

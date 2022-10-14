@@ -1,6 +1,6 @@
 <?php
 
-	namespace Base\Units;
+	namespace Base;
 
 	trait Instance {
 		static protected ?self $instance = null;

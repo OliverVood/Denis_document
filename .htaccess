@@ -1,0 +1,16 @@
+<IfModule mod_headers.c>
+	Header set Access-Control-Allow-Origin: *
+</IfModule>
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+
+    Options All -Indexes
+
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^(.*)\.(tpl|inc|htaccess)$ 404.inc [R=404,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^admin/?$ admin.php [QSA,NC,L]
+</IfModule>

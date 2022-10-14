@@ -6,7 +6,6 @@ type TypeRequestParams = {
 }
 
 namespace Base {
-
 	export namespace Common {
 
 		export function RequestData(address: string, data: Object, params?: TypeRequestParams) {
@@ -32,15 +31,14 @@ namespace Base {
 				cache			: false,
 				// beforeSend: function() { if (funcBeforeSend) funcBeforeSend(); },
 				// complete: function() { if (funcComplete) funcComplete(); },
-				success: function(response) { RequestResponse(response/*, {function: funcSuccess}*/); },
+				success			: function(response) { RequestResponse(response/*, {function: funcSuccess}*/); },
 				error			: function(response) { console.log('request failed: ' + address); console.log(response); }
 			});
-		} // END FUNCTION RequestData
+		}
 
 		function RequestResponse(response) {
 			console.log(response);
-		} // END FUNCTION RequestResponse
+		}
 
-	} // END NAMESPACE COMMON
-
-} // END NAMESPACE SITE
+	}
+}

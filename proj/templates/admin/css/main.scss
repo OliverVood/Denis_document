@@ -1,0 +1,19 @@
+$color-text: #000000;
+$color-text-primary: #ffffff;
+
+$color-primary: #3e4246;
+$color-primary-dark: #23282c;
+$color-primary-light: #23282c9e;
+$color-secondary: #006e95;
+
+html { height: 100%; }
+body {
+	margin: 0; height: 100%; display: flex; flex-direction: column;
+	> header { background-color: $color-primary-dark; color: $color-text-primary; }
+	> div {
+		flex: auto; display: flex;
+		menu { margin: 0; padding: 0; background-color: $color-primary; color: $color-text-primary; }
+		main {  }
+	}
+	> footer { background-color: $color-primary-dark; color: $color-text-primary; }
+}

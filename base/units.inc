@@ -2,7 +2,7 @@
 
 	namespace Base\Units;
 
-	class Units {
+	abstract class Units {
 		private static array $names = [];
 		private static array $ids = [];
 

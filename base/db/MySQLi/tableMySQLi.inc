@@ -29,8 +29,10 @@
 		public function string(string $name, int $length) { $this->PushField(new FieldStringMySQLi($name, $length, $this)); }
 		public function text(string $name) { $this->PushField(new FieldTextMySQLi($name, $this)); }
 
-		public function Check() {
-			echo "Проверка таблицы <b>`{$this->name}`</b>:<br>";
+		public function Check(): array {
+			$out = ['state' => 1, 'fields' => []];
+
+//			echo "Проверка таблицы <b>`{$this->name}`</b>:<br>";
 
 			$fields = [];
 
@@ -47,10 +49,12 @@
 
 			/* Check fields */
 			foreach ($fields as $field) {
-				if (!isset($fields_db[$field])) echo "Нет поля <b>`{$field}`</b>.<br>";
-				else if (!isset($this->structure[$field])) echo "Лишнее поле <b>`{$field}`</b>.<br>";
-				else $this->structure[$field]->Check($fields_db[$field]);
+				if (!isset($fields_db[$field])) { $out['state'] = -1; $out['fields'][] = ['state' => -1, 'name' => $field->GetName()]; } //echo "Нет поля <b>`{$field}`</b>.<br>";
+				else if (!isset($this->structure[$field])) { $out['state'] = -2; $out['fields'][] = ['state' => -2, 'name' => $field->GetName()]; }//echo "Лишнее поле <b>`{$field}`</b>.<br>";
+				else { $res = $this->structure[$field]->Check($fields_db[$field]); if ($res['state'] < 0) $out['state'] = -3; $out['fields'][] = $res; }
 			}
+
+			return $out;
 		}
 
 		public function Make() {
