@@ -1,6 +1,6 @@
 <?php
 
-	namespace Base\Units;
+	namespace Base;
 
 	abstract class Units {
 		private static array $names = [];

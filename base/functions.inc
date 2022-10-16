@@ -21,6 +21,19 @@
 	}
 
 	/**
+	 * Возвращает значение параметра запроса
+	 * @param string $post_name - Имя POST-параметра
+	 * @param string $get_name - Имя GET-параметра
+	 * @param $default - Значение по умолчанию
+	 * @return mixed
+	 */
+	function GetParam(string $post_name, string $get_name, $default) {
+		if (isset($_POST[$post_name])) return $_POST[$post_name];
+		if (isset($_GET[$get_name])) return $_GET[$get_name];
+		return $default;
+	}
+
+	/**
 	 * Проверяет можно ли выводить отладочную информацию
 	 * @return bool
 	 */

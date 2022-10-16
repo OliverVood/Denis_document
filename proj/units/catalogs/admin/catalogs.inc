@@ -2,8 +2,9 @@
 
 	namespace PROJ\Units;
 
-	use Base\Units\Units;
+	use Base\Units;
 	use Base\Instance;
+	use Proj\Units\Consts;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
 

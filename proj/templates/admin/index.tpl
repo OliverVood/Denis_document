@@ -1,9 +1,8 @@
 <?php
 
-	namespace Admin\Templates;
+	namespace Proj\Admin\Templates;
 
 	use Base\Templates\View;
-	use Admin\Templates\Layout;
 
 	class Template extends View {
 
@@ -20,7 +19,10 @@
 					<meta name = "viewport" content = "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 					<meta http-equiv = "X-UA-Compatible" content = "ie=edge">
 					<title>Document</title>
-					<?php Layout::BrowseStylesheets(); ?>
+					<?php
+						Layout::BrowseScripts();
+						Layout::BrowseStylesheets();
+					?>
 				</head>
 				<body><? $this->RenderSections(); ?></body>
 			</html>

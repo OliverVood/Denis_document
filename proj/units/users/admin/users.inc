@@ -1,9 +1,10 @@
 <?php
 
-	namespace PROJ\Units;
+	namespace Proj\Admin\Units;
 
-	use Base\Units\Units;
+	use Base\Units;
 	use Base\Instance;
+	use Proj\Units\Consts;
 
 	require DIR_UNITS . 'users/consts.inc';
 

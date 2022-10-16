@@ -7,6 +7,7 @@
 	require 'db/field.inc';
 
 	require 'instance.inc';
+	require 'controller.inc';
 	require 'units.inc';
 
 	require 'template/layout.inc';

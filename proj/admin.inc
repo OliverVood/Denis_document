@@ -6,6 +6,8 @@
 	require DIR_PROJ . 'admin.proj.inc';
 
 	use Base\DB;
+	use Base\Controller;
+	use Proj\Admin\Templates\Layout;
 
 	$db = DB\DBMySQLi::Connect('localhost', 'admin', '123', 'documents');
 	if (!$db->State()) die('MySQLi database connection error! Code: ' . $db->GetErrorCode());
@@ -57,11 +59,8 @@
 	//	PROJ\Units\Users::instance()->test();
 	//	PROJ\Units\Catalogs::instance()->test();
 	//	Base\Units\Users::instance->test();
-	use Admin\Templates\Layout;
-	Layout::instance()->header->Push('head<br>head');
-	Layout::instance()->menu->Push('menu');
-	Layout::instance()->main->Push('main');
-	Layout::instance()->main->Push('<input type="button"value="sdsdgg JH">');
-	Layout::instance()->footer->Push('footer 1<br>');
-	Layout::instance()->footer->Push('footer 2');
-	Admin\Templates\Template::object()->Render();
+	Layout::instance()->header->Push('Привет, админ');
+	Layout::instance()->footer->Push('с Documents');
+	Controller::Execute();
+
+	Proj\Admin\Templates\Template::object()->Render();

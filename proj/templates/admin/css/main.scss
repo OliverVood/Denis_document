@@ -3,17 +3,35 @@ $color-text-primary: #ffffff;
 
 $color-primary: #3e4246;
 $color-primary-dark: #23282c;
-$color-primary-light: #23282c9e;
+$color-primary-light: #76797c;
 $color-secondary: #006e95;
 
-html { height: 100%; }
+* { box-sizing: border-box; }
+html { height: 100%; font-family: sans-serif; }
+ul { margin: 0; padding: 0; }
+li { list-style-type: none; }
+a { text-decoration: none; color: $color-text-primary; }
 body {
 	margin: 0; height: 100%; display: flex; flex-direction: column;
-	> header { background-color: $color-primary-dark; color: $color-text-primary; }
+	> header { padding: 10px; background-color: $color-primary-dark; color: $color-text-primary; }
 	> div {
 		flex: auto; display: flex;
-		menu { margin: 0; padding: 0; background-color: $color-primary; color: $color-text-primary; }
+		menu {
+			margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
+			li {
+				> span {
+					position: relative; display: block; padding: 10px; cursor: pointer;
+					> ul { position: absolute; display: none; top: 0; left: 200px; width: 200px; background-color: $color-primary; }
+					&:hover { background-color: $color-secondary; }
+				}
+				> a {
+					display: block; padding: 10px;
+					&:hover { background-color: $color-secondary; }
+				}
+				&:hover > span > ul { display: block; }
+			}
+		}
 		main {  }
 	}
-	> footer { background-color: $color-primary-dark; color: $color-text-primary; }
+	> footer { padding: 10px; background-color: $color-primary-dark; color: $color-text-primary; }
 }
