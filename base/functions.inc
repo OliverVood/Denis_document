@@ -4,7 +4,7 @@
 
 	/**
 	 * Отправка JSON данных
-	 * @param string $string - строка JSON
+	 * @param string $string - Строка JSON
 	 */
 	#[NoReturn] function SendJSON(string $string) {
 		header("Cache-Control: no-cache, no-store, must-revalidate");
@@ -14,10 +14,18 @@
 
 	/**
 	 * Кодирование и отправка данных JSON
-	 * @param $data - данные для кодирования
+	 * @param $data - Данные для кодирования
 	 */
 	#[NoReturn] function SendJSONData($data) {
 		SendJSON(json_encode($data));
+	}
+
+	/**
+	 * Отправка положительного ответа
+	 * @param $data - Данные
+	 */
+	#[NoReturn] function SendJSONSuccess($data) {
+		SendJSONData(['state' => 'ok', 'data' => $data]);
 	}
 
 	/**

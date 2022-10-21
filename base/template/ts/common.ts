@@ -4,13 +4,30 @@ type TypeRequestParams = {
 	processData		?: boolean,
 	contentType		?: string
 }
+type TypeResponse = {
+	state			: 'ok' | 'message',
+	data			: any
+}
+
+class GlobalParams {
+	static param = {};
+
+	static Set(name: string, value: any) {
+		GlobalParams.param[name] = value;
+	}
+
+	static Get(name): any {
+		return GlobalParams.param[name];
+	}
+
+}
 
 namespace Base {
 	export namespace Common {
 
-		export function RequestData(address: string, data: Object, params?: TypeRequestParams) {
+		export function RequestData(address: string, data: Object, handler?: Function, params?: TypeRequestParams) {
 			let method			= 'post';
-			let request 		= 'http://documents/';
+			let request 		= GlobalParams.Get('request');
 			let processData		= true;
 			let contentType		= 'application/x-www-form-urlencoded;charset=UTF-8';
 
@@ -31,13 +48,19 @@ namespace Base {
 				cache			: false,
 				// beforeSend: function() { if (funcBeforeSend) funcBeforeSend(); },
 				// complete: function() { if (funcComplete) funcComplete(); },
-				success			: function(response) { RequestResponse(response/*, {function: funcSuccess}*/); },
+				success			: function(response) { RequestResponse(response, (handler) ? handler : null); },
 				error			: function(response) { console.log('request failed: ' + address); console.log(response); }
 			});
 		}
 
-		function RequestResponse(response) {
-			console.log(response);
+		function RequestResponse(response: TypeResponse, handler: Function) {
+			switch (response['state']) {
+				case 'ok': if (handler) handler(response['data']); break;
+			}
+		}
+
+		export function Request(address: string, handler?: Function, params?: TypeRequestParams) {
+			RequestData(address, {}, handler, params);
 		}
 
 	}

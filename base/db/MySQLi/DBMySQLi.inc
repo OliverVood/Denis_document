@@ -9,7 +9,7 @@
 		private int $errno = 0;
 		private array $history = [];
 
-		private function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
+		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
 			parent::__construct($host, $username, $password, $dbname, $port, $socket);
 
 			@ $this->db = new \mysqli($this->host, $this->username, $this->password, $this->dbname, $this->port, $this->socket);

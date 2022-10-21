@@ -21,9 +21,11 @@
 			$this->main = new Section();
 			$this->footer = new Section();
 
-			self::AddStylesheet('main', DIR_REL_TPL . 'admin/css/main.css');
 			self::AddScripts('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
 			self::AddScripts('main', '/base/template/js/common.js');
+			self::AddScripts('general', '/proj/templates/admin/js/general.js');
+
+			self::AddStylesheet('main', DIR_REL_TPL . 'admin/css/main.css');
 		}
 
 	}

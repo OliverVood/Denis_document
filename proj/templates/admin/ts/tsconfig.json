@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+	"module": "none",
+	"target": "esnext",
+	"lib" : ["ESNext", "DOM"],
+	"sourceMap": true,
+	"alwaysStrict": true,
+	"rootDirs": ["./"],
+  	"outDir": "../js"
+  },
+  "include": ["**/*"],
+  "exclude": ["node_module"]
+}

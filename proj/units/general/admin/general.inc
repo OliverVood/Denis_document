@@ -8,32 +8,47 @@
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
+	use Base\Action;
 	use Proj\Admin\Templates\General\Item;
 	use Proj\Units\Consts;
+	use Proj\DB;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
 
 	class General extends Units implements Consts\General {
 		use Instance;
 
+		private DB $db;
+
+		private Action $out_menu;
+		private Action $db_struct;
+		private Action $db_check;
+
 		public function __construct() {
 			parent::__construct(self::ID, self::NAME);
+			$this->db = DB::instance();
 
-			Controller::PushScene('null', 'null', [$this, 'OutMenu'], [$this, 'OutMenu1'], [$this, 'OutMenu2']);
-			Controller::PushScene('db', 'check', [$this, 'Check']);
-			Controller::PushScene('1', '1', [$this, 'Check5']);
+			$this->out_menu 	= new Action();
+			$this->db_struct 	= new Action('db', 'struct', '#', /** @lang JavaScript */ "console.log('struct'); return false;");
+			$this->db_check 	= new Action('db', 'check', 'admin/db/check', /** @lang JavaScript */ "Base.Common.Request('/db/check', Admin.General.RenderCheck); return false;");
+
+			Controller::instance()->view->Push($this->out_menu, [$this, 'OutMenu'], [$this, 'OutMenu1'], [$this, 'OutMenu2']);
+			Controller::instance()->view->Push($this->db_check, [$this, 'Check']);
 		}
 
-		public function OutMenu() {//href = "admin?__p=db&__a=check"
+		public function OutMenu() {
 			$items = [
-				'<a href = "#">Структура</a>',
-				'<a onclick = "Base.Common.RequestData(\'admin?__p=db&__a=check\');">Проверить</a>'
+				$this->db_struct->GetLink('Структура'),
+				$this->db_check->GetLink('Проверить')
 			];
 			Layout::instance()->menu->Push(Group::object()->ToVar('База данных', $items));
 		}
 
 		public function OutMenu1() {
 			Layout::instance()->menu->Push(Item::object()->ToVar('<a href = "#">Раздел меню</a>'));
+
+			Layout::instance()->header->Push('Привет, админ');
+			Layout::instance()->footer->Push('с Documents');
 		}
 
 		public function OutMenu2() {
@@ -41,13 +56,14 @@
 		}
 
 		public function Check() {
+			SendJSONSuccess($this->db->Check());
 //			$t = $db->Check();
 //			SendJSONData($t);
-			SendJSONData([1,2,3,4,5]);
+//			SendJSONData([1,2,3,4,5]);
 		}
 
-		public function Check5() {
-			Layout::instance()->main->Push('sdfhgdyfdsyfg');
+		public function test() {
+			echo 'General';
 		}
 
 	}

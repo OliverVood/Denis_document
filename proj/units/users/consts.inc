@@ -1,6 +1,6 @@
 <?php
 
-	namespace PROJ\Units\Consts;
+	namespace Proj\Units\Consts;
 
 	interface Users {
 		const ID				= ID_USERS;

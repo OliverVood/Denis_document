@@ -7,7 +7,9 @@
 	require 'db/field.inc';
 
 	require 'instance.inc';
+	require 'stage.inc';
 	require 'controller.inc';
+	require 'action.inc';
 	require 'units.inc';
 
 	require 'template/layout.inc';

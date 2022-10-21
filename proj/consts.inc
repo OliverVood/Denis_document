@@ -8,3 +8,6 @@
 	const DIR_REL_ROOT				= '/';
 	const DIR_REL_PROJ				= DIR_REL_ROOT . 'proj/';
 	const DIR_REL_TPL				= DIR_REL_PROJ . 'templates/';
+
+	define('PROTOCOL', (isset($_SERVER['HTTPS'])) ? 'https' : 'http');;
+	define('ADDRESS', PROTOCOL . '://' . $_SERVER['SERVER_NAME']);

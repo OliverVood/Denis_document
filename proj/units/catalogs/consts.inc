@@ -1,6 +1,6 @@
 <?php
 
-	namespace PROJ\Units\Consts;
+	namespace Proj\Units\Consts;
 
 	interface Catalogs {
 		const ID				= ID_CATALOGS;

@@ -24,7 +24,14 @@
 						Layout::BrowseStylesheets();
 					?>
 				</head>
-				<body><? $this->RenderSections(); ?></body>
+				<body>
+					<? $this->RenderSections(); ?>
+					<script>
+						$(function() {
+							GlobalParams.Set('request', '<?= \REQUEST; ?>');
+						});
+					</script>
+				</body>
 			</html>
 		<?php }
 
