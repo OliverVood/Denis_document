@@ -33,10 +33,10 @@
 			};
 			$str_st = $this->CreationFormat();
 
-			if ($str_db !== $str_st) return ['state' => -3, 'name' => $this->name, 'details' => $str_st];
-			if (is_null($str_db)) return ['state' => -4, 'name' => $this->name];
+			if ($str_db !== $str_st) return ['name' => $this->name, 'state' => -3, 'details' => $str_st];
+			if (is_null($str_db)) return ['name' => $this->name, 'state' => -4];
 
-			return ['state' => 1, $this->name];
+			return ['name' => $this->name, 'state' => 1];
 		}
 
 		public function Make() {

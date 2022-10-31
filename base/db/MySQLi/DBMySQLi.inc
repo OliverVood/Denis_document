@@ -226,11 +226,11 @@
 
 			/* Check tables */
 			foreach ($tables as $table) {
-				$s = ['state' => 1, 'name' => $table];
-				if (!isset($tables_db[$table])) $s['state'] = -1;//echo "В БД нет таблицы <b>`{$table}</b>`.<br>";
-				else if (!isset($tables_sr[$table])) $s['state'] = -2;//echo "Лишняя таблица в БД <b>`{$table}`</b>.<br>";
-				else { $res = $this->GetTable($table)->Check(); if ($res['state'] < 0) $s['state'] = -3; $s['fields'] = $res['fields']; }
-				$out[] = $s;
+				$s = ['name' => $table, 'state' => 1];
+				if (!isset($tables_db[$table])) { $s['state'] = -1; $s['error'] = 'Создать таблицу'; }
+				else if (!isset($tables_sr[$table])) { $s['state'] = -2; $s['error'] = 'Удалить таблицу'; }
+				else { $res = $this->GetTable($table)->Check(); if ($res['state'] < 0) { $s['state'] = -3; $s['error'] = 'Изменить таблицу'; } $s['fields'] = $res['fields']; }
+				if ($s['state'] < 0) $out[] = $s;
 			}
 
 			return $out;

@@ -5,6 +5,9 @@
 	require DIR_UNITS . 'general/consts.inc';
 	require 'views/group.tpl';
 
+
+	use JetBrains\PhpStorm\NoReturn;
+
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
@@ -23,6 +26,7 @@
 		private Action $out_menu;
 		private Action $db_struct;
 		private Action $db_check;
+		private Action $db_make;
 
 		public function __construct() {
 			parent::__construct(self::ID, self::NAME);
@@ -31,9 +35,11 @@
 			$this->out_menu 	= new Action();
 			$this->db_struct 	= new Action('db', 'struct', '#', /** @lang JavaScript */ "console.log('struct'); return false;");
 			$this->db_check 	= new Action('db', 'check', 'admin/db/check', /** @lang JavaScript */ "Base.Common.Request('/db/check', Admin.General.RenderCheck); return false;");
+			$this->db_make 		= new Action('db', 'make', 'admin/db/make', /** @lang JavaScript */ "Base.Common.Request('/db/make', Admin.General.RenderCheck); return false;");
 
 			Controller::instance()->view->Push($this->out_menu, [$this, 'OutMenu'], [$this, 'OutMenu1'], [$this, 'OutMenu2']);
 			Controller::instance()->view->Push($this->db_check, [$this, 'Check']);
+			Controller::instance()->view->Push($this->db_make, [$this, 'Make']);
 		}
 
 		public function OutMenu() {
@@ -55,11 +61,12 @@
 			Layout::instance()->menu->Push(Item::object()->ToVar('<a href = "#">Ну очень-очень длинный раздел меню</a>'));
 		}
 
-		public function Check() {
+		#[NoReturn] public function Check() {
 			SendJSONSuccess($this->db->Check());
-//			$t = $db->Check();
-//			SendJSONData($t);
-//			SendJSONData([1,2,3,4,5]);
+		}
+
+		#[NoReturn] public function Make() {
+			SendJSONSuccess([]);
 		}
 
 		public function test() {

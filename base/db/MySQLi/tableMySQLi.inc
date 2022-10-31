@@ -32,26 +32,27 @@
 		public function Check(): array {
 			$out = ['state' => 1, 'fields' => []];
 
-//			echo "Проверка таблицы <b>`{$this->name}`</b>:<br>";
-
 			$fields = [];
+
+			/* Get fields struct */
+			foreach ($this->structure as $name => $field) {
+				$fields[] = $name;
+			}
 
 			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE TABLE_NAME LIKE '{$this->name}' ORDER BY `ORDINAL_POSITION`");
 			$fields_db = $this->db->FetchAll($result, function(& $items, $item) use (& $fields) {
 				$items[$item['COLUMN_NAME']] = $item;
-				$fields[] = $item['COLUMN_NAME'];
+				if (!in_array($item['COLUMN_NAME'], $fields)) $fields[] = $item['COLUMN_NAME'];
 			});
-
-			/* Get fields struct */
-			foreach ($this->structure as $name => $field) {
-				if (!in_array($name, $fields)) $fields[] = $name;
-			}
 
 			/* Check fields */
 			foreach ($fields as $field) {
-				if (!isset($fields_db[$field])) { $out['state'] = -1; $out['fields'][] = ['state' => -1, 'name' => $field->GetName()]; } //echo "Нет поля <b>`{$field}`</b>.<br>";
-				else if (!isset($this->structure[$field])) { $out['state'] = -2; $out['fields'][] = ['state' => -2, 'name' => $field->GetName()]; }//echo "Лишнее поле <b>`{$field}`</b>.<br>";
-				else { $res = $this->structure[$field]->Check($fields_db[$field]); if ($res['state'] < 0) $out['state'] = -3; $out['fields'][] = $res; }
+				$outf = ['state' => 1, 'name' => $field];
+				if (!isset($fields_db[$field])) { $out['state'] = -1; $outf['state'] = -1; $outf['error'] = 'Добавить поле'; }
+				else if (!isset($this->structure[$field])) { $out['state'] = -2; $outf['state'] = -2; $outf['error'] = 'Удалить поле'; }
+				else { $res = $this->structure[$field]->Check($fields_db[$field]); if ($res['state'] < 0) $out['state'] = -3; $outf = $res; $outf['error'] = 'Изменить поле'; }
+
+				if ($outf['state'] < 0) $out['fields'][] = $outf;
 			}
 
 			return $out;

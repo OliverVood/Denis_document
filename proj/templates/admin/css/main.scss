@@ -1,40 +1,36 @@
-$color-text: #000000;
-$color-text-primary: #ffffff;
-
-//$color-primary: #3e4246;
-//$color-primary-dark: #23282c;
-//$color-primary-light: #76797c;
-$color-primary: #fff;
-$color-primary-dark: #fff;
-$color-primary-light: #fff;
-$color-secondary: #006e95;
+@use "variables" as *;
+@use "common" as *;
 
 * { box-sizing: border-box; }
-html { height: 100%; font-family: sans-serif; }
+html { height: 100%; font-family: AjarSans, sans-serif; font-size: 14px; color: $color-text-primary; }
 h1 { margin: 0; }
 ul { margin: 0; padding: 0; }
 li { list-style-type: none; }
 a { text-decoration: none; color: $color-text-primary; }
+input {
+	outline: none; font-family: AjarSans, sans-serif; font-size: 14px;
+	&[type="submit"] { @include mix-btn; cursor: pointer; }
+}
 body {
 	margin: 0; height: 100%; display: flex; flex-direction: column;
-	> header { padding: 10px; background-color: $color-primary-dark; color: $color-text-primary; }
+	> header { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
 	> div {
 		flex: auto; display: flex;
 		menu { margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary; }
 		main {	flex: auto; }
 	}
-	> footer { padding: 10px; background-color: $color-primary-dark; color: $color-text-primary; }
+	> footer { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
 }
 
 menu {
 	li {
 		> span {
-			position: relative; display: block; padding: 10px; cursor: pointer;
+			position: relative; display: block; padding: 0.6rem; cursor: pointer;
 			> ul { position: absolute; display: none; top: 0; left: 200px; width: 200px; background-color: $color-primary; }
 			&:hover { background-color: $color-secondary; }
 		}
 		> a {
-			display: block; padding: 10px;
+			display: block; padding: 0.6rem;
 			&:hover { background-color: $color-secondary; }
 		}
 		&:hover > span > ul { display: block; }
@@ -42,11 +38,17 @@ menu {
 }
 
 main {
-	h1 { text-align: center; }
+	padding: 0.2rem;
+	h1 { padding: 1rem 0; font-size: 1.4rem; text-align: center; }
 	table {
-		> thead > tr > th { padding: 8px; background-color: $color-secondary; font-weight: 400; color: $color-text-primary; }
+		> thead > tr {
+			background-color: $color-secondary; color: $color-text-primary;
+			> th { padding: 0.6rem; font-weight: 400; }
+		}
 		> tbody > tr {
-			&:nth-child(even) { background-color: $color-primary-light; }
+			&:nth-child(even) { background-color: $color-primary-super-light; }
+			&:hover { background-color: $color-tertiary-light; }
+			> td { padding: 0.6rem; }
 		}
 	}
 }

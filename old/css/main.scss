@@ -5,7 +5,7 @@ $colors: (
 	hover: #990000
 );
 
-@font-face { font-family: AjarSans;  src: url("font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: AjarSans;  src: url("proj/templates/admin/css/font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
 html { height: 100%; font-family: AjarSans, sans-serif; }
 body {

@@ -12,11 +12,11 @@ type TypeResponse = {
 class GlobalParams {
 	static param = {};
 
-	static Set(name: string, value: any) {
+	static Set(name :string, value :any) {
 		GlobalParams.param[name] = value;
 	}
 
-	static Get(name): any {
+	static Get(name) :any {
 		return GlobalParams.param[name];
 	}
 
@@ -25,10 +25,10 @@ class GlobalParams {
 namespace Base {
 	export namespace Common {
 
-		export function RequestData(address: string, data: Object, handler?: Function, params?: TypeRequestParams) {
+		export function RequestData(address :string, data :Object, handler ?:Function, params ?:TypeRequestParams) {
 			let method			= 'post';
 			let request 		= GlobalParams.Get('request');
-			let processData		= true;
+			let processData		= false;
 			let contentType		= 'application/x-www-form-urlencoded;charset=UTF-8';
 
 			if (params) {
@@ -53,14 +53,20 @@ namespace Base {
 			});
 		}
 
-		function RequestResponse(response: TypeResponse, handler: Function) {
+		export function Request(address :string, handler ?:Function, params ?:TypeRequestParams) {
+			RequestData(address, {}, handler, params);
+		}
+
+		export function RequestForm(form: JQuery, handler ?:Function, params ?:TypeRequestParams) {
+			let _form = form[0] as HTMLFormElement;
+
+			RequestData(form.attr('action'), new FormData(_form), handler, params);
+		}
+
+		function RequestResponse(response :TypeResponse, handler :Function) {
 			switch (response['state']) {
 				case 'ok': if (handler) handler(response['data']); break;
 			}
-		}
-
-		export function Request(address: string, handler?: Function, params?: TypeRequestParams) {
-			RequestData(address, {}, handler, params);
 		}
 
 	}
