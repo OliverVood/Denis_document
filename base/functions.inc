@@ -5,8 +5,9 @@
 	/**
 	 * Отправка JSON данных
 	 * @param string $string - Строка JSON
+	 * @return void
 	 */
-	#[NoReturn] function SendJSON(string $string) {
+	#[NoReturn] function SendJSON(string $string): void {
 		header("Cache-Control: no-cache, no-store, must-revalidate");
 		header('Content-Type: application/json; charset=utf-8');
 		die($string);
@@ -14,30 +15,31 @@
 
 	/**
 	 * Кодирование и отправка данных JSON
-	 * @param $data - Данные для кодирования
+	 * @param array $data - Данные для кодирования
+	 * @return void
 	 */
-	#[NoReturn] function SendJSONData($data) {
+	#[NoReturn] function SendJSONData(array $data): void {
 		SendJSON(json_encode($data));
 	}
 
 	/**
 	 * Отправка положительного ответа
-	 * @param $data - Данные
+	 * @param mixed $data - Данные
+	 * @return void
 	 */
-	#[NoReturn] function SendJSONSuccess($data) {
+	#[NoReturn] function SendJSONSuccess(mixed $data): void {
 		SendJSONData(['state' => 'ok', 'data' => $data]);
 	}
 
 	/**
 	 * Возвращает значение параметра запроса
-	 * @param string $post_name - Имя POST-параметра
-	 * @param string $get_name - Имя GET-параметра
-	 * @param $default - Значение по умолчанию
+	 * @param string $key - Ключ POST/GET параметра
+	 * @param mixed $default - Значение по умолчанию
 	 * @return mixed
 	 */
-	function GetParam(string $post_name, string $get_name, $default) {
-		if (isset($_POST[$post_name])) return $_POST[$post_name];
-		if (isset($_GET[$get_name])) return $_GET[$get_name];
+	function GetParam(string $key, mixed $default = null): mixed {
+		if (isset($_POST[$key])) return $_POST[$key];
+		if (isset($_GET[$key])) return $_GET[$key];
 		return $default;
 	}
 
@@ -45,16 +47,17 @@
 	 * Проверяет можно ли выводить отладочную информацию
 	 * @return bool
 	 */
-	function CheckDebugger() :bool {
-		return (DEBUG);
+	function CheckDebugger(): bool {
+		return DEBUG;
 	}
 
 	/**
 	 * Вывод отладочной информации
-	 * @param $var - Переменная для вывода
+	 * @param mixed $var - Переменная для вывода
 	 * @param string $title - Заголовок
+	 * @return void
 	 */
-	function Debug($var, string $title = '') :void {
+	function Debug(mixed $var, string $title = ''): void {
 		if (!CheckDebugger()) return;
 
 		echo "<b>{$title}</b><pre>";

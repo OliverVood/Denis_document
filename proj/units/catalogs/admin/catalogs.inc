@@ -30,10 +30,11 @@
 			$table->uint8('uint8');
 			$table->uint16('uint16');
 			$table->uint24('uint24');
-			$table->uint32('uint32');
 			$table->uint64('uint64');
 			$table->float('float');
+			$table->float('float2');
 			$table->double('double');
+			$table->double('double222');
 			$table->timestamp('tsupd', true);
 			$table->timestamp('ts');
 			$table->enum('enum', ['one', 'two', 'three']);

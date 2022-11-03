@@ -3,9 +3,15 @@
 	namespace Base\DB;
 
 	abstract class FieldMySQLi extends Field {
+		const ERROR_NULL	=  1;
+		const ERROR_CREATE 	= -1;
+		const ERROR_VARIOUS	= -2;
+		const ERROR_MISSING = -3;
+		const ERROR_DELETE 	= -4;
+
 		/** @var TableMySQLi $table */
 
-		public function Check(?array $data_field_db) : ?array {
+		public function Check(?array $data_field_db): ?array {
 			$hash = MD5($data_field_db['DATA_TYPE'] . $data_field_db['COLUMN_TYPE'] . $data_field_db['COLUMN_KEY']);
 			$str_db = match ($hash) {
 				'c548aac1c21add2c654f222d56e428de' => FieldIDMySQLi::DataToCreationFormat($data_field_db),
@@ -33,10 +39,10 @@
 			};
 			$str_st = $this->CreationFormat();
 
-			if ($str_db !== $str_st) return ['name' => $this->name, 'state' => -3, 'details' => $str_st];
-			if (is_null($str_db)) return ['name' => $this->name, 'state' => -4];
+			if (is_null($str_db)) return ['name' => $this->name, 'state' => self::ERROR_MISSING];
+			if ($str_db !== $str_st) return ['name' => $this->name, 'state' => self::ERROR_VARIOUS, 'details' => $str_st];
 
-			return ['name' => $this->name, 'state' => 1];
+			return ['name' => $this->name, 'state' => self::ERROR_NULL];
 		}
 
 		public function Make() {
@@ -54,7 +60,7 @@
 			//		}
 		}
 
-		static protected function DataToCreationFormat($data): string {
+		static protected function DataToCreationFormat(array $data): string {
 			$pieces = [];
 			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
 			$pieces['type'] = $data['COLUMN_TYPE'];

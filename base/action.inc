@@ -15,7 +15,12 @@
 			$this->click 	= $click;
 		}
 
-		public function GetLink($content): string {
+		/**
+		 * Возвращает ссылку
+		 * @param string $content - Контент
+		 * @return string
+		 */
+		public function GetLink(string $content): string {
 			return '<a href = "' . $this->href . '" onclick = "' . $this->click . '">' . $content . '</a>';
 		}
 

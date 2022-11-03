@@ -5,6 +5,7 @@
 	use mysqli_result;
 
 	class DBMySQLi extends DB {
+
 		private \mysqli $db;
 		private int $errno = 0;
 		private array $history = [];
@@ -209,35 +210,59 @@
 			$out = [];
 			$tables = [];
 
+			/* Get tables structure */
+			$tables_struct = [];
+			foreach ($this->tables as $table) {
+				$name = $table->GetName();
+				$tables_struct[] = $name;
+				$tables[] = $name;
+			}
+
 			/* Get tables DB */
-			$result = $this->Query("SELECT `table_name` AS `name`, `engine` AS `engine` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
+			$result = $this->Query("SELECT `table_name` AS `name` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
 			$tables_db = $this->FetchAll($result, function(& $items, $item) use (& $tables) {
-				$items[$item['name']] = $item['engine'];
+				$items[] = $item['name'];
 				if (!in_array($item['name'], $tables)) $tables[] = $item['name'];
 			});
 
-			/* Get tables structure */
-			$tables_sr = [];
-			foreach ($this->tables as $table) {
-				$name = $table->GetName();
-				$tables_sr[$name] = [];
-				if (!in_array($name, $tables)) $tables[] = $name;
-			}
-
 			/* Check tables */
 			foreach ($tables as $table) {
-				$s = ['name' => $table, 'state' => 1];
-				if (!isset($tables_db[$table])) { $s['state'] = -1; $s['error'] = 'Создать таблицу'; }
-				else if (!isset($tables_sr[$table])) { $s['state'] = -2; $s['error'] = 'Удалить таблицу'; }
-				else { $res = $this->GetTable($table)->Check(); if ($res['state'] < 0) { $s['state'] = -3; $s['error'] = 'Изменить таблицу'; } $s['fields'] = $res['fields']; }
-				if ($s['state'] < 0) $out[] = $s;
+				$state = TableMySQLi::ERROR_NULL;
+				$error = null;
+				$fields = null;
+				if (!in_array($table, $tables_db)) {
+					$state = TableMySQLi::ERROR_CREATE;
+					$error = 'Создать таблицу';
+				}
+				else if (!in_array($table, $tables_struct)) {
+					$state = TableMySQLi::ERROR_DELETE;
+					$error = 'Удалить таблицу';
+				}
+				else {
+					$res = $this->GetTable($table)->Check();
+					if ($res['state'] < 0) {
+						$state = $res['state'];
+						$error = 'Изменить таблицу';
+						$fields = $res['fields'];
+					}
+				}
+
+				if ($state < 0) {
+					$_out = ['name' => $table, 'state' => $state, 'error' => $error];
+					if ($fields) $_out['fields'] = $fields;
+					$out[] = $_out;
+				}
 			}
 
 			return $out;
 		}
 
-		public function Make() {
-			foreach ($this->tables as $table) $table->Make();
+		public function Make(): array {
+			$tables = GetParam('tables');Debug($tables);die();
+			//TODO continue from here
+//			foreach ($this->tables as $table) $table->Make();
+
+			return [];
 		}
 
 	}

@@ -15,9 +15,13 @@
 			$this->view = new Stage();
 		}
 
-		public function Execute() {
-			$area = GetParam('_a', '__a', 'null');
-			$part = GetParam('__p', '__p', 'null');
+		/**
+		 * Выполнить контроллер
+		 * @return void
+		 */
+		public function Execute(): void {
+			$area = GetParam('__a', 'null');
+			$part = GetParam('__p', 'null');
 
 			$this->void->Execute($area, $part);
 			$this->work->Execute($area, $part);

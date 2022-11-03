@@ -9,6 +9,6 @@
 		<script type = "text/javascript" src = "/base/template/js/common.js"></script>
 	</head>
 	<body>
-		<button onclick = "Base.Common.RequestData('check.php');">Check</button>
+		<button onclick = "Base.Common.Query.Send('check.php');">Check</button>
 	</body>
 </html>

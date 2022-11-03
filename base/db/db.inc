@@ -48,7 +48,7 @@
 			return $this->dbname;
 		}
 
-		public function PushTables($table, ...$tables) {
+		public function PushTables($table, ...$tables) : void {
 			$args = func_get_args();
 			foreach ($args as $arg) $this->tables[$arg->GetName()] = $arg;
 		}

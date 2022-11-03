@@ -34,8 +34,8 @@
 
 			$this->out_menu 	= new Action();
 			$this->db_struct 	= new Action('db', 'struct', '#', /** @lang JavaScript */ "console.log('struct'); return false;");
-			$this->db_check 	= new Action('db', 'check', 'admin/db/check', /** @lang JavaScript */ "Base.Common.Request('/db/check', Admin.General.RenderCheck); return false;");
-			$this->db_make 		= new Action('db', 'make', 'admin/db/make', /** @lang JavaScript */ "Base.Common.Request('/db/make', Admin.General.RenderCheck); return false;");
+			$this->db_check 	= new Action('db', 'check', 'admin/db/check', /** @lang JavaScript */ "Base.Common.Query.Send('/db/check', Admin.General.RenderCheck); return false;");
+			$this->db_make 		= new Action('db', 'make', 'admin/db/make', /** @lang JavaScript */ "Base.Common.Query.Send('/db/make', Admin.General.RenderCheck); return false;");
 
 			Controller::instance()->view->Push($this->out_menu, [$this, 'OutMenu'], [$this, 'OutMenu1'], [$this, 'OutMenu2']);
 			Controller::instance()->view->Push($this->db_check, [$this, 'Check']);
@@ -65,12 +65,8 @@
 			SendJSONSuccess($this->db->Check());
 		}
 
-		#[NoReturn] public function Make() {
-			SendJSONSuccess([]);
-		}
-
-		public function test() {
-			echo 'General';
+		#[NoReturn] public function Make() {//TODO continue from here
+			SendJSONSuccess($this->db->Make());
 		}
 
 	}

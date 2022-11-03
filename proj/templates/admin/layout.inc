@@ -22,8 +22,9 @@
 			$this->footer = new Section();
 
 			self::AddScripts('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
-			self::AddScripts('main', '/base/template/js/common.js');
-			self::AddScripts('general', '/proj/templates/admin/js/general.js');
+			self::AddScripts('base_common', '/base/template/js/common.js');
+			self::AddScripts('admin_common', '/proj/templates/admin/js/common.js');
+			self::AddScripts('admin_general', '/proj/templates/admin/js/general.js');
 
 			self::AddStylesheet('main', DIR_REL_TPL . 'admin/css/main.css');
 		}

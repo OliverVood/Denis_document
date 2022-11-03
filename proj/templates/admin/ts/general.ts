@@ -1,8 +1,10 @@
 namespace Admin {
 	export namespace General {
 
-		export function RenderCheck(data :{ name :string, state :number, error ?:string, fields ?:Object }[]) {
-			//to -> main (ввести понятия секции в Admin)
+		type TypeField = { name: string, state: number, error: string, details: string }[];
+		type TypeTable = { name: string, state: number, error: string, fields?: TypeField }[];
+
+		export function RenderCheck(data: TypeTable) {
 			/* Elements */
 			let $title = $('<h1/>').text('Проверка базы данных');
 			let $form = $('<form/>', {action: '/db/make'});
@@ -16,7 +18,7 @@ namespace Admin {
 				$('table input[type="checkbox"]').prop('checked', $checkbox.is(':checked'));
 			});
 			$submit.on('click', function () {
-				Base.Common.RequestForm($submit.closest('form'), function () {
+				Base.Common.Query.SendForm($submit.closest('form'), function () {
 					console.log('!!!');
 				});
 				return false;
@@ -49,12 +51,12 @@ namespace Admin {
 							GetField(data[i].name, data[i].fields[j])
 						);
 			}
-			$('main').empty().append($title, $form);
+			Admin.Common.Layout.main.Fill($title, $form);
 
 			function GetTable(table) {
-				let $checkbox = $('<input/>', {type: 'checkbox', name: `make[${table.name}]`, value: 1})
+				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${table.name}][state]`, value: table.state})
 				$checkbox.on('click', function () {
-					$(`input[name^="make[${table.name}]["]`).prop('checked', $checkbox.is(':checked'));
+					$(`input[name^="tables[${table.name}]["]`).prop('checked', $checkbox.is(':checked'));
 				})
 				return $('<tr/>').append(
 					$('<td/>').text(table.name),
@@ -72,7 +74,7 @@ namespace Admin {
 					$('<td/>').text(tablename),
 					$('<td/>').text(field.name),
 					$('<td/>').append(
-						$('<input/>', {type: 'checkbox', name: `make[${tablename}][${field.name}]`, value: 1})
+						$('<input/>', {type: 'checkbox', name: `tables[${tablename}][fields][${field.name}]`, value: field.state})
 					),
 					$('<td/>').text(field.error)
 				);

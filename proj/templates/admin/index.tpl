@@ -28,7 +28,8 @@
 					<? $this->RenderSections(); ?>
 					<script>
 						$(function() {
-							GlobalParams.Set('request', '<?= \REQUEST; ?>');
+							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
+							Admin.Common.Layout.Initialization();
 						});
 					</script>
 				</body>

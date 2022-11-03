@@ -14,7 +14,7 @@
 			return self::$objects[$name];
 		}
 
-		protected function Start() { ob_start(); }
+		protected function Start(): void { ob_start(); }
 
 		protected function Read(): string {
 			$val = ob_get_contents();
