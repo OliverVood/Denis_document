@@ -9,6 +9,6 @@
 			parent::__construct('float', $name, $table);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` float NOT NULL DEFAULT '0'"; }
+		public function CreationFormat(): string { return "`{$this->name}` float NOT NULL DEFAULT '0'"; }
 
 	}

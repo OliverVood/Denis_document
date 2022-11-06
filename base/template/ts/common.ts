@@ -66,6 +66,10 @@ namespace Base {
 				Query.SendData(form.attr('action'), new FormData(_form), handler, {contentType: false, processData: false});
 			}
 
+			public static SubmitForm(e, handler ?:Function) {
+				Query.SendForm($(e.currentTarget).closest('form'), handler);
+			}
+
 			private static Response(response :TypeResponse, handler :Function) {
 				switch (response['state']) {
 					case 'ok': if (handler) handler(response['data']); break;

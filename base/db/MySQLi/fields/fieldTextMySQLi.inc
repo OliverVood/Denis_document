@@ -18,6 +18,6 @@
 			return implode(' ', $pieces);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` text NOT NULL"; }
+		public function CreationFormat(): string { return "`{$this->name}` text NOT NULL"; }
 
 	}

@@ -9,6 +9,6 @@
 			parent::__construct('int124', $name, $table);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` mediumint NOT NULL DEFAULT '0'"; }
+		public function CreationFormat(): string { return "`{$this->name}` mediumint NOT NULL DEFAULT '0'"; }
 
 	}

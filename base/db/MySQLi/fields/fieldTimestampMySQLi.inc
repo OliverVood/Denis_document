@@ -23,6 +23,6 @@
 			return implode(' ', $pieces);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
+		public function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
 
 	}

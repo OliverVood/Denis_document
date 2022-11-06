@@ -18,6 +18,8 @@
 		abstract public function Check();
 		abstract public function Make();
 
+		abstract public function Create();
+
 		abstract public function id(string $name): void;
 		abstract public function bool(string $name): void;
 		abstract public function int8(string $name): void;

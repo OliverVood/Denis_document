@@ -22,6 +22,6 @@
 			return implode(' ', $pieces);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` set('" . implode("','", $this->set) . "') NOT NULL"; }
+		public function CreationFormat(): string { return "`{$this->name}` set('" . implode("','", $this->set) . "') NOT NULL"; }
 
 	}

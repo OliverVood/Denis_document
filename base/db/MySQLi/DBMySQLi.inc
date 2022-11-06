@@ -55,13 +55,19 @@
 
 		/**
 		 * Запрос к БД
-		 * @param string $text - Текст запроса
+		 * @param string $query - Текст запроса
 		 * @return bool|mysqli_result
 		 */
-		public function Query(string $text): bool|mysqli_result {
-			$this->history[] = $text;
+		public function Query(string $query): bool|mysqli_result {
+			$this->history[] = $query;
 
-			return $this->db->query($text);
+			return $this->db->query($query);
+		}
+
+		public function MultiQuery(string $query): bool|mysqli_result {
+			$this->history[] = $query;
+
+			return $this->db->multi_query($query);
 		}
 
 		/**
@@ -206,6 +212,10 @@
 			return $out;
 		}
 
+		/**
+		 * Проверка базы данных
+		 * @return array
+		 */
 		public function Check(): array {
 			$out = [];
 			$tables = [];
@@ -257,12 +267,33 @@
 			return $out;
 		}
 
-		public function Make(): array {
-			$tables = GetParam('tables');Debug($tables);die();
-			//TODO continue from here
-//			foreach ($this->tables as $table) $table->Make();
+		/**
+		 * Исправление базы данных
+		 * @return bool
+		 */
+		public function Make(): bool {
+			if (!$tables = GetParam('tables')) return false;
 
-			return [];
+			$queries = [];
+			foreach ($tables as $tablename => $table) {
+				$q = match ((int)$table['state']) {
+					TableMySQLi::ERROR_CREATE => $this->tables[$tablename]->Create(),
+					TableMySQLi::ERROR_UPDATE => $this->tables[$tablename]->Update($table),
+					TableMySQLi::ERROR_DELETE => TableMySQLi::Delete($tablename),
+					default => ''
+				};
+				if (is_array($q)) foreach ($q as $query) $queries[] = $query;
+				else $queries[] = $q;
+			} //Debug($queries);die();
+
+			$this->MultiQuery(implode('; ', $queries));
+
+			//TODO continue from here
+
+//			Debug($tables);
+//			die();
+
+			return true;
 		}
 
 	}

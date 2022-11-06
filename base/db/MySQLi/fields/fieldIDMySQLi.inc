@@ -19,6 +19,7 @@
 			return implode(' ', $pieces);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` int unsigned NOT NULL AUTO_INCREMENT"; }
+		public function CreationFormat(): string { return "`{$this->name}` int unsigned NOT NULL AUTO_INCREMENT"; }
+		public function UpdateFormat(): string { return "`{$this->name}` int unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT"; }
 
 	}

@@ -9,6 +9,6 @@
 			parent::__construct('uint32', $name, $table);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` int unsigned NOT NULL DEFAULT '0'"; }
+		public function CreationFormat(): string { return "`{$this->name}` int unsigned NOT NULL DEFAULT '0'"; }
 
 	}

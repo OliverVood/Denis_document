@@ -9,6 +9,6 @@
 			parent::__construct('double', $name, $table);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` double NOT NULL DEFAULT '0'"; }
+		public function CreationFormat(): string { return "`{$this->name}` double NOT NULL DEFAULT '0'"; }
 
 	}

@@ -22,6 +22,6 @@
 			return implode(' ', $pieces);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` enum('" . implode("','", $this->enum) . "') NOT NULL"; }
+		public function CreationFormat(): string { return "`{$this->name}` enum('" . implode("','", $this->enum) . "') NOT NULL"; }
 
 	}

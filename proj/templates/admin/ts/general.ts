@@ -4,81 +4,127 @@ namespace Admin {
 		type TypeField = { name: string, state: number, error: string, details: string }[];
 		type TypeTable = { name: string, state: number, error: string, fields?: TypeField }[];
 
-		export function RenderCheck(data: TypeTable) {
-			/* Elements */
-			let $title = $('<h1/>').text('Проверка базы данных');
-			let $form = $('<form/>', {action: '/db/make'});
-			let $table = $('<table/>');
-			let $tbody = $('<tbody/>');
-			let $checkbox = $('<input/>', {type: 'checkbox'});
-			let $submit = $('<input/>', {type: 'submit', value: 'Исправить'});
+		export class Render {
 
-			/* Events */
-			$checkbox.on('click', function () {
-				$('table input[type="checkbox"]').prop('checked', $checkbox.is(':checked'));
-			});
-			$submit.on('click', function () {
-				Base.Common.Query.SendForm($submit.closest('form'), function () {
-					console.log('!!!');
-				});
-				return false;
-			})
-
-			/* Building DOM */
-			$form.append(
-				$table.append(
-					$('<thead/>').append(
-						$('<tr/>').append(
-							$('<th/>').text('Таблица'),
-							$('<th/>').text('Поле'),
-							$('<th/>').append(
-								$checkbox
-							),
-							$('<th/>').text('Ошибка')
-						)
-					),
-					$tbody
-				),
-				$submit
-			);
-			for (let i in data) {
-				$tbody.append(
-					GetTable(data[i])
+			public static CheckDB(data: TypeTable) {
+				Admin.Common.Layout.main.Fill(
+					$('<h1/>').text('Проверка базы данных'),
+					data.length ? Render.Form(data) : Render.Empty()
 				);
-				if (data[i].fields)
-					for (let j in data[i].fields)
-						$tbody.append(
-							GetField(data[i].name, data[i].fields[j])
-						);
 			}
-			Admin.Common.Layout.main.Fill($title, $form);
 
-			function GetTable(table) {
-				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${table.name}][state]`, value: table.state})
-				$checkbox.on('click', function () {
+			private static Form(data) {
+				/* Elements */
+				let $form = $('<form/>', {action: '/db/make'});//TODO Разработать систему экшинов
+				let $table = $('<table/>');
+				let $tbody = $('<tbody/>');
+				let $checkbox = $('<input/>', {type: 'checkbox'});
+				let $submit = $('<input/>', {type: 'submit', value: 'Исправить'});
+
+				/* Handlers */
+				let OnSelectAll = () => {
+					$('table input[type="checkbox"]').prop('checked', $checkbox.is(':checked'));
+				}
+
+				let OnSubmit = (e) => {
+					Base.Common.Query.SubmitForm(e, function (data) {
+						Admin.General.Render.CheckDB(data);
+					});
+					return false;
+				}
+
+				/* Events */
+				$checkbox.on('click', OnSelectAll);
+				$submit.on('click', OnSubmit);
+
+				/* Building DOM */
+				$form.append(
+					$table.append(
+						$('<thead/>').append(
+							$('<tr/>').append(
+								$('<th/>').text('Таблица'),
+								$('<th/>').text('Поле'),
+								$('<th/>').append(
+									$checkbox
+								),
+								$('<th/>').text('Ошибка')
+							)
+						),
+						$tbody
+					),
+					$submit
+				);
+
+				Render.Tables($tbody, data);
+
+				return $form;
+			}
+
+			private static Tables($tbody, tables) {
+				for (let i in tables) Render.Table($tbody, tables[i]);
+			}
+
+			private static Table($tbody, table) {
+				/* Elements */
+				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${table.name}][state]`, value: table.state});
+
+				/* Handlers */
+				let OnSelectTable = () => {
 					$(`input[name^="tables[${table.name}]["]`).prop('checked', $checkbox.is(':checked'));
-				})
-				return $('<tr/>').append(
-					$('<td/>').text(table.name),
-					$('<td/>').text('-'),
-					$('<td/>').append(
-						$checkbox
-					),
-					$('<td/>').text(table.error)
+				}
+
+				/* Events */
+				$checkbox.on('click', OnSelectTable);
+
+				/* Building DOM */
+				$tbody.append(
+					$('<tr/>').append(
+						$('<td/>').text(table.name),
+						$('<td/>').text('-'),
+						$('<td/>').append(
+							$checkbox
+						),
+						$('<td/>').text(table.error)
+					)
 				);
 
+				if (table.fields) Render.Fields($tbody, table.name, table.fields);
 			}
 
-			function GetField (tablename, field) {
-				return $('<tr/>').append(
-					$('<td/>').text(tablename),
-					$('<td/>').text(field.name),
-					$('<td/>').append(
-						$('<input/>', {type: 'checkbox', name: `tables[${tablename}][fields][${field.name}]`, value: field.state})
-					),
-					$('<td/>').text(field.error)
+			private static Fields($tbody, tablename, fields) {
+				for (let i in fields) Render.Field($tbody, tablename, fields[i]);
+			}
+
+			private static Field($tbody, tablename, field) {
+				/* Elements */
+				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${tablename}][fields][${field.name}][state]`, value: field.state});
+				let textError = field.error + ((field.details) ? ` (${field.details})` : '');
+
+				/* Handlers */
+				let OnSelectField = () => {//TODO Если не выбрано ни одно
+					if ($checkbox.is(':checked')) $(`input[name^="tables[${tablename}][state]"]`).prop('checked', true);
+				}
+
+				/* Events */
+				$checkbox.on('click', OnSelectField);
+
+				/* Building DOM */
+				$tbody.append(
+					$('<tr/>').append(
+						$('<td/>').text(tablename),
+						$('<td/>').text(field.name),
+						$('<td/>').append(
+							$checkbox
+						),
+						$('<td/>').text(textError)
+					)
 				);
 			}
+
+			private static Empty() {
+				return $('<h3>').text('База данных исправна.');
+			}
+
 		}
 
 	}

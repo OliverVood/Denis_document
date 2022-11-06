@@ -51,6 +51,7 @@
 			$table2 = new TableMySQLi('test50', $this->db);
 			$table2->id('id');
 			$table2->bool('asd');
+			$table2->bool('wewe');
 
 			$this->db->PushTables($table, $table1, $table2);
 		}

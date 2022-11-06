@@ -2,11 +2,17 @@
 
 	namespace Base\DB;
 
+	use http\Encoding\Stream\Debrotli;
+
 	class TableMySQLi extends Table {
 		const ERROR_NULL	=  1;
 		const ERROR_CREATE 	= -1;
 		const ERROR_UPDATE 	= -2;
 		const ERROR_DELETE 	= -3;
+
+		private string	$engine 	= 'InnoDB';
+		private string	$encoding 	= 'utf8';
+		private array	$primary	= [];
 
 		/** @var DBMySQLi $db */
 
@@ -14,7 +20,7 @@
 			parent::__construct($name, $db);
 		}
 
-		public function id(string $name): void { $this->PushField(new FieldIDMySQLi($name, $this)); }
+		public function id(string $name): void { $this->AddPrimary([$name]); $this->PushField(new FieldIDMySQLi($name, $this)); }
 		public function bool(string $name): void { $this->PushField(new FieldBoolMySQLi($name, $this)); }
 		public function int8(string $name): void { $this->PushField(new FieldInt8MySQLi($name, $this)); }
 		public function int16(string $name): void { $this->PushField(new FieldInt16MySQLi($name, $this)); }
@@ -33,6 +39,7 @@
 		public function set(string $name, array $set): void { $this->PushField(new FieldSetMySQLi($name, $set, $this)); }
 		public function string(string $name, int $length): void { $this->PushField(new FieldStringMySQLi($name, $length, $this)); }
 		public function text(string $name): void { $this->PushField(new FieldTextMySQLi($name, $this)); }
+		public function AddPrimary(array $primary): void { $this->primary[] = $primary; }
 
 		public function Check(): array {
 			$out = ['state' => 1, 'fields' => []];
@@ -86,6 +93,31 @@
 
 		public function Make() {
 			echo "Make({$this->name});<br>";
+		}
+
+		public function Create(): string {
+			$fields = [];
+			$primaries = [];
+			foreach ($this->structure as $field) $fields[] = $field->CreationFormat();
+			foreach ($this->primary as $primary) $primaries[] = ", PRIMARY KEY (`" . implode('`, `', $primary) . "`)";
+			return "CREATE TABLE `{$this->name}` (" . implode(', ', $fields) . implode('', $primaries) . ") ENGINE = {$this->engine}  DEFAULT CHARSET = {$this->encoding}";
+		}
+
+		public function Update($data): array {
+			$queries = [];
+			foreach ($data['fields'] as $fieldname => $field) {
+				$queries[] = match ((int)$field['state']) {
+					FieldMySQLi::ERROR_CREATE => $this->structure[$fieldname]->Create(),
+					FieldMySQLi::ERROR_VARIOUS => $this->structure[$fieldname]->Update($field),
+					FieldMySQLi::ERROR_DELETE => FieldMySQLi::Delete($this->name, $fieldname),
+					default => ''
+				};
+			}
+			return $queries;
+		}
+
+		public static function Delete(string $tablename): string {
+			return "DROP TABLE `{$tablename}`";
 		}
 
 	}

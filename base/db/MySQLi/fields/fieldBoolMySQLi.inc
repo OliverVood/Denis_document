@@ -9,6 +9,6 @@
 			parent::__construct('bool', $name, $table);
 		}
 
-		protected function CreationFormat(): string { return "`{$this->name}` tinyint(1) NOT NULL DEFAULT '0'"; }
+		public function CreationFormat(): string { return "`{$this->name}` tinyint(1) NOT NULL DEFAULT '0'"; }
 
 	}

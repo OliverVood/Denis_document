@@ -11,6 +11,8 @@
 
 		/** @var TableMySQLi $table */
 
+		abstract public function CreationFormat(): string;
+
 		public function Check(?array $data_field_db): ?array {
 			$hash = MD5($data_field_db['DATA_TYPE'] . $data_field_db['COLUMN_TYPE'] . $data_field_db['COLUMN_KEY']);
 			$str_db = match ($hash) {
@@ -60,6 +62,8 @@
 			//		}
 		}
 
+		public function UpdateFormat(): string { return $this->CreationFormat(); }
+
 		static protected function DataToCreationFormat(array $data): string {
 			$pieces = [];
 			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
@@ -69,6 +73,19 @@
 
 			return implode(' ', $pieces);
 		}
+
+		public function Create(): string {
+			return "ALTER TABLE `{$this->tablename}` ADD {$this->UpdateFormat()}";
+		}
+
+		public function Update(): string {
+			return "ALTER TABLE `{$this->tablename}` CHANGE `{$this->name}` {$this->UpdateFormat()}";
+		}
+
+		public static function Delete($tablename, $fieldname): string {
+			return "ALTER TABLE `{$tablename}` DROP COLUMN `{$fieldname}`";
+		}
+
 
 	}
 
