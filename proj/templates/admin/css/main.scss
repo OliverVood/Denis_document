@@ -9,7 +9,7 @@ ul { margin: 0; padding: 0; }
 li { list-style-type: none; }
 a { text-decoration: none; color: $color-text-primary; }
 input {
-	outline: none; font-family: AjarSans, sans-serif; font-size: 14px;
+	outline: none; font-family: AjarSans, sans-serif; font-size: 1rem;
 	&[type="submit"] { @include mix-btn; cursor: pointer; }
 }
 body {

@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "none",
+		"target": "esnext",
+		"lib" : ["ESNext", "DOM"],
+		"rootDirs": ["./"],
+		"outDir": "../js",
+		"declaration": true,
+		"sourceMap": true,
+		"alwaysStrict": true
+	},
+	"include": ["**/*", "../../../../base/template/js/common.d.ts"],
+	"exclude": ["node_module"]
+}

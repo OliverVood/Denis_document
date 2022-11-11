@@ -5,8 +5,6 @@
 	RewriteEngine On
 	RewriteBase /
 
-    Options All -Indexes
-
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^(.*)\.(tpl|inc|htaccess)$ 404.inc [R=404,NC,L]
 
@@ -21,4 +19,16 @@
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^admin/([0-9a-z-_]+)/([0-9a-z-_]+)/?$ admin.php?__a=$1&__p=$2 [QSA,NC,L]
+
+#	RewriteCond %{REQUEST_FILENAME} !-f
+#	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^$ site.php [QSA,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^([0-9a-z-_]+)/?$ site.php?__a=$1 [QSA,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^([0-9a-z-_]+)/([0-9a-z-_]+)/?$ site.php?__a=$1&__p=$2 [QSA,NC,L]
 </IfModule>

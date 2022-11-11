@@ -6,7 +6,7 @@
 
 	class Item extends View {
 
-		public function ToVar(string $item) {
+		public function ToVar(string $item): string {
 			$this->Start();
 			$this->Render($item);
 			return $this->Read();

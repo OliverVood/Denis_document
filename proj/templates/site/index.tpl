@@ -1,18 +1,18 @@
 <?php
 
-	namespace Proj\Admin\Templates;
+	namespace Proj\Site\Templates;
 
 	use Base\Templates\View;
 
 	class Template extends View {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
-		}
+	public function ToVar(): string {
+		$this->Start();
+		$this->Render();
+		return $this->Read();
+	}
 
-		public function Render() { ?><!doctype html>
+	public function Render() { ?><!doctype html>
 			<html lang  = "ru">
 				<head>
 					<meta charset = "UTF-8">
@@ -27,9 +27,11 @@
 				<body>
 					<? $this->RenderSections(); ?>
 					<script>
+						let $ui_menu;
 						$(function() {
 							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
-							Admin.Common.Layout.Initialization();
+							Site.Common.Layout.Initialization();
+							$ui_menu = new Site.Common.Menu();
 						});
 					</script>
 				</body>
@@ -38,10 +40,16 @@
 
 		public function RenderSections() { ?>
 			<header><?php Layout::instance()->header->Browse(); ?></header>
-			<div>
-				<menu><?php Layout::instance()->menu->Browse(); ?></menu>
-				<main><?php Layout::instance()->main->Browse(); ?></main>
-			</div>
+			<main>
+				<div>
+					<?php Layout::instance()->main->Browse(); ?>
+					sdfsdf<br>
+					sdf<br>
+					dsf<br>
+					dsf<br>
+					df<br>
+				</div>
+			</main>
 			<footer><?php Layout::instance()->footer->Browse(); ?></footer>
 		<?php }
 

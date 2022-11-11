@@ -1,0 +1,150 @@
+@use "variables" as *;
+@use "common" as *;
+
+* { box-sizing: border-box; }
+html { height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: url("img/wall.jpg"); }
+body {
+	margin: 0; height: 100%; display: flex; flex-direction: column;
+	> main {
+		flex: auto;
+		> div { margin: 0 auto; width: 1200px; min-height: 100%; background-color: #eaeaea; box-shadow: 0 0 0.2rem #a5a5a5; font-family: Monitorica, sans-serif; }
+	}
+	> footer { margin-top: 4rem }
+}
+
+//#bdd3d1
+//@use "sass:map";
+//
+//$colors: (
+//		gray: #898989,
+//		hover: #990000
+//);
+//
+//@font-face { font-family: AjarSans;  src: url("proj/templates/admin/css/font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+//
+//html { height: 100%; font-family: AjarSans, sans-serif; }
+//body {
+//	margin: 0; height: 100%; background-image: url("img/1639189468-1001-www.lookw.ru.jpg");
+//	&.blur {
+//		&:before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-image: url("img/1639189468-1001-www.lookw.ru.jpg"); filter: blur(4px);  }
+//		> .layout { filter: blur(4px); }
+//	}
+//}
+//a {
+//	cursor: pointer;
+//	&:hover { color: map-get($colors, hover); }
+//}
+//
+//.layout {
+//	display: flex; flex-direction: column; min-height: 100%;
+//	> .block {
+//		&.menu { flex: none; }
+//		&.content { flex: auto; }
+//		&.footer { flex: none; }
+//	}
+//}
+
+.view.site.menu {
+	display: flex; padding: 60px; //font-family: "Times New Roman", sans-serif;
+	> .list {
+		flex: auto; display: flex; font-size: 25px;
+		> a {
+			padding: 10px 20px;
+			&:not(:last-child) { margin-right: 20px; }
+		}
+	}
+	> .more {
+		flex: none; display: flex; align-items: center; overflow: hidden;
+		> div {
+			position: relative; width: 40px; height: 40px; cursor: pointer;
+			> div {
+				position: absolute; left: 0; width: 40px; height: 4px; background-color: #898989;
+				&:nth-child(1) { top: 6px; /*transform: rotate(45deg); top: 18px;*/ }
+				&:nth-child(2) { top: 18px; }
+				&:nth-child(3) { top: 30px; }
+			}
+			&:hover > div { background-color: #990000; }
+		}
+	}
+}
+
+.view.site.full_menu {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #ffffff; background-image: url("img/bg1.png"); background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	&:before { content: ""; position: absolute; top: 10px; right: 10px; bottom: 10px; left: 10px; background-image: url("img/fill.png"); background-color: #0000009e; opacity: 0.5; }
+	> .close { position: absolute; top: 60px; right: 60px; width: 40px; height: 40px; background-color: #7e7e7e; }
+	> .menu {
+		&.m1 { top: 5rem;
+			left: 5rem;
+			position: absolute;
+			border-left: 2px solid #777;
+			padding-left: 30px;
+			bottom: 5rem;
+			> div {
+				> div:first-child {     position: absolute;
+					transform: rotate(-90deg);
+					bottom: 5rem;
+					left: -62px; }
+				> div:last-child {
+					> div {
+						font-size: 1.5rem;
+						position: relative;
+						&:not(:first-child) { margin-top: 1rem; }
+						> span {
+							position: absolute;
+							top: 0;
+							left: -42px;
+							width: 21px;
+							height: 21px;
+							border: 1px solid #ababab;
+							border-radius: 50%;
+							> span {
+								position: absolute;
+								top: 5px;
+								left: 6px;
+								width: 8px;
+								height: 8px;
+								background-color: #777;
+								border-radius: 50%;
+							}
+						}
+					}
+				}
+			}
+		}
+		&.m3 {
+			position: absolute;
+			right: 4rem;
+			top: 10rem;
+			border-right: 2px solid #777;
+			text-align: right;
+			> div {
+				> div:first-child { display: none; }
+				> div:last-child {
+					padding-right: 20px;
+					padding-bottom: 5rem;
+					> div {
+						font-size: 1.2rem;
+						position: relative;
+						&:not(:first-child) { margin-bottom: 0.5rem; }
+						> span {
+							position: absolute;
+							top: 7px;
+							right: -25px;
+							width: 8px;
+							height: 8px;
+							background-color: #777;
+							border-radius: 50%;
+						}
+					}
+				}
+			}
+		}
+	}
+}

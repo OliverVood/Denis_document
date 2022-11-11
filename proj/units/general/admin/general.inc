@@ -12,10 +12,10 @@
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
-	use Proj\Admin\Templates\General\Item;
 	use Proj\Units\Consts;
 	use Proj\DB;
 	use Proj\Admin\Templates\Layout;
+	use Proj\Admin\Templates\General\Item;
 	use Proj\Admin\Templates\General\Group;
 
 	class General extends Units implements Consts\General {
@@ -67,7 +67,6 @@
 
 		#[NoReturn] public function Make() {
 			$this->db->Make();
-
 			SendJSONSuccess($this->db->Check());
 		}
 

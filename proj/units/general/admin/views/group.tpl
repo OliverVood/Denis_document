@@ -8,7 +8,7 @@
 
 	class Group extends View {
 
-		public function ToVar(string $title, array $items) {
+		public function ToVar(string $title, array $items): string {
 			$this->Start();
 			$this->Render($title, $items);
 			return $this->Read();

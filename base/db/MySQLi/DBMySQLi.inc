@@ -64,10 +64,21 @@
 			return $this->db->query($query);
 		}
 
-		public function MultiQuery(string $query): bool|mysqli_result {
+		/**
+		 * Мультизапрос к БД
+		 * @param string $query - Текст запросов
+		 * @return array
+		 */
+		public function MultiQuery(string $query): array {
 			$this->history[] = $query;
 
-			return $this->db->multi_query($query);
+			$this->db->multi_query($query);
+			$result = [];
+			do {
+				$result[] = $this->db->store_result();
+			} while ($this->db->next_result());
+
+			return $result;
 		}
 
 		/**
