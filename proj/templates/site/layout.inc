@@ -21,7 +21,8 @@
 
 			self::AddScripts('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
 			self::AddScripts('base_common', '/base/template/js/common.js');
-			self::AddScripts('admin_common', '/proj/templates/site/js/common.js');
+			self::AddScripts('site_common', '/proj/templates/site/js/common.js');
+			self::AddScripts('site_catalogs', '/proj/templates/site/js/catalogs.js');
 
 			self::AddStylesheet('main', DIR_REL_TPL . 'site/css/main.css');
 		}

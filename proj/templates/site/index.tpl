@@ -43,11 +43,6 @@
 			<main>
 				<div>
 					<?php Layout::instance()->main->Browse(); ?>
-					sdfsdf<br>
-					sdf<br>
-					dsf<br>
-					dsf<br>
-					df<br>
 				</div>
 			</main>
 			<footer><?php Layout::instance()->footer->Browse(); ?></footer>

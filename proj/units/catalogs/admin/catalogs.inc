@@ -15,7 +15,7 @@
 
 		private DB $db;
 
-		public function __construct() {
+		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 			$this->db = DB::instance();
 

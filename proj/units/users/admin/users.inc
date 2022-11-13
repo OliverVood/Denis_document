@@ -11,7 +11,7 @@
 	class Users extends Units implements Consts\Users {
 		use Instance;
 
-		public function __construct() {
+		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 		}
 

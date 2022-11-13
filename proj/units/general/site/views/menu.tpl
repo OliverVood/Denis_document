@@ -13,11 +13,12 @@
 		}
 
 		public function Render() { ?>
-			<div class = "view site menu">
+			<div class = "view general menu">
+				<div class = "logo"><a href = "/"></a></div>
 				<div class = "list">
-					<a>Home</a>
-					<a>Portfolio</a>
-					<a>Contacts</a>
+					<a>Главная</a>
+					<a>О проекте</a>
+					<a>Контакты</a>
 				</div>
 				<div class = "more">
 					<div onclick = "$ui_menu.Open();">

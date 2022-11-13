@@ -18,7 +18,7 @@
 
 		private Action $out_menu;
 
-		public function __construct() {
+		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 
 			$this->out_menu		= new Action('always', 'always');
