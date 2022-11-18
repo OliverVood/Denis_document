@@ -1,20 +1,33 @@
 namespace Site {
 	export namespace Catalogs {
 
-		export class  PriceList {
+		function DuplicateInit($elem: JQuery, event: string = 'input') {
+			$elem.after(
+				$('<span/>', {class: 'print'})
+			);
+
+			$elem.on(event, OnDuplicate);
+		}
+
+		function OnDuplicate(e) {
+			let $source = $(e.currentTarget);
+			$source.next().text($source.val().toString());
+		}
+
+		export class  Estimate {
 			/* Variables */
 
 			/* Elements */
-			$parent					: JQuery;
-			$wrap					: JQuery;
-			$header					: JQuery;
-			$caption				: JQuery;
-			$contacts				: JQuery;
-			$contact_name			: JQuery;
-			$contact_address		: JQuery;
-			$contact_email			: JQuery;
-			$contact_phone			: JQuery;
-			$tables					: JQuery;
+			private $parent					: JQuery;
+			private $wrap					: JQuery;
+			private $header					: JQuery;
+			private $caption				: JQuery;
+			private $contacts				: JQuery;
+			private $contact_name			: JQuery;
+			private $contact_address		: JQuery;
+			private $contact_email			: JQuery;
+			private $contact_phone			: JQuery;
+			private $lists					: JQuery;
 
 			constructor(selector) {
 				/* Set elements */
@@ -27,14 +40,12 @@ namespace Site {
 				this.$contact_address		= $('<input/>', {type: 'text', placeholder: 'Адрес ...🖊'});
 				this.$contact_email			= $('<input/>', {type: 'text', placeholder: 'E-mail ...🖊'});
 				this.$contact_phone			= $('<input/>', {type: 'text', placeholder: 'Телефон ...🖊'});
-				this.$tables				= $('<div/>', {class: 'tables'});
-
-				/* Events */
+				this.$lists					= $('<div/>', {class: 'lists'});
 
 				/* Building DOM */
 				this.$wrap.append(
 					this.$header.append(
-						this.$caption.text('Прайс-лист'),
+						this.$caption.text('Смета'),
 						this.$contacts.append(
 							$('<div/>').append(this.$contact_name),
 							$('<div/>').append(this.$contact_address),
@@ -42,7 +53,7 @@ namespace Site {
 							$('<div/>').append(this.$contact_phone)
 						)
 					),
-					this.$tables,
+					this.$lists,
 					$('<div/>', {class: 'footer'}).append(
 						$('<div/>').text('место для печати'),
 						$('<div/>').append(
@@ -55,55 +66,69 @@ namespace Site {
 						)
 					)
 				);
-				this.$parent.append(
-					this.$wrap
-				);
 
-				let table = new Table();
-				this.$tables.append(
-					table.GetTable()
+				/* Duplicate */
+				DuplicateInit(this.$contact_name);
+				DuplicateInit(this.$contact_address);
+				DuplicateInit(this.$contact_email);
+				DuplicateInit(this.$contact_phone);
+
+				this.AddList();
+
+				this.$parent.append(this.$wrap);
+			}
+
+			private AddList() {
+				let list = new List();
+				this.$lists.append(
+					list.GetElem()
 				);
 			}
 
 		}
 
-		class Table {
+		class List {
 			/* Variables */
-			iter					: number;
+			private items							: {[key: number]: Item};
+			private iter							: number;
+			private percent							: number;
 
 			/* Elements */
-			$lines					: {[key: number]: JQuery};
-			$table					: JQuery;
-			$thead					: JQuery;
-			$remove					: JQuery;
-			$tbody					: JQuery;
-			$add_line				: JQuery;
-			$tr_sum					: JQuery;
-			$tr_percent				: JQuery;
-			$tr_total				: JQuery;
+			private $list							: JQuery;
+			private $head							: JQuery;
+			private $add_line						: JQuery;
+			private $tr_sum							: JQuery;
+			private $sum							: JQuery;
+			private $percent						: JQuery;
+			private $total							: JQuery;
 
 			constructor() {
 				/* Set variables */
-				this.iter = 0;
+				this.items 					= {};
+				this.iter					= 0;
+				this.percent				= 0;
 
 				/* Set elements */
-				this.$lines 				= [];
-				this.$table 				= $('<table/>');
-				this.$thead 				= $('<thead/>');
-				this.$remove 				= $('<span/>');
-				this.$tbody 				= $('<tbody/>');
+				this.$list 					= $('<div/>', {class: 'list'});
+				this.$head	 				= $('<input/>', {type: 'text', placeholder: '...🖊'});
 				this.$add_line 				= $('<span/>');
-				this.$tr_sum 				= $('<tr/>', {class: 'sum'});
-				this.$tr_percent 			= $('<tr/>', {class: 'percent'});
-				this.$tr_total 				= $('<tr/>', {class: 'total'});
+				this.$tr_sum 				= $('<tr/>');
+				this.$sum 					= $('<span/>');
+				this.$percent				= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$total 				= $('<span/>');
 
+				/* Events */
+				this.$add_line.on('click', this.AddItem.bind(this));
+				this.$percent.on('input', this.InputPercent.bind(this));
+				this.$percent.on('blur', this.EnterPercent.bind(this));
 
-					this.$table.append(
-						this.$thead.append(
+				/* Building DOM */
+				this.$list.append(
+					$('<div/>', {class: 'title'}).append(this.$head),
+					$('<table/>').append(
+						$('<thead/>').append(
 							$('<tr/>').append(
-								$('<th/>').append(
-									this.$remove.text('+/-')
-								),
+								$('<th/>').append($('<span/>').text('+/-')),
 								$('<th/>').text('Наименование'),
 								$('<th/>').text('Количество'),
 								$('<th/>').text('Еденица измерения'),
@@ -111,90 +136,168 @@ namespace Site {
 								$('<th/>').text('Сумма')
 							)
 						),
-						this.$tbody.append(
+						$('<tbody/>').append(
 							this.$tr_sum.append(
-								$('<td/>').append(
-									this.$add_line.text('+')
-								),
+								$('<td/>', {class: 'number'}).append(this.$add_line.text('+')),
 								$('<td/>', {colspan: 3}),
 								$('<td/>').text('Всего'),
-								$('<td/>'),
+								$('<td/>', {class: 'number'}).append(this.$sum),
 							),
-							this.$tr_percent.append(
-								$('<td/>', {colspan: 4}),
+							$('<tr/>').append(
+								$('<td/>'),
+								$('<td/>', {colspan: 3}),
 								$('<td/>').text('Скидка, %'),
-								$('<td/>').append(
-									$('<input/>', {type: 'text', placeholder: '...🖊'})
-								),
+								$('<td/>', {class: 'number'}).append(this.$percent),
 							),
-							this.$tr_total.append(
-								$('<td/>', {colspan: 4}),
-								$('<td/>').text('Итого'),
+							$('<tr/>', {class: 'total'}).append(
 								$('<td/>'),
+								$('<td/>', {colspan: 3}),
+								$('<td/>').text('Итого'),
+								$('<td/>', {class: 'number'}).append(this.$total),
 							)
 						)
-					);
+					)
+				);
 
-				this.Add();
-				this.Add();
-				this.Add();
-				this.Add();
+				/* Duplicate */
+				DuplicateInit(this.$head);
+				DuplicateInit(this.$percent, 'blur');
+
+				this.AddItem();
+
+				this.Sum();
+			}
+
+			public GetElem(): JQuery {
+				return this.$list;
+			}
+
+			public AddItem(): void {
+				let _id = ++this.iter;
+				let item = new Item(_id, this);
+				this.items[_id] = item;
+
+				this.$tr_sum.before(item.GetElem());
+
+				this.Sum();
+			}
+
+			public Sum(): void {
+				let _sum = 0;
+				for (let i in this.items) _sum += this.items[i].GetSum();
+
+				this.$sum.text(_sum.toFixed(2));
+				this.$total.text((_sum - (_sum * this.percent / 100)).toFixed(2));
+			}
+
+			private InputPercent(): void {
+				this.percent = parseFloat(this.$percent.val().toString());
+				if (isNaN(this.percent)) this.percent = 0;
+
+				this.Sum();
+			}
+
+			private EnterPercent(): void {
+				this.$percent.val(this.percent);
+			}
+
+			public RemoveItem(id: number): void {
+				delete this.items[id];
+				this.Sum();
+			}
+
+		}
+
+		class Item {
+			/* Variables */
+			private list				: List;
+			private id					: number;
+			private sum					: number;
+
+			/* Elements */
+			private $tr					: JQuery;
+			private $remove				: JQuery;
+			private $name				: JQuery;
+			private $count				: JQuery;
+			private $unit				: JQuery;
+			private $price				: JQuery;
+			private $sum				: JQuery;
+
+			constructor(id: number, table: List) {
+				/* Set variables */
+				this.list		= table;
+				this.id			= id;
+				this.sum		= 0;
+
+				/* Set elements */
+				this.$remove	= $('<span/>');
+
+				this.$name		= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$count		= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$unit		= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$price		= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$sum		= $('<span/>');
 
 				/* Events */
 				this.$remove.on('click', this.Remove.bind(this));
-				this.$add_line.on('click', this.Add.bind(this));
+				this.$count.on('input', this.Input.bind(this));
+				this.$price.on('input', this.Input.bind(this));
+				this.$count.on('blur', this.Enter.bind(this));
+				this.$price.on('blur', this.Enter.bind(this));
+
+				/* Building DOM */
+				this.$tr = $('<tr/>', {class: 'line'}).append(
+					$('<td/>', {class: 'number'}).append(this.$remove.text('-')),
+					$('<td/>').append(this.$name, $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number'}).append(this.$count.val('0'), $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number'}).append(this.$unit, $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number'}).append(this.$price.val('0'), $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number'}).append(this.$sum)
+				);
+
+				/* Duplicate */
+				DuplicateInit(this.$name);
+				DuplicateInit(this.$unit);
+				DuplicateInit(this.$count, 'blur');
+				DuplicateInit(this.$price, 'blur');
+
+				this.$sum.text(this.Sum());
 			}
 
-			public GetTable(): JQuery {
-				return this.$table;
+			public GetElem(): JQuery {
+				return this.$tr;
+			}
+
+			public GetSum(): number {
+				return this.sum;
+			}
+
+			private Sum(): number {
+				let _price = Number(parseFloat(this.$price.val().toString()).toFixed(2));
+				let _count = Number(parseFloat(this.$count.val().toString()).toFixed(2));
+				if (isNaN(_count)) _count = 0;
+				if (isNaN(_price)) _price = 0;
+
+				return this.sum = Number((_price * _count).toFixed(2));
+			}
+
+			private Input(): void {
+				this.$sum.text(this.Sum());
+				this.list.Sum();
+			}
+
+			private Enter(e): void {
+				let $input = $(e.currentTarget);
+
+				let val = Number(parseFloat($input.val().toString()).toFixed(2));
+				if (isNaN(val)) val = 0;
+
+				$input.val(val);
 			}
 
 			private Remove(): void {
-				// this.$wrap.remove();
-			}
-
-			private Add(): void {
-				/* Elements */
-				let $remove = $('<span/>');
-				let $count = $('<input/>', {type: 'text', placeholder: '...🖊'});
-				let $price = $('<input/>', {type: 'text', placeholder: '...🖊'});
-				let $sum = $('<span/>');
-
-				/* Building DOM */
-				let $tr = $('<tr/>', {class: 'line'}).append(
-					$('<td/>').append(
-						$remove.text('-')
-					),
-					$('<td/>').append(
-						$('<input/>', {type: 'text', placeholder: '...🖊'})
-					),
-					$('<td/>').append(
-						$count
-					),
-					$('<td/>').append(
-						$('<input/>', {type: 'text', placeholder: '...🖊'})
-					),
-					$('<td/>').append(
-						$price
-					),
-					$('<td/>').append(
-						$sum
-					)
-				)
-				this.$tr_sum.before($tr);
-
-				/* Events */
-				$remove.on('click', function() { $tr.remove(); });
-				$count.on('blur', Sum.bind(this));
-				$price.on('blur', Sum.bind(this));
-
-				this.$lines[++this.iter] = $tr;
-
-				function Sum() {
-					console.log($count.val(), $price.val());
-					let _su = Number($count.val()) * Number($price.val());
-					$sum.text(_su);
-				}
+				this.list.RemoveItem(this.id);
+				this.$tr.remove();
 			}
 
 		}

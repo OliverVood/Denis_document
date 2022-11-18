@@ -1,6 +1,6 @@
 <?php
 
-	namespace Proj\Units;
+	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
 	require 'views/work.tpl';

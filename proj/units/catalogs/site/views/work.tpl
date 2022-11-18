@@ -15,9 +15,15 @@
 		public function Render() { ?>
 			<div class = "view catalogs work">
 				<div class = "btns">
-					<div><input type = "button" value = "+ Создать прайс-лист" onclick = "new Site.Catalogs.PriceList('.view.catalogs.work > .lists');"></input></div>
+					<div>
+						<input type = "button" value = "+ Добавить таблицу" onclick = "Estimate.AddList();">
+						<input type = "button" value = "p Печать" onclick = "window.print();">
+					</div>
 				</div>
-				<div class = "lists"></div>
+				<div class = "container"></div>
+				<script>
+					let Estimate = new Site.Catalogs.Estimate('.view.catalogs.work > .container');
+				</script>
 			</div>
 		<?php }
 

@@ -1,6 +1,6 @@
 <?php
 
-	namespace Proj\Units;
+	namespace Proj\Admin\Units;
 
 	use Base\Units;
 	use Base\Instance;
