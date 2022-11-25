@@ -1,0 +1,32 @@
+@use "variables" as *;
+
+@mixin MixScreen($min: null, $max: null, $screen: false, $print: false) {
+	@if ($min != null or $max != null or $screen or $print) {
+
+		$media: '';
+		$fill: false;
+
+		@if ($screen) { $media: 'screen'; $fill: true; }
+		@if ($print) { @if ($fill) { $media: $media + ' AND '; } $media: $media + 'screen'; $fill: true; }
+		@if ($min) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(min-width: ' + $min + ')'; $fill: true; }
+		@if ($max) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(max-width: ' + $max + ')'; }
+
+		@media ($media) {
+			@content;
+		}
+
+	} @else {
+		@content;
+	}
+}
+
+@mixin MixBtn {
+	display: inline-block; padding: 0.6rem 1.6rem; border: 0.2rem solid $color-btn-border; background-color: $color-btn-bg; color: $color-primary-text; cursor: pointer;
+	&:hover { border-color: $color-btn-border-hover; background-color: $color-btn-bg-hover; }
+	&:active, &:focus-visible { border-color: $color-btn-border-active; background-color: $color-btn-bg-active; }
+	&.negative {
+		border-color: $color-negative-btn-bg; background-color: $color-negative-btn-bg;
+		&:hover { border-color: $color-negative-btn-border-hover; background-color: $color-negative-btn-bg-hover; }
+		&:active, &:focus-visible { border-color: $color-negative-btn-border-active; background-color: $color-negative-btn-bg-active; }
+	}
+}

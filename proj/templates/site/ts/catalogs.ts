@@ -16,6 +16,8 @@ namespace Site {
 
 		export class  Estimate {
 			/* Variables */
+			private lists					: {[key: number]: List};
+			private iter					: number;
 
 			/* Elements */
 			private $parent					: JQuery;
@@ -30,6 +32,10 @@ namespace Site {
 			private $lists					: JQuery;
 
 			constructor(selector) {
+				/* Set variables */
+				this.lists					= {};
+				this.iter					= 0;
+
 				/* Set elements */
 				this.$parent 				= $(selector);
 				this.$wrap					= $('<div/>', {class: 'wrap'});
@@ -57,11 +63,17 @@ namespace Site {
 					$('<div/>', {class: 'footer'}).append(
 						$('<div/>').text('место для печати'),
 						$('<div/>').append(
-							$('<div/>').append(
-								$('<div/>').text('Дата:')
+							$('<div/>', {class: 'date'}).append(
+								$('<div/>').text('Дата:'),
+								$('<div/>').append(
+									$('<input/>', {type: 'date', value: Site.Common.UIDate.Today(), class: 'number'})
+								)
 							),
-							$('<div/>').append(
-								$('<div/>').text('Автограф:')
+							$('<div/>', {class: 'autograph'}).append(
+								$('<div/>').text('Автограф:'),
+								$('<div/>').append(
+									$('<div/>')
+								)
 							),
 						)
 					)
@@ -78,40 +90,69 @@ namespace Site {
 				this.$parent.append(this.$wrap);
 			}
 
-			private AddList() {
-				let list = new List();
+			public RemoveList(id: number): void {
+				delete this.lists[id];
+
+				// this.Sum();
+			}
+
+			public AddList() {
+				let _id = ++this.iter;
+				let list = new List(_id, this);
+				this.lists[_id] = list;
+
 				this.$lists.append(
 					list.GetElem()
 				);
+
+				// this.Sum();
 			}
 
 		}
 
 		class List {
 			/* Variables */
+			private estimate						: Estimate;
+			private id								: number;
 			private items							: {[key: number]: Item};
 			private iter							: number;
 			private percent							: number;
+			private collapse						: boolean;
+			private visible							: boolean;
 
 			/* Elements */
 			private $list							: JQuery;
+			private $wrap							: JQuery;
 			private $head							: JQuery;
+			private $visible						: JQuery;
+			private $delete							: JQuery;
+			private $table							: JQuery;
 			private $add_line						: JQuery;
+			private $collapse						: JQuery;
 			private $tr_sum							: JQuery;
 			private $sum							: JQuery;
 			private $percent						: JQuery;
 			private $total							: JQuery;
 
-			constructor() {
+			constructor(id: number, estimate: Estimate) {
 				/* Set variables */
+				this.estimate				= estimate;
+				this.id						= id;
 				this.items 					= {};
 				this.iter					= 0;
 				this.percent				= 0;
+				this.collapse				= false;
+				this.visible				= true;
 
 				/* Set elements */
 				this.$list 					= $('<div/>', {class: 'list'});
+				this.$wrap					= $('<div/>', {class: 'wrap'});
 				this.$head	 				= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$add_line 				= $('<span/>');
+				this.$collapse				= $('<span/>', {class: 'item collapse', title: "Свернуть строки"});
+				this.$visible				= $('<span/>', {class: 'visible', title: "Скрыть таблицу"});
+				this.$delete				= $('<span/>', {class: 'delete negative', title: "Удалить таблицу"});
+				this.$add_line 				= $('<span/>', {class: 'item add', title: 'Добавить строку'});
+				this.$table					= $('<table/>');
 				this.$tr_sum 				= $('<tr/>');
 				this.$sum 					= $('<span/>');
 				this.$percent				= $('<input/>', {type: 'text', placeholder: '...🖊'});
@@ -121,39 +162,50 @@ namespace Site {
 				this.$add_line.on('click', this.AddItem.bind(this));
 				this.$percent.on('input', this.InputPercent.bind(this));
 				this.$percent.on('blur', this.EnterPercent.bind(this));
+				this.$collapse.on('click', this.OnCollapse.bind(this));
+				this.$visible.on('click', this.OnVisible.bind(this));
+				this.$delete.on('click', this.OnDelete.bind(this));
 
 				/* Building DOM */
 				this.$list.append(
-					$('<div/>', {class: 'title'}).append(this.$head),
-					$('<table/>').append(
-						$('<thead/>').append(
-							$('<tr/>').append(
-								$('<th/>').append($('<span/>').text('+/-')),
-								$('<th/>').text('Наименование'),
-								$('<th/>').text('Количество'),
-								$('<th/>').text('Еденица измерения'),
-								$('<th/>').text('Цена'),
-								$('<th/>').text('Сумма')
-							)
-						),
-						$('<tbody/>').append(
-							this.$tr_sum.append(
-								$('<td/>', {class: 'number'}).append(this.$add_line.text('+')),
-								$('<td/>', {colspan: 3}),
-								$('<td/>').text('Всего'),
-								$('<td/>', {class: 'number'}).append(this.$sum),
+					$('<div/>', {class: 'control tabu'}).append(
+						this.$visible,
+						this.$delete
+					),
+					this.$wrap.append(
+						$('<div/>', {class: 'title'}).append(this.$head),
+						this.$table.append(
+							$('<thead/>').append(
+								$('<tr/>').append(
+									$('<th/>', {class: 'tabu'}).append($('<span/>').text('+/-')),
+									$('<th/>').text('Наименование'),
+									$('<th/>').text('Количество'),
+									$('<th/>').text('Единица измерения'),
+									$('<th/>').text('Цена'),
+									$('<th/>').text('Сумма')
+								)
 							),
-							$('<tr/>').append(
-								$('<td/>'),
-								$('<td/>', {colspan: 3}),
-								$('<td/>').text('Скидка, %'),
-								$('<td/>', {class: 'number'}).append(this.$percent),
-							),
-							$('<tr/>', {class: 'total'}).append(
-								$('<td/>'),
-								$('<td/>', {colspan: 3}),
-								$('<td/>').text('Итого'),
-								$('<td/>', {class: 'number'}).append(this.$total),
+							$('<tbody/>').append(
+								this.$tr_sum.append(
+									$('<td/>', {class: 'number tabu'}).append(this.$add_line),
+									$('<td/>', {colspan: 3}),
+									$('<td/>').text('Всего'),
+									$('<td/>', {class: 'number'}).append(this.$sum),
+								),
+								$('<tr/>').append(
+									$('<td/>', {class: 'number tabu'}).append(
+										this.$collapse
+									),
+									$('<td/>', {colspan: 3}),
+									$('<td/>').text('Скидка, %'),
+									$('<td/>', {class: 'number'}).append(this.$percent),
+								),
+								$('<tr/>', {class: 'total'}).append(
+									$('<td/>', {class: 'tabu'}),
+									$('<td/>', {colspan: 3}),
+									$('<td/>').text('Итого'),
+									$('<td/>', {class: 'number'}).append(this.$total),
+								)
 							)
 						)
 					)
@@ -190,6 +242,11 @@ namespace Site {
 				this.$total.text((_sum - (_sum * this.percent / 100)).toFixed(2));
 			}
 
+			public RemoveItem(id: number): void {
+				delete this.items[id];
+				this.Sum();
+			}
+
 			private InputPercent(): void {
 				this.percent = parseFloat(this.$percent.val().toString());
 				if (isNaN(this.percent)) this.percent = 0;
@@ -201,9 +258,32 @@ namespace Site {
 				this.$percent.val(this.percent);
 			}
 
-			public RemoveItem(id: number): void {
-				delete this.items[id];
-				this.Sum();
+			private OnCollapse(): void {
+				this.collapse = !this.collapse;
+
+				if (this.collapse) {
+					this.$table.find('tr.line').addClass('print');
+					this.$add_line.addClass('hide');
+				} else {
+					this.$table.find('tr.line').removeClass('print');
+					this.$add_line.removeClass('hide');
+				}
+			}
+
+			private OnVisible(): void {
+				this.visible = !this.visible;
+
+				if (this.visible) this.$wrap.removeClass('hide');
+				else this.$wrap.addClass('hide');
+			}
+
+			private OnDelete(): void {
+				this.Remove();
+			}
+
+			private Remove(): void {
+				this.estimate.RemoveList(this.id);
+				this.$list.remove();
 			}
 
 		}
@@ -223,14 +303,14 @@ namespace Site {
 			private $price				: JQuery;
 			private $sum				: JQuery;
 
-			constructor(id: number, table: List) {
+			constructor(id: number, list: List) {
 				/* Set variables */
-				this.list		= table;
+				this.list		= list;
 				this.id			= id;
 				this.sum		= 0;
 
 				/* Set elements */
-				this.$remove	= $('<span/>');
+				this.$remove	= $('<span/>', {class: 'item del negative', title: 'Удалить строку'});
 
 				this.$name		= $('<input/>', {type: 'text', placeholder: '...🖊'});
 				this.$count		= $('<input/>', {type: 'text', placeholder: '...🖊'});
@@ -247,11 +327,11 @@ namespace Site {
 
 				/* Building DOM */
 				this.$tr = $('<tr/>', {class: 'line'}).append(
-					$('<td/>', {class: 'number'}).append(this.$remove.text('-')),
+					$('<td/>', {class: 'number tabu'}).append(this.$remove),
 					$('<td/>').append(this.$name, $('<span/>', {class: 'print'})),
-					$('<td/>', {class: 'number'}).append(this.$count.val('0'), $('<span/>', {class: 'print'})),
-					$('<td/>', {class: 'number'}).append(this.$unit, $('<span/>', {class: 'print'})),
-					$('<td/>', {class: 'number'}).append(this.$price.val('0'), $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number'}).append(this.$count.val('0')),
+					$('<td/>', {class: 'number'}).append(this.$unit),
+					$('<td/>', {class: 'number'}).append(this.$price.val('0')),
 					$('<td/>', {class: 'number'}).append(this.$sum)
 				);
 
@@ -273,12 +353,12 @@ namespace Site {
 			}
 
 			private Sum(): number {
-				let _price = Number(parseFloat(this.$price.val().toString()).toFixed(2));
-				let _count = Number(parseFloat(this.$count.val().toString()).toFixed(2));
+				let _price = +(parseFloat(this.$price.val().toString()).toFixed(2));
+				let _count = +(parseFloat(this.$count.val().toString()).toFixed(2));
 				if (isNaN(_count)) _count = 0;
 				if (isNaN(_price)) _price = 0;
 
-				return this.sum = Number((_price * _count).toFixed(2));
+				return this.sum = +((_price * _count).toFixed(2));
 			}
 
 			private Input(): void {
@@ -289,7 +369,7 @@ namespace Site {
 			private Enter(e): void {
 				let $input = $(e.currentTarget);
 
-				let val = Number(parseFloat($input.val().toString()).toFixed(2));
+				let val = +(parseFloat($input.val().toString()).toFixed(2));
 				if (isNaN(val)) val = 0;
 
 				$input.val(val);

@@ -14,6 +14,19 @@ namespace Site {
 
 		}
 
+		export class UIDate {
+
+			static Today(): string {
+				let d = new Date();
+				let day = d.getDate();
+				let month = d.getMonth() + 1;
+				let year = d.getFullYear();
+
+				return `${year}-${month}-${day}`;
+			}
+
+		}
+
 		export class Menu {
 			jq_body			: JQuery;
 			jq_wrap			: JQuery;

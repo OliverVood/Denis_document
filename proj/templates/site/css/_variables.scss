@@ -1,0 +1,45 @@
+/* Palette */
+$color-primary							: #428192;
+$color-primary-light					: #4C97AB;
+$color-primary-text						: #FFFFFF;
+
+$color-secondary						: #CBDCE1;
+
+$color-negative							: #A6574A;
+$color-negative-light					: #AD675B;
+
+$color-neutral-black					: #565656;
+$color-neutral							: #A5A5A5;
+$color-neutral-light					: #C5C5C5;
+$color-neutral-extra-light				: #EAEAEA;
+
+/* Color elements */
+$color-btn-text 						: $color-primary-text;
+
+$color-btn-bg 							: $color-primary;
+$color-btn-bg-hover 					: $color-primary-light;
+$color-btn-bg-active 					: $color-primary-light;
+
+$color-btn-border 						: $color-primary;
+$color-btn-border-hover 				: $color-primary-light;
+$color-btn-border-active 				: $color-primary;
+
+$color-negative-btn-bg					: $color-negative;
+$color-negative-btn-bg-hover			: $color-negative-light;
+$color-negative-btn-bg-active			: $color-negative-light;
+
+$color-negative-btn-border				: $color-negative;
+$color-negative-btn-border-hover		: $color-negative-light;
+$color-negative-btn-border-active		: $color-negative;
+
+/* sizes */
+//$size2XS    : 360;
+//$sizeXS     : 420;
+//$sizeS      : 480;
+//$sizeM      : 576;
+//$sizeL      : 680;
+//$sizeX      : 768;
+//$sizeXL     : 860;
+//$size2XL    : 992;
+//$size3XL    : 1080;
+//$size4XL    : 1200;

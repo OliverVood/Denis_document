@@ -14,11 +14,8 @@
 
 		public function Render() { ?>
 			<div class = "view catalogs work">
-				<div class = "btns">
-					<div>
-						<input type = "button" value = "+ Добавить таблицу" onclick = "Estimate.AddList();">
-						<input type = "button" value = "p Печать" onclick = "window.print();">
-					</div>
+				<div class = "btns tabu">
+					<input type = "button" value = "+ Добавить таблицу" onclick = "Estimate.AddList();"><input type = "button" value = "p Печать" onclick = "window.print();">
 				</div>
 				<div class = "container"></div>
 				<script>

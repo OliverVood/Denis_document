@@ -1,11 +1,31 @@
 @CHARSET "UTF-8";
 
-@font-face { font-family: PetersburgC; src: url("font/PetersburgC/regular.otf") format("opentype"); font-weight: normal; font-style: normal; }
-@font-face { font-family: PetersburgC; src: url("font/PetersburgC/bold.otf") format("opentype"); font-weight: bold; font-style: normal; }
-@font-face { font-family: PetersburgC; src: url("font/PetersburgC/italic.otf") format("opentype"); font-weight: normal; font-style: italic; }
-@font-face { font-family: PetersburgC; src: url("font/PetersburgC/bold-italic.otf") format("opentype"); font-weight: bold; font-style: italic; }
+@font-face { font-family: PetersburgC; src: url("fonts/PetersburgC/regular.otf") format("opentype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: PetersburgC; src: url("fonts/PetersburgC/bold.otf") format("opentype"); font-weight: bold; font-style: normal; }
+@font-face { font-family: PetersburgC; src: url("fonts/PetersburgC/italic.otf") format("opentype"); font-weight: normal; font-style: italic; }
+@font-face { font-family: PetersburgC; src: url("fonts/PetersburgC/bold-italic.otf") format("opentype"); font-weight: bold; font-style: italic; }
 
-@font-face { font-family: Monitorica; src: url("font/Monitorica/regular.otf") format("opentype"); font-weight: normal; font-style: normal; }
-@font-face { font-family: Monitorica; src: url("font/Monitorica/bold.otf") format("opentype"); font-weight: bold; font-style: normal; }
-@font-face { font-family: Monitorica; src: url("font/Monitorica/italic.otf") format("opentype"); font-weight: normal; font-style: italic; }
-@font-face { font-family: Monitorica; src: url("font/Monitorica/bold-italic.otf") format("opentype"); font-weight: bold; font-style: italic; }
+@font-face { font-family: Monitorica; src: url("fonts/Monitorica/regular.otf") format("opentype"); font-weight: normal; font-style: normal; }
+@font-face { font-family: Monitorica; src: url("fonts/Monitorica/bold.otf") format("opentype"); font-weight: bold; font-style: normal; }
+@font-face { font-family: Monitorica; src: url("fonts/Monitorica/italic.otf") format("opentype"); font-weight: normal; font-style: italic; }
+@font-face { font-family: Monitorica; src: url("fonts/Monitorica/bold-italic.otf") format("opentype"); font-weight: bold; font-style: italic; }
+
+//@mixin ff($weight, $name, $family, $folder)
+//{
+//	@font-face {font-family: $family; font-style: normal; font-weight:$weight; src:url($folder + '/' + $name + '.ttf') format('truetype');}
+//	@font-face {font-family: $family; font-style: italic; font-weight:$weight; src:url($folder + '/' + $name + '-italic.ttf') format('truetype');}
+//}
+//
+//@mixin font-face($family, $folder) {
+//	@include ff(100, 'thin', $family, $folder);
+//	//@include ff(200, 'extra-light', $family, $folder);
+//	@include ff(300, 'light', $family, $folder);
+//	@include ff(400, 'regular', $family, $folder);
+//	@include ff(500, 'medium', $family, $folder);
+//	//@include ff(600, 'semi-bold', $family, $folder);
+//	@include ff(700, 'bold', $family, $folder);
+//	//@include ff(800, 'extra-bold', $family, $folder);
+//	@include ff(900, 'black', $family, $folder);
+//}
+//
+//@include font-face('Roboto', '/templates/site/css/fonts/roboto');

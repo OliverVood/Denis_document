@@ -2,7 +2,7 @@
 
 @font-face { font-family: AjarSans; src: url("font/Ajar Sans/AjarSans-Regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
-@mixin mix-btn {
+@mixin MixBtn {
   padding: 0.6rem 1.6rem; border: 0.2rem solid $color-secondary; border-radius: 0.4rem; background-color: $color-secondary; color: $color-text-primary;
   &:hover { border-color: $color-secondary-dark; background-color: $color-secondary-dark; }
   &:focus-visible, &:active { border-color: $color-secondary-dark; background-color: $color-secondary-light; }
