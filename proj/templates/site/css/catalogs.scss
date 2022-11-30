@@ -2,9 +2,9 @@
 @use "functions" as *;
 
 .view.catalogs.work {
-	> .btns > input {
-
-		&:not(:last-child) { margin-right: 0.5rem; }
+	> .btns {
+		display: flex;
+		> *:not(:last-child) { margin-right: 0.5rem; }
 	}
 	> .container {
 		> .wrap {

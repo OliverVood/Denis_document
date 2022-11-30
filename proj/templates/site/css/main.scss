@@ -1,6 +1,6 @@
 @use "variables" as *;
 @use "functions" as *;
-@use "common" as *;
+@use "fonts" as *;
 
 * { box-sizing: border-box; }
 html { height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: url("img/wall.jpg"); }

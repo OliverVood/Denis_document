@@ -1,3 +1,6 @@
+const VERSION_DB = 25;
+const DOCS = ['price_list', 'estimate', 'completion'];
+
 namespace Site {
 	export namespace Catalogs {
 
@@ -14,7 +17,116 @@ namespace Site {
 			$source.next().text($source.val().toString());
 		}
 
-		export class  Estimate {
+		function UpgradeDBStructure(db: IDBDatabase) {
+			if (!db.objectStoreNames.contains('documents')) db.createObjectStore('documents', {keyPath: 'type'});
+			if (!db.objectStoreNames.contains('estimate')) db.createObjectStore('estimate', {keyPath: 'id'});
+			if (!db.objectStoreNames.contains('estimate_table')) db.createObjectStore('estimate_table', {keyPath: 'id'});
+			if (!db.objectStoreNames.contains('estimate_record')) db.createObjectStore('estimate_record', {keyPath: 'id'});
+		}
+
+		function UpgradeDBData(db) {
+			console.log('UpgradeDBData');
+
+			let transaction = db.transaction('documents', 'readwrite');
+			let store = transaction.objectStore('documents');
+			for (let i in DOCS) store.put({type: DOCS[i], iter: 0});
+		}
+
+		type TypeDataEstimate = { id: number, datecr: string, datemd: string }[];
+
+		export class Controller {
+			/* Variables */
+			estimate						: Estimate;
+			db
+
+			/* Elements */
+			$view							: JQuery;
+			$control						: JQuery;
+			$list							: JQuery;
+			$old							: JQuery;
+			$add							: JQuery;
+			$print							: JQuery;
+			$container						: JQuery;
+
+			constructor(selector: string, data: TypeDataEstimate = []) {
+				/* Set values */
+				// let self = this;
+				this.db = indexedDB.open('desktop', VERSION_DB);
+
+				this.db.onupgradeneeded = () => UpgradeDBStructure(this.db.result);
+
+				this.db.onsuccess = () => {
+					console.log('working db');
+
+					UpgradeDBData(this.db.result);
+
+					let db = this.db.result;
+
+					db.onversionchange = () => {
+						db.close();
+						alert("База данных устарела, пожалуйста, перезагрузите страницу.");
+					};
+				};
+
+				this.db.onerror = () => {
+					console.error("Error", this.db.error);
+				};
+
+				this.db.onblocked = () => {
+					alert("База данных заблокированна, пожалуйста, закройте другие вкладки сайта и перезагрузите страницу.");
+				}
+
+				/* Set elements */
+				this.$view = $(selector);
+				this.$control = $('<div/>', {class: 'btns tabu'});
+				this.$list = $('<select/>');
+				this.$old = $('<optgroup/>', {label: 'Сохранённые сметы:'});
+				this.$add = $('<input/>', {type: 'button', value: '+ Добавить таблицу', disabled: true});
+				this.$print = $('<input/>', {type: 'button', value: 'p Печать', disabled: true});
+				this.$container = $('<div/>', {class: 'container'});
+
+				/* Building DOM */
+				this.$view.append(
+					this.$control.append(
+						this.$list.append(
+							$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету'),
+							$('<optgroup/>', {label: 'Действие:'}).append(
+								$('<option/>', {value: '0'}).text('Создать новую')
+							)
+						),
+						this.$add,
+						this.$print
+					),
+					this.$container
+				);
+				if (data.length) {
+					for (let i in data) this.$old.append(
+						$('<option/>', {value: data[i]['id']}).text(`Изменено ${data[i]['datemd']} (от ${data[i]['datecr']})`)
+					);
+					this.$list.append(
+						this.$old
+					);
+				}
+
+				/* Events */
+				this.$list.on('change', this.NewEstimate.bind(this));
+			}
+
+			private NewEstimate() {
+				let self = this;
+
+				this.estimate = new Estimate(this.$container);
+
+				this.$add.removeAttr('disabled');
+				this.$print.removeAttr('disabled');
+
+				this.$add.on('click', () => self.estimate.AddList());
+				this.$print.on('click', () => window.print());
+			}
+
+		}
+
+		class Estimate {
 			/* Variables */
 			private lists					: {[key: number]: List};
 			private iter					: number;
@@ -31,13 +143,13 @@ namespace Site {
 			private $contact_phone			: JQuery;
 			private $lists					: JQuery;
 
-			constructor(selector) {
+			constructor($content: JQuery) {
 				/* Set variables */
 				this.lists					= {};
 				this.iter					= 0;
 
 				/* Set elements */
-				this.$parent 				= $(selector);
+				this.$parent 				= $content;
 				this.$wrap					= $('<div/>', {class: 'wrap'});
 				this.$header				= $('<div/>', {class: 'header'});
 				this.$caption				= $('<div/>', {class: 'caption'});

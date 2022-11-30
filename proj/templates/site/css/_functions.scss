@@ -24,6 +24,7 @@
 	display: inline-block; padding: 0.6rem 1.6rem; border: 0.2rem solid $color-btn-border; background-color: $color-btn-bg; color: $color-primary-text; cursor: pointer;
 	&:hover { border-color: $color-btn-border-hover; background-color: $color-btn-bg-hover; }
 	&:active, &:focus-visible { border-color: $color-btn-border-active; background-color: $color-btn-bg-active; }
+	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-primary-text; }
 	&.negative {
 		border-color: $color-negative-btn-bg; background-color: $color-negative-btn-bg;
 		&:hover { border-color: $color-negative-btn-border-hover; background-color: $color-negative-btn-bg-hover; }

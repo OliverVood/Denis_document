@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+@mixin MixFontFace($path, $name, $family, $weight, $style: normal, $format: 'truetype') {
+	$ex: 'ttf';
+	@if ($format == 'opentype') { $ex: 'otf'; }
+	@font-face { font-family: $family; src: url($path + $name + '.' + $ex) format($format); font-weight: $weight; font-style: $style; }
+}
+
+@mixin MixFontsFace($family, $path) {
+	@include MixFontFace($path, 'regular', $family, 400, normal, 'opentype');
+	@include MixFontFace($path, 'italic', $family, 400, italic, 'opentype');
+	@include MixFontFace($path, 'bold', $family, 700, normal, 'opentype');
+	@include MixFontFace($path, 'bold-italic', $family, 700, italic, 'opentype');
+}
+
+@include MixFontsFace(PetersburgC, 'fonts/PetersburgC/');
+@include MixFontsFace(Monitorica, 'fonts/Monitorica/');

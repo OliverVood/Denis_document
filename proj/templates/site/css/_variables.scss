@@ -1,3 +1,17 @@
+/* Sizes */
+//$size3XS    : 240;
+//$size2XS    : 360;
+//$sizeXS     : 420;
+//$sizeS      : 480;
+//$sizeM      : 560;
+//$sizeL      : 680;
+//$sizeX      : 760;
+//$sizeXL     : 860;
+//$size2XL    : 980;
+//$size3XL    : 1080;
+//$size4XL    : 1200;
+//$size5XL    : 1920;
+
 /* Palette */
 $color-primary							: #428192;
 $color-primary-light					: #4C97AB;
@@ -31,15 +45,3 @@ $color-negative-btn-bg-active			: $color-negative-light;
 $color-negative-btn-border				: $color-negative;
 $color-negative-btn-border-hover		: $color-negative-light;
 $color-negative-btn-border-active		: $color-negative;
-
-/* sizes */
-//$size2XS    : 360;
-//$sizeXS     : 420;
-//$sizeS      : 480;
-//$sizeM      : 576;
-//$sizeL      : 680;
-//$sizeX      : 768;
-//$sizeXL     : 860;
-//$size2XL    : 992;
-//$size3XL    : 1080;
-//$size4XL    : 1200;
