@@ -2,9 +2,16 @@
 @use "functions" as *;
 
 .view.catalogs.work {
-	> .btns {
+	> .control {
 		display: flex;
-		> *:not(:last-child) { margin-right: 0.5rem; }
+		> .btns {
+			flex: auto; display: flex;
+			> * {
+				&.print { background-image: url("img/print.svg"); }
+				&.add_table { background-image: url("img/add table.svg"); }
+				&:not(:last-child) { margin-right: 0.5rem; }
+			}
+		}
 	}
 	> .container {
 		> .wrap {
@@ -53,7 +60,7 @@
 						input { padding: 0; width: 100%; }
 						.item {
 							@include MixBtn; padding: 0; width: 3rem; height: 2rem; line-height: 2rem; vertical-align: middle; background-size: 0.8rem; background-position: center; background-repeat: no-repeat;
-							&.hide { display: none; }
+							&.glob_hide { display: none; }
 							&.add { background-image: url("img/ui/line/add.svg"); }
 							&.del { background-image: url("img/ui/line/remove.svg"); }
 							&.collapse { background-size: 1rem; background-image: url("img/ui/fill/toggle.svg"); }

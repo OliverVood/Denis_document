@@ -1,37 +1,28 @@
+@use "sass:map";
 @use "variables" as *;
 @use "functions" as *;
-@use "fonts" as *;
+@use "fonts";
 
-* { box-sizing: border-box; }
-html { height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: url("img/wall.jpg"); }
-body {
-	display: flex; flex-direction: column; margin: 0; height: 100%; font-size: 1.2rem;
-	> main {
-		flex: auto;
-		> div {
-			margin: 0 auto; padding: 1rem; width: 1200px; min-height: 100%; background-color: $color-neutral-extra-light; box-shadow: 0 0 0.2rem $color-neutral; font-family: Monitorica, sans-serif;
-			input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
-		}
-	}
-	> footer { padding-top: 4rem; }
-}
 a { cursor: pointer; }
-.print { display: none; }
-.hide { display: none; }
 input[type="button"] { @include MixBtn; outline: none; }
+.hide { display: none; }
 
+@mixin MixMain($params: null) {
+	$display_print: none;
+	$display_tabu: null;
+
+	@if ($params != null) {
+		$temp: map.get($params, 'display_print'); @if ($temp != null) { $display_print: $temp; }
+		$temp: map.get($params, 'display_tabu'); @if ($temp != null) { $display_tabu: $temp; }
+	}
+
+	.glob_print { display: $display_print !important; }
+	@if ($display_tabu != null) { .glob_tabu { display: $display_tabu !important; } }
+}
+
+@include MixScreen() { @include MixMain(); }
+@include MixScreen(null, null, false, true) { @include MixMain((display_print: revert, display_tabu: none)); }
+
+@import "template";
 @import "general";
 @import "catalogs";
-
-@media print {
-	html {
-		background-image: none;
-		body {
-			> header { display: none; }
-			> main > div { width: 100%; min-width: auto; background-color: transparent; box-shadow: none }
-			> footer { display: none; }
-		}
-	}
-	.print { display: revert; }
-	.tabu { display: none; }
-}

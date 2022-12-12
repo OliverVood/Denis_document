@@ -1,12 +1,9 @@
-const VERSION_DB = 25;
-const DOCS = ['price_list', 'estimate', 'completion'];
-
 namespace Site {
 	export namespace Catalogs {
 
 		function DuplicateInit($elem: JQuery, event: string = 'input') {
 			$elem.after(
-				$('<span/>', {class: 'print'})
+				$('<span/>', {class: 'glob_print'})
 			);
 
 			$elem.on(event, OnDuplicate);
@@ -17,119 +14,108 @@ namespace Site {
 			$source.next().text($source.val().toString());
 		}
 
-		function UpgradeDBStructure(db: IDBDatabase) {
-			if (!db.objectStoreNames.contains('documents')) db.createObjectStore('documents', {keyPath: 'type'});
-			if (!db.objectStoreNames.contains('estimate')) db.createObjectStore('estimate', {keyPath: 'id'});
-			if (!db.objectStoreNames.contains('estimate_table')) db.createObjectStore('estimate_table', {keyPath: 'id'});
-			if (!db.objectStoreNames.contains('estimate_record')) db.createObjectStore('estimate_record', {keyPath: 'id'});
-		}
-
-		function UpgradeDBData(db) {
-			console.log('UpgradeDBData');
-
-			let transaction = db.transaction('documents', 'readwrite');
-			let store = transaction.objectStore('documents');
-			for (let i in DOCS) store.put({type: DOCS[i], iter: 0});
-		}
-
-		type TypeDataEstimate = { id: number, datecr: string, datemd: string }[];
-
 		export class Controller {
+			// const STATE_EDIT				= 1;
+
 			/* Variables */
-			estimate						: Estimate;
-			db
+			private estimate				: Estimate;
 
 			/* Elements */
 			$view							: JQuery;
 			$control						: JQuery;
+			$btns							: JQuery;
+			$info							: JQuery;
+			$state							: JQuery;
 			$list							: JQuery;
-			$old							: JQuery;
-			$add							: JQuery;
-			$print							: JQuery;
+			$optgroup_old					: JQuery;
+			btn_add							: JQuery;
+			btn_print						: JQuery;
 			$container						: JQuery;
 
-			constructor(selector: string, data: TypeDataEstimate = []) {
-				/* Set values */
-				// let self = this;
-				this.db = indexedDB.open('desktop', VERSION_DB);
-
-				this.db.onupgradeneeded = () => UpgradeDBStructure(this.db.result);
-
-				this.db.onsuccess = () => {
-					console.log('working db');
-
-					UpgradeDBData(this.db.result);
-
-					let db = this.db.result;
-
-					db.onversionchange = () => {
-						db.close();
-						alert("База данных устарела, пожалуйста, перезагрузите страницу.");
-					};
-				};
-
-				this.db.onerror = () => {
-					console.error("Error", this.db.error);
-				};
-
-				this.db.onblocked = () => {
-					alert("База данных заблокированна, пожалуйста, закройте другие вкладки сайта и перезагрузите страницу.");
-				}
-
+			constructor(selector: string) {
 				/* Set elements */
 				this.$view = $(selector);
-				this.$control = $('<div/>', {class: 'btns tabu'});
+				this.$control = $('<div/>', {class: 'control glob_tabu'});
+				this.$btns = $('<div/>', {class: 'btns'});
+				this.$info = $('<div/>', {class: 'info'});
+				this.$state = $('<span/>', {class: 'state'});
 				this.$list = $('<select/>');
-				this.$old = $('<optgroup/>', {label: 'Сохранённые сметы:'});
-				this.$add = $('<input/>', {type: 'button', value: '+ Добавить таблицу', disabled: true});
-				this.$print = $('<input/>', {type: 'button', value: 'p Печать', disabled: true});
+				this.$optgroup_old = $('<optgroup/>', {label: 'Сохранённые сметы:'});
+				this.btn_add = $('<input/>', {type: 'button', value: 'Добавить таблицу', disabled: true, class: 'img add_table'});
+				this.btn_print = $('<input/>', {type: 'button', value: 'Печать', disabled: true, class: 'img print'});
 				this.$container = $('<div/>', {class: 'container'});
 
 				/* Building DOM */
 				this.$view.append(
 					this.$control.append(
-						this.$list.append(
-							$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету'),
-							$('<optgroup/>', {label: 'Действие:'}).append(
-								$('<option/>', {value: '0'}).text('Создать новую')
-							)
+						this.$btns.append(
+							this.$list.append(
+								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету'),
+								$('<optgroup/>', {label: 'Действие:'}).append(
+									$('<option/>', {value: '0'}).text('Создать новую')
+								)
+							),
+							this.btn_add,
+							this.btn_print
 						),
-						this.$add,
-						this.$print
+						this.$info.append(
+							this.$state
+						)
 					),
 					this.$container
 				);
-				if (data.length) {
-					for (let i in data) this.$old.append(
-						$('<option/>', {value: data[i]['id']}).text(`Изменено ${data[i]['datemd']} (от ${data[i]['datecr']})`)
+
+				Site.Common.DB.Cursor('estimate', (cursor) => {
+					if (!cursor) return;
+
+					let key = cursor.key;
+					let value = cursor.value;
+
+					this.$optgroup_old.append(
+						$('<option/>', {value: key}).text(`Изменено ${value.datemd} (от ${value.datecr})`)
 					);
-					this.$list.append(
-						this.$old
-					);
-				}
+					this.$list.append(this.$optgroup_old);
+
+					cursor.continue();
+				});
 
 				/* Events */
-				this.$list.on('change', this.NewEstimate.bind(this));
+				this.$list.on('change', this.CreateEstimate.bind(this));
 			}
 
-			private NewEstimate() {
-				let self = this;
+			private CreateEstimate() {
+				this.$container.empty();
 
-				this.estimate = new Estimate(this.$container);
+				this.estimate = new Estimate(Number(this.$list.val()), this.$container);
 
-				this.$add.removeAttr('disabled');
-				this.$print.removeAttr('disabled');
+				this.btn_add.removeAttr('disabled');
+				this.btn_print.removeAttr('disabled');
 
-				this.$add.on('click', () => self.estimate.AddList());
-				this.$print.on('click', () => window.print());
+				this.btn_add.off('click.doc').on('click.doc', () => this.estimate.AddList());
+				this.btn_print.off('click.doc').on('click.doc', () => window.print());
+			}
+
+			public SaveState(state: string) {
+
 			}
 
 		}
 
 		class Estimate {
 			/* Variables */
-			private lists					: {[key: number]: List};
+			private id						: number;
+			private datecr					: string;
+			private datemd					: string;
+			private company					: string;
+			private address					: string;
+			private phone					: string;
+			private mail					: string;
+			private timer					?: number;
+			private autosave				: number;
+
 			private iter					: number;
+			private lists					: {[key: number]: Table};
+			private dataOptions;
 
 			/* Elements */
 			private $parent					: JQuery;
@@ -143,10 +129,20 @@ namespace Site {
 			private $contact_phone			: JQuery;
 			private $lists					: JQuery;
 
-			constructor($content: JQuery) {
+			constructor(id: number, $content: JQuery) {
 				/* Set variables */
-				this.lists					= {};
-				this.iter					= 0;
+				this.id						= id;
+				this.timer					= null;
+				this.autosave				= 2000;
+				this.iter 					= 0//Number(localStorage.getItem('EstimateTableIter'));
+				this.lists 					= {};
+				this.dataOptions 			= {
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+					hour: 'numeric',
+					minute: 'numeric'
+				};
 
 				/* Set elements */
 				this.$parent 				= $content;
@@ -197,9 +193,28 @@ namespace Site {
 				DuplicateInit(this.$contact_email);
 				DuplicateInit(this.$contact_phone);
 
-				this.AddList();
-
 				this.$parent.append(this.$wrap);
+
+				if (!this.id) {
+					this.CreateData(Number(localStorage.getItem('EstimateIter')) || 1, '', '', '', '', true, true);
+					localStorage.setItem('EstimateIter', (this.id + 1).toString());
+
+					this.Save();
+					this.AutosaveEnable();
+				} else {
+					Site.Common.DB.Connect().then((result: IDBDatabase) => {
+						let transaction = result.transaction('estimate', 'readonly');
+						let store = transaction.objectStore('estimate');
+						let request = store.get(this.id);
+
+						request.onsuccess = (event) => {
+							let result = event.target.result;
+							this.CreateData(result.id, result.company, result.address, result.phone, result.mail, result.datecr, result.datemd);
+							this.Fill();
+							this.AutosaveEnable();
+						}
+					});
+				}
 			}
 
 			public RemoveList(id: number): void {
@@ -210,19 +225,115 @@ namespace Site {
 
 			public AddList() {
 				let _id = ++this.iter;
-				let list = new List(_id, this);
-				this.lists[_id] = list;
+				let _table = new Table(_id, this);
+
+				// localStorage.setItem('EstimateIter', _id.toString());
+				this.lists[_id] = _table;
 
 				this.$lists.append(
-					list.GetElem()
+					_table.GetElem()
 				);
 
 				// this.Sum();
 			}
 
+			private Fill() {
+				this.$contact_name.val(this.company).trigger('input');
+				this.$contact_address.val(this.address).trigger('input');
+				this.$contact_phone.val(this.phone).trigger('input');
+				this.$contact_email.val(this.mail).trigger('input');
+			}
+
+			private AutosaveEnable() {
+				this.$contact_name.on('input', this.Commit.bind(this));
+				this.$contact_address.on('input', this.Commit.bind(this));
+				this.$contact_email.on('input', this.Commit.bind(this));
+				this.$contact_phone.on('input', this.Commit.bind(this));
+			}
+
+			private CreateData(id: number, company: string, address: string, phone: string, mail: string, datecr: string | boolean = false, datemd: string | boolean = false) {
+				this.id = id;
+
+				this.UpdateData(company, address, phone, mail, datecr, datemd);
+			}
+
+			private UpdateData(company: string, address: string, phone: string, mail: string, datecr: string | boolean = false, datemd: string | boolean = false) {
+				let date = new Date();
+				let date_str = date.toLocaleString('ru', this.dataOptions);
+
+				if (datecr) this.datecr = (datecr === true) ? date_str : datecr;
+				if (datemd) this.datemd = (datemd === true) ? date_str : datemd;
+				this.company = company;
+				this.address = address;
+				this.phone = phone;
+				this.mail = mail;
+			}
+
+			private Commit() {
+				clearTimeout(this.timer);
+				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
+			}
+
+			private UpdateDataAndSave() {
+				this.UpdateData(
+					this.$contact_name.val().toString(),
+					this.$contact_address.val().toString(),
+					this.$contact_phone.val().toString(),
+					this.$contact_email.val().toString(),
+					false,
+					true
+				);
+				this.Save();
+			}
+
+			private Save() {
+				Site.Common.DB.Connect().then((result: IDBDatabase) => {
+					let transaction = result.transaction('estimate', 'readwrite');
+					let store = transaction.objectStore('estimate');
+					let data = {
+						id: this.id,
+						datecr: this.datecr,
+						datemd: this.datemd,
+						company: this.company,
+						address: this.address,
+						phone: this.phone,
+						mail: this.mail
+					};
+
+					store.put(data);
+				});
+			}
+
 		}
 
-		class List {
+		class Table {
+
+			// 	let transaction = this.db.result.transaction('estimate', 'readwrite');
+			// 	let store = transaction.objectStore('estimate');
+			// 	let estimate = {
+			// 		company: 'ИП Иванов Ю. И.',
+			// 		address: 'ул. Нахимова, 28',
+			// 		mail: 'ivanov_master@mail.ru',
+			// 		phone: '+7 (923) 500 11 11',
+			// 		// id: this.id
+			// 		// datecr: new Date()
+			// 		// datemd: new Date()
+			// 		id: 4,
+			// 		datecr: '02.12.2022, 19:29',
+			// 		datemd: '03.12.2022, 19:45'
+			// 	};
+			// 	// let request = store.put(estimate);
+			//
+			// 	// let datemd = new Date();
+			// 	// console.log(datemd.toLocaleString('ru', {
+			// 	// 	year: 'numeric',
+			// 	// 	month: 'numeric',
+			// 	// 	day: 'numeric',
+			// 	// 	hour: 'numeric',
+			// 	// 	minute: 'numeric'
+			// 	// }));
+			//
+			// 	this.AddList();
 			/* Variables */
 			private estimate						: Estimate;
 			private id								: number;
@@ -280,7 +391,7 @@ namespace Site {
 
 				/* Building DOM */
 				this.$list.append(
-					$('<div/>', {class: 'control tabu'}).append(
+					$('<div/>', {class: 'control glob_tabu'}).append(
 						this.$visible,
 						this.$delete
 					),
@@ -289,7 +400,7 @@ namespace Site {
 						this.$table.append(
 							$('<thead/>').append(
 								$('<tr/>').append(
-									$('<th/>', {class: 'tabu'}).append($('<span/>').text('+/-')),
+									$('<th/>', {class: 'glob_tabu'}).append($('<span/>').text('+/-')),
 									$('<th/>').text('Наименование'),
 									$('<th/>').text('Количество'),
 									$('<th/>').text('Единица измерения'),
@@ -299,13 +410,13 @@ namespace Site {
 							),
 							$('<tbody/>').append(
 								this.$tr_sum.append(
-									$('<td/>', {class: 'number tabu'}).append(this.$add_line),
+									$('<td/>', {class: 'number glob_tabu'}).append(this.$add_line),
 									$('<td/>', {colspan: 3}),
 									$('<td/>').text('Всего'),
 									$('<td/>', {class: 'number'}).append(this.$sum),
 								),
 								$('<tr/>').append(
-									$('<td/>', {class: 'number tabu'}).append(
+									$('<td/>', {class: 'number glob_tabu'}).append(
 										this.$collapse
 									),
 									$('<td/>', {colspan: 3}),
@@ -313,7 +424,7 @@ namespace Site {
 									$('<td/>', {class: 'number'}).append(this.$percent),
 								),
 								$('<tr/>', {class: 'total'}).append(
-									$('<td/>', {class: 'tabu'}),
+									$('<td/>', {class: 'glob_tabu'}),
 									$('<td/>', {colspan: 3}),
 									$('<td/>').text('Итого'),
 									$('<td/>', {class: 'number'}).append(this.$total),
@@ -374,19 +485,19 @@ namespace Site {
 				this.collapse = !this.collapse;
 
 				if (this.collapse) {
-					this.$table.find('tr.line').addClass('print');
-					this.$add_line.addClass('hide');
+					this.$table.find('tr.line').addClass('glob_print');
+					this.$add_line.addClass('glob_hide');
 				} else {
-					this.$table.find('tr.line').removeClass('print');
-					this.$add_line.removeClass('hide');
+					this.$table.find('tr.line').removeClass('glob_print');
+					this.$add_line.removeClass('glob_hide');
 				}
 			}
 
 			private OnVisible(): void {
 				this.visible = !this.visible;
 
-				if (this.visible) this.$wrap.removeClass('hide');
-				else this.$wrap.addClass('hide');
+				if (this.visible) this.$wrap.removeClass('glob_hide');
+				else this.$wrap.addClass('glob_hide');
 			}
 
 			private OnDelete(): void {
@@ -402,7 +513,7 @@ namespace Site {
 
 		class Item {
 			/* Variables */
-			private list				: List;
+			private list				: Table;
 			private id					: number;
 			private sum					: number;
 
@@ -415,7 +526,7 @@ namespace Site {
 			private $price				: JQuery;
 			private $sum				: JQuery;
 
-			constructor(id: number, list: List) {
+			constructor(id: number, list: Table) {
 				/* Set variables */
 				this.list		= list;
 				this.id			= id;
@@ -439,8 +550,8 @@ namespace Site {
 
 				/* Building DOM */
 				this.$tr = $('<tr/>', {class: 'line'}).append(
-					$('<td/>', {class: 'number tabu'}).append(this.$remove),
-					$('<td/>').append(this.$name, $('<span/>', {class: 'print'})),
+					$('<td/>', {class: 'number glob_tabu'}).append(this.$remove),
+					$('<td/>').append(this.$name, $('<span/>', {class: 'glob_print'})),
 					$('<td/>', {class: 'number'}).append(this.$count.val('0')),
 					$('<td/>', {class: 'number'}).append(this.$unit),
 					$('<td/>', {class: 'number'}).append(this.$price.val('0')),

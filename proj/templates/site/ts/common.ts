@@ -27,6 +27,70 @@ namespace Site {
 
 		}
 
+		export class DB {
+			static VERSION = 1;
+			static NAME = 'desktop';
+			static EXECUTE = '';
+
+			static Connect(execute = ['transaction']) {
+
+				return new Promise((resolve, reject) => {
+					let request = window.indexedDB.open(DB.NAME, DB.VERSION);
+
+					/* Check structure */
+					request.onupgradeneeded = (event) => {
+						DB.EXECUTE = 'version';
+						if (execute.includes('version')) resolve(event.target.result);
+					}
+
+					/* Success */
+					request.onsuccess = (event) => {
+						request.result.onversionchange = () => {
+							request.result.close();
+							alert("База данных устарела, пожалуйста, перезагрузите страницу.");
+						};
+
+						DB.EXECUTE = 'transaction';
+						if (execute.includes('transaction')) resolve(event.target.result);
+					}
+
+					/* Error db */
+					request.onerror = (event) => {
+						console.error("Error: ", event, request.error);
+						reject(event);
+					}
+
+					request.onblocked = () => {
+						alert("База данных заблокированна, пожалуйста, закройте другие вкладки сайта и перезагрузите страницу.");
+					}
+
+				});
+			}
+
+			static CheckStructure() {
+				DB.Connect(['version']).then((result: IDBDatabase) => {
+					if (!result.objectStoreNames.contains('estimate')) result.createObjectStore('estimate', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('estimate_table')) result.createObjectStore('estimate_table', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('estimate_record')) result.createObjectStore('estimate_record', {keyPath: 'id'});
+				});
+			}
+
+			static Cursor(name: string, success: Function) {
+				DB.Connect(['transaction']).then((result: IDBDatabase) => {
+					let transaction = result.transaction(name, 'readonly');
+					let store = transaction.objectStore(name);
+					let request = store.openCursor();
+
+					request.onsuccess = (event) => {
+						success(event.target.result);
+					}
+				});
+			}
+
+		}
+
+		DB.CheckStructure();
+
 		export class Menu {
 			jq_body			: JQuery;
 			jq_wrap			: JQuery;
