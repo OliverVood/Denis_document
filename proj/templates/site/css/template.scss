@@ -1,29 +1,45 @@
+@use "sass:map";
+
 @use "variables" as *;
+@use "functions" as *;
 
 * { box-sizing: border-box; }
 
-html {
-	height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: url("img/wall.jpg");
-	body {
-		display: flex; flex-direction: column; margin: 0; height: 100%; font-size: 1.2rem;
-		> main {
-			flex: auto;
-			> div {
-				margin: 0 auto; padding: 1rem; width: 1200px; min-height: 100%; background-color: $color-neutral-extra-light; box-shadow: 0 0 0.2rem $color-neutral; font-family: Monitorica, sans-serif;
-				input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
+@mixin MixTemplate($params: null) {
+	$bg_img					: url("img/wall.jpg");
+	$header_display			: revert;
+	$footer_display			: revert;
+	$document_width			: 1200px;
+	$document_min_width		: auto;
+	$document_bg_color		: $color-neutral-extra-light;
+	$document_box_shadow	: 0 0 0.2rem $color-neutral;
+
+	@if ($params != null) {
+		$temp: map.get($params, 'bg_img'); @if ($temp != null) { $bg_img: $temp; }
+		$temp: map.get($params, 'header_display'); @if ($temp != null) { $header_display: $temp; }
+		$temp: map.get($params, 'footer_display'); @if ($temp != null) { $footer_display: $temp; }
+		$temp: map.get($params, 'document_width'); @if ($temp != null) { $document_width: $temp; }
+		$temp: map.get($params, 'document_min_width'); @if ($temp != null) { $document_min_width: $temp; }
+		$temp: map.get($params, 'document_bg_color'); @if ($temp != null) { $document_bg_color: $temp; }
+		$temp: map.get($params, 'document_box_shadow'); @if ($temp != null) { $document_box_shadow: $temp; }
+	}
+
+	html {
+		height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: $bg-img;
+		body {
+			display: flex; flex-direction: column; margin: 0; height: 100%; font-size: 1.2rem;
+			> header { display: $header_display; }
+			> main {
+				flex: auto;
+				> div {
+					margin: 0 auto; padding: 1rem; width: $document_width; min-height: 100%; background-color: $document_bg_color; box-shadow: $document_box_shadow; font-family: Monitorica, sans-serif;
+					input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
+				}
 			}
+			> footer { display: $footer_display; padding-top: 4rem; }
 		}
-		> footer { padding-top: 4rem; }
 	}
 }
 
-@media print {
-	html {
-		background-image: none;
-		body {
-			> header { display: none; }
-			> main > div { width: 100%; min-width: auto; background-color: transparent; box-shadow: none }
-			> footer { display: none; }
-		}
-	}
-}
+@include MixScreen() { @include MixTemplate(); }
+@include MixScreen(null, null, false, true) { @include MixTemplate((bg-img: none, header_display: none, footer_display: none, document_width: 100%, document_bg_color: transparent, document_box_shadow: none)); }

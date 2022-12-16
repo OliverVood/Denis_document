@@ -1,7 +1,9 @@
 @use "sass:map";
+
 @use "variables" as *;
 @use "functions" as *;
-@use "fonts";
+
+@import "fonts";
 
 a { cursor: pointer; }
 input[type="button"] { @include MixBtn; outline: none; }

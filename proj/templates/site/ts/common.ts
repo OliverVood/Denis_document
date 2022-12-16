@@ -70,7 +70,10 @@ namespace Site {
 			static CheckStructure() {
 				DB.Connect(['version']).then((result: IDBDatabase) => {
 					if (!result.objectStoreNames.contains('estimate')) result.createObjectStore('estimate', {keyPath: 'id'});
-					if (!result.objectStoreNames.contains('estimate_table')) result.createObjectStore('estimate_table', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('estimate_table')) {
+						let store = result.createObjectStore('estimate_table', {keyPath: 'id'});
+						store.createIndex('eid', 'eid');
+					}
 					if (!result.objectStoreNames.contains('estimate_record')) result.createObjectStore('estimate_record', {keyPath: 'id'});
 				});
 			}
