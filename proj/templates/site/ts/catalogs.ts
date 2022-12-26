@@ -76,7 +76,7 @@ namespace Site {
 				);
 
 				Site.Common.DB.Cursor('estimate', (cursor) => {
-					if (!cursor) { new Skins.Select(this.$list); return; }
+					if (!cursor) { new Skins.Select(this.$list, this.DeleteEstimate); return; }
 
 					let key = cursor.key;
 					let value = cursor.value;
@@ -103,6 +103,10 @@ namespace Site {
 
 				this.btn_add.off('click.estimate').on('click.estimate', () => this.estimate.AddTable(0));
 				this.btn_print.off('click.estimate').on('click.estimate', () => window.print());
+			}
+
+			private DeleteEstimate(id: number) {
+				console.log('Delete ', id);
 			}
 
 			public SaveState(state: number) {
