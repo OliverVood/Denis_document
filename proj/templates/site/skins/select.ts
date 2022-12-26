@@ -1,23 +1,66 @@
 namespace Skins {
 
 	export class Select {
+		/* Variables */
+		open					: boolean;
+		im						: boolean;
+		closing					: boolean;
+
+		/* Elements */
+		$skin					: JQuery;
 
 		constructor(elem: string | JQuery, funcDelete: Function | null = null) {
-			let $elem = (typeof elem === 'string') ? $(elem) : elem;
+			/* Set variables */
+			this.open			= false;
+			this.closing		= true;
 
-			$elem.hide();
-			let $skin = $('<div>', {class: 'skin select'});
+			/* Set elements */
+			this.$skin = $('<div>', {class: 'skin select'});
 			let $placeholder = $('<div>', {class: 'placeholder'});
 			let $content = $('<div>', {class: 'content'});
+			let $elem = (typeof elem === 'string') ? $(elem) : elem;
+
+			/* Events */
+			this.$skin.on('click', this.OnSkin.bind(this));
+			$(document).on('click', this.OnDocument.bind(this));
+			$placeholder.on('click', this.Switch.bind(this));
 
 			this.ScanElem($elem, $content, funcDelete);
 
-			$skin.append(
+			$elem.hide();
+
+			this.$skin.append(
 				$placeholder.text('Выберите'),
 				$content
-			)
+			);
 
-			$elem.after($skin);
+			$elem.after(this.$skin);
+		}
+
+		private OnSkin() {
+			this.closing = false;
+		}
+
+		private OnDocument() {
+			if (this.closing) this.Close();
+			this.closing = true;
+		}
+
+		private Switch() {
+			switch (this.open) {
+				case true: this.Close(); break;
+				case false: this.Open(); break;
+			}
+		}
+
+		private Open() {
+			this.$skin.addClass('open');
+			this.open = true;
+		}
+
+		private Close() {
+			this.$skin.removeClass('open');
+			this.open = false;
 		}
 
 		private ScanElem($elem: JQuery, $parent: JQuery, funcDelete: Function | null) {
@@ -41,23 +84,23 @@ namespace Skins {
 			let hidden = ($elem.is(':disabled')) ? ' hidden' : '';
 
 			/* Elements */
-			let $wrap = $('<div/>', {class: `option${selected}${disabled}${hidden}`});
-			let $option = $('<div/>', {class: 'select'});
+			let $option = $('<div/>', {class: `option${selected}${disabled}${hidden}`});
+			let $select = $('<div/>', {class: 'select'});
 			let $delete = $('<div/>', {class: 'delete'});
 
 			/* Building DOM */
-			$wrap.append(
-				$option,
+			$option.append(
+				$select,
 				funcDelete ? $delete : $()
 			);
 
 			/* Events */
-			$option.on('click', () => $elem.trigger('change'));
-			if (funcDelete) $delete.on('click', () => funcDelete(value));
+			$select.on('click', () => { $elem.prop('selected', true); $elem.trigger('change'); this.Close(); });
+			if (funcDelete) $delete.on('click', () => funcDelete(Number(value)));
 
-			$option.text(text);
+			$select.text(text);
 
-			$parent.append($wrap);
+			$parent.append($option);
 		}
 
 		private RenderOptgroup($elem: JQuery, $parent: JQuery, funcDelete: Function | null) {

@@ -106,6 +106,39 @@ namespace Site {
 			}
 
 			private DeleteEstimate(id: number) {
+				Site.Common.DB.Connect().then((result: IDBDatabase) => {
+					let transactionEstimate = result.transaction('estimate', 'readwrite');
+					let storeEstimate = transactionEstimate.objectStore('estimate');
+					storeEstimate.delete(id);
+
+					let transactionTable = result.transaction('estimate_table', 'readonly');
+					let storeTable = transactionTable.objectStore('estimate_table');
+					let estimateIndex = storeTable.index('eid');
+					let requestTable = estimateIndex.openCursor(IDBKeyRange.only(id));
+
+					requestTable.onsuccess = (event) => {
+						let cursor = event.target.result;
+
+						if (!cursor) return;
+
+						result.transaction('estimate_table', 'readwrite').objectStore('estimate_table').delete(cursor.value.id);
+
+						let transactionRecord = result.transaction('estimate_record', 'readonly');
+						let storeRecord = transactionRecord.objectStore('estimate_record');
+						let tableIndex = storeRecord.index('tid');
+						let requestRecord = tableIndex.openCursor(IDBKeyRange.only(cursor.value.id));
+
+						requestRecord.onsuccess = (event) => {
+							let cursor = event.target.result;
+
+							if (!cursor) return;
+							result.transaction('estimate_record', 'readwrite').objectStore('estimate_record').delete(cursor.value.id);
+							cursor.continue();
+						}
+
+						cursor.continue();
+					}
+				});
 				console.log('Delete ', id);
 			}
 
