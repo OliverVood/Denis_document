@@ -7,16 +7,16 @@
 		> .btns {
 			flex: auto; display: flex;
 			> * {
-				&.print { background-image: url("img/print.svg"); }
-				&.add_table { background-image: url("img/add table.svg"); }
+				&.print { background-image: url("img/ui/print.svg"); }
+				&.add_table { background-image: url("img/ui/add table.svg"); }
 				&:not(:last-child) { margin-right: 0.5rem; }
 			}
 		}
 		> .info > span {
 			display: flex; align-items: center; height: 100%; color: $color-neutral;
 			&:before { display: inline-block; width: 2rem; height: 100%; background-size: 15px; background-position: center; background-repeat: no-repeat; }
-			&.edit:before { content: ""; background-image: url("img/edit.svg"); }
-			&.save:before { content: ""; background-image: url("img/save.svg"); }
+			&.edit:before { content: ""; background-image: url("img/ui/edit.svg"); }
+			&.save:before { content: ""; background-image: url("img/ui/save.svg"); }
 		}
 	}
 	> .container {
@@ -44,8 +44,11 @@
 					> span {
 						@include MixBtn; display: inline-block; padding: 0; width: 2rem; height: 2rem; background-size: 1rem; background-repeat: no-repeat; background-position: center;
 						&:not(:last-child) { margin-right: 0.4rem; }
-						&.visible { background-image: url("img/ui/fill/hide.svg"); }
-						&.delete { background-image: url("img/ui/fill/delete.svg"); }
+						&.visible {
+							background-image: url("img/ui/hide.svg");
+							&.show { background-image: url("img/ui/show.svg"); }
+						}
+						&.delete { background-image: url("img/ui/delete.svg"); }
 					}
 				}
 				> .wrap {
@@ -67,9 +70,9 @@
 						.item {
 							@include MixBtn; padding: 0; width: 3rem; height: 2rem; line-height: 2rem; vertical-align: middle; background-size: 0.8rem; background-position: center; background-repeat: no-repeat;
 							&.glob_hide { display: none; }
-							&.add { background-image: url("img/ui/line/add.svg"); }
-							&.del { background-image: url("img/ui/line/remove.svg"); }
-							&.collapse { background-size: 1rem; background-image: url("img/ui/fill/toggle.svg"); }
+							&.add { background-image: url("img/ui/add.svg"); }
+							&.del { background-image: url("img/ui/remove.svg"); }
+							&.collapse { background-size: 1rem; background-image: url("img/ui/toggle.svg"); }
 						}
 					}
 				}

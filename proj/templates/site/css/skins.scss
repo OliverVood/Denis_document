@@ -1,0 +1,27 @@
+@use "variables" as *;
+
+@mixin Select {
+
+	&.select {
+		cursor: default;
+		> .placeholder { display: inline-block; padding: 0.6rem 2.8rem 0.6rem 1.6rem; border: 0.2rem solid $color-select-border; background-color: $color-light; background-image: url("img/ui/arrow/top.svg"); background-size: 1.2rem; background-position: center right 0.6rem; background-repeat: no-repeat; cursor: pointer; }
+		> .content { /*display: none;*/ position: absolute; margin-top: 0.2rem; background-color: $color-select_fill; box-shadow: 2px 2px 6px 0 #00000055; }
+		.option {
+			padding: 0.6rem 1.6rem; white-space: nowrap; text-overflow: ellipsis; cursor: pointer;
+			&:hover { background-color: $color-primary-light; color: $color-primary-text; }
+			&.selected { background-color: $color-primary; color: $color-primary-text; }
+			&.disabled { background-color: $color-neutral; color: $color-primary-text; }
+			&.hidden { display: none; }
+		}
+		.label { padding: 0.6rem 1.6rem; white-space: nowrap; text-overflow: ellipsis; font-weight: bold; }
+		&.open {
+			> .placeholder { background-image: url("img/ui/arrow/bottom.svg"); }
+			> .content { display: block; }
+		}
+	}
+
+}
+
+.skin {
+	@include Select;
+}

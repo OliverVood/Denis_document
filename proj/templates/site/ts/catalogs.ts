@@ -1,7 +1,7 @@
 namespace Site {
 	export namespace Catalogs {
 
-		function DuplicateInit($elem: JQuery, event: string = 'input') {
+		function DuplicateInit($elem: JQuery, event: string = 'input'): void {
 			$elem.after(
 				$('<span/>', {class: 'glob_print'})
 			);
@@ -9,7 +9,7 @@ namespace Site {
 			$elem.on(event, OnDuplicate);
 		}
 
-		function OnDuplicate(e) {
+		function OnDuplicate(e): void {
 			let $source = $(e.currentTarget);
 			$source.next().text($source.val().toString());
 		}
@@ -17,6 +17,11 @@ namespace Site {
 		function GetDate(): string {
 			let _date = new Date();
 			return _date.toLocaleString('ru-RU', {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'});
+		}
+
+		function EmptyIfZero(th): void {
+			let $th = $(th.currentTarget);
+			if ($th.val() === '0') $th.val('');
 		}
 
 		export class Controller {
@@ -71,7 +76,7 @@ namespace Site {
 				);
 
 				Site.Common.DB.Cursor('estimate', (cursor) => {
-					if (!cursor) return;
+					if (!cursor) { new Skins.Select(this.$list); return; }
 
 					let key = cursor.key;
 					let value = cursor.value;
@@ -125,12 +130,12 @@ namespace Site {
 			private date							: string;
 
 			private readonly controller				: Controller;
-			private readonly autosave				: number;
 			private readonly tables					: {[key: number]: Table};
+			private readonly autosave				: number;
 			private timer							?: number;
 
 			/* Elements */
-			private readonly $parent				: JQuery;
+			private readonly $container				: JQuery;
 			private readonly $wrap					: JQuery;
 			private readonly $header				: JQuery;
 			private readonly $caption				: JQuery;
@@ -142,27 +147,27 @@ namespace Site {
 			private readonly $contact_date			: JQuery;
 			private readonly $lists					: JQuery;
 
-			constructor(id: number, $content: JQuery, controller: Controller) {
+			constructor(id: number, $container: JQuery, controller: Controller) {
 				/* Set variables */
-				this.id						= id;
+				this.id								= id;
 
-				this.controller				= controller;
-				this.timer					= null;
-				this.autosave				= 2000;
-				this.tables 				= {};
+				this.controller						= controller;
+				this.tables 						= {};
+				this.timer							= null;
+				this.autosave						= 2000;
 
 				/* Set elements */
-				this.$parent 				= $content;
-				this.$wrap					= $('<div/>', {class: 'wrap'});
-				this.$header				= $('<div/>', {class: 'header'});
-				this.$caption				= $('<div/>', {class: 'caption'});
-				this.$contacts				= $('<div/>', {class: 'contacts'});
-				this.$contact_name			= $('<input/>', {type: 'text', placeholder: 'Компания или Ф.И.О ...🖊'});
-				this.$contact_address		= $('<input/>', {type: 'text', placeholder: 'Адрес ...🖊'});
-				this.$contact_email			= $('<input/>', {type: 'text', placeholder: 'E-mail ...🖊'});
-				this.$contact_phone			= $('<input/>', {type: 'text', placeholder: 'Телефон ...🖊'});
-				this.$contact_date			= $('<input/>', {type: 'date', class: 'number'});
-				this.$lists					= $('<div/>', {class: 'lists'});
+				this.$container 					= $container;
+				this.$wrap							= $('<div/>', {class: 'wrap'});
+				this.$header						= $('<div/>', {class: 'header'});
+				this.$caption						= $('<div/>', {class: 'caption'});
+				this.$contacts						= $('<div/>', {class: 'contacts'});
+				this.$contact_name					= $('<input/>', {type: 'text', placeholder: 'Компания или Ф.И.О ...🖊'});
+				this.$contact_address				= $('<input/>', {type: 'text', placeholder: 'Адрес ...🖊'});
+				this.$contact_email					= $('<input/>', {type: 'text', placeholder: 'E-mail ...🖊'});
+				this.$contact_phone					= $('<input/>', {type: 'text', placeholder: 'Телефон ...🖊'});
+				this.$contact_date					= $('<input/>', {type: 'date', class: 'number'});
+				this.$lists							= $('<div/>', {class: 'lists'});
 
 				/* Building DOM */
 				this.$wrap.append(
@@ -202,7 +207,7 @@ namespace Site {
 				DuplicateInit(this.$contact_phone);
 				DuplicateInit(this.$contact_date);
 
-				this.$parent.append(this.$wrap);
+				this.$container.append(this.$wrap);
 
 				if (!this.id) {
 					this.CreateData(Number(localStorage.getItem('EstimateIter')) || 1, '', '', '', '', Site.Common.UIDate.Today(), true, true);
@@ -240,19 +245,15 @@ namespace Site {
 				}
 			}
 
-			public AddTable(id: number, data: TypeTableData | null = null) {
+			public AddTable(id: number, data: TypeTableData | null = null): void {
 				this.tables[id] = new Table(id, this.id, data, this.$lists, this.controller, this);
-
-				// this.Sum();
 			}
 
 			public RemoveTable(id: number): void {
 				delete this.tables[id];
-
-				// this.Sum();
 			}
 
-			private Fill() {
+			private Fill(): void {
 				this.$contact_name.val(this.company).trigger('input');
 				this.$contact_address.val(this.address).trigger('input');
 				this.$contact_email.val(this.mail).trigger('input');
@@ -260,7 +261,7 @@ namespace Site {
 				this.$contact_date.val(this.date).trigger('input');
 			}
 
-			private AutosaveEnable() {
+			private AutosaveEnable(): void {
 				this.$contact_name.on('input', this.Commit.bind(this));
 				this.$contact_address.on('input', this.Commit.bind(this));
 				this.$contact_email.on('input', this.Commit.bind(this));
@@ -268,14 +269,14 @@ namespace Site {
 				this.$contact_date.on('input', this.Commit.bind(this));
 			}
 
-			private CreateData(id: number, company: string, address: string, mail: string, phone: string, date: string, datecr: string | boolean = false, datemd: string | boolean = false) {
+			private CreateData(id: number, company: string, address: string, mail: string, phone: string, date: string, datecr: string | boolean = false, datemd: string | boolean = false): void {
 				this.id = id;
 				if (datecr) this.datecr = (datecr === true) ? GetDate() : datecr;
 
 				this.UpdateData(company, address, mail, phone, date, datemd);
 			}
 
-			private UpdateData(company: string, address: string, mail: string, phone: string, date: string, datemd: string | boolean = false) {
+			private UpdateData(company: string, address: string, mail: string, phone: string, date: string, datemd: string | boolean = false): void {
 				if (datemd) this.datemd = (datemd === true) ? GetDate() : datemd;
 
 				this.company = company;
@@ -285,13 +286,13 @@ namespace Site {
 				this.date = date;
 			}
 
-			private Commit() {
+			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
 				this.controller.SaveState(Controller.STATE_EDIT);
 			}
 
-			private UpdateDataAndSave() {
+			private UpdateDataAndSave(): void {
 				this.UpdateData(
 					this.$contact_name.val().toString(),
 					this.$contact_address.val().toString(),
@@ -303,7 +304,7 @@ namespace Site {
 				this.Save();
 			}
 
-			private Save() {
+			private Save(): void {
 				Site.Common.DB.Connect().then((result: IDBDatabase) => {
 					let transaction = result.transaction('estimate', 'readwrite');
 					let store = transaction.objectStore('estimate');
@@ -326,7 +327,7 @@ namespace Site {
 
 		}
 
-		type TypeTableData = { id: number, eid: number, datecr: string, datemd : string, header: string, discount: number  };
+		type TypeTableData = { id: number, eid: number, datecr: string, datemd : string, header: string, discount: number };
 
 		class Table {
 			/* Variables */
@@ -338,17 +339,15 @@ namespace Site {
 			private header							: string;
 			private discount						: number;
 
+			private sum								: number;
+
 			private readonly controller				: Controller;
 			private readonly estimate				: Estimate;
+			private records							: {[key: number]: Record};
 			private readonly autosave				: number;
 			private timer							?: number;
-
-
-
-			private items							: {[key: number]: Item};
-			private iter							: number;
-			private collapse						: boolean;
 			private visible							: boolean;
+			private collapse						: boolean;
 
 			/* Elements */
 			private readonly $container				: JQuery;
@@ -356,7 +355,7 @@ namespace Site {
 			private readonly $wrap					: JQuery;
 			private readonly $header				: JQuery;
 			private readonly $visible				: JQuery;
-			private readonly $delete				: JQuery;
+			private readonly $remove				: JQuery;
 			private readonly $table					: JQuery;
 			private readonly $add_line				: JQuery;
 			private readonly $collapse				: JQuery;
@@ -367,47 +366,45 @@ namespace Site {
 
 			constructor(id: number, eid: number, data: TypeTableData | null, $container: JQuery, controller: Controller, estimate: Estimate) {
 				/* Set variables */
-				this.id						= id;
-				this.eid					= eid;
+				this.id								= id;
+				this.eid							= eid;
 
-				this.controller				= controller;
-				this.estimate				= estimate;
-				this.timer					= null;
-				this.autosave				= 2000;
+				this.sum							= 0;
 
-
-
-				this.items 					= {};
-				this.iter					= 0;
-				this.collapse				= false;
-				this.visible				= true;
+				this.controller						= controller;
+				this.estimate						= estimate;
+				this.records 						= {};
+				this.timer							= null;
+				this.autosave						= 2000;
+				this.collapse						= false;
+				this.visible						= true;
 
 				/* Set elements */
-				this.$container 			= $container;
-				this.$list 					= $('<div/>', {class: 'list'});
-				this.$wrap					= $('<div/>', {class: 'wrap'});
-				this.$header	 			= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$collapse				= $('<span/>', {class: 'item collapse', title: "Свернуть строки"});
-				this.$visible				= $('<span/>', {class: 'visible', title: "Скрыть таблицу"});
-				this.$delete				= $('<span/>', {class: 'delete negative', title: "Удалить таблицу"});
-				this.$add_line 				= $('<span/>', {class: 'item add', title: 'Добавить строку'});
-				this.$table					= $('<table/>');
-				this.$tr_sum 				= $('<tr/>');
-				this.$sum 					= $('<span/>');
-				this.$discount				= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$total 				= $('<span/>');
+				this.$container 					= $container;
+				this.$list 							= $('<div/>', {class: 'list'});
+				this.$wrap							= $('<div/>', {class: 'wrap'});
+				this.$header	 					= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$collapse						= $('<span/>', {class: 'item collapse', title: "Свернуть строки"});
+				this.$visible						= $('<span/>', {class: 'visible', title: "Скрыть таблицу"});
+				this.$remove						= $('<span/>', {class: 'delete negative', title: "Удалить таблицу"});
+				this.$add_line 						= $('<span/>', {class: 'item add', title: 'Добавить строку'});
+				this.$table							= $('<table/>');
+				this.$tr_sum 						= $('<tr/>');
+				this.$sum 							= $('<span/>');
+				this.$discount						= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$total 						= $('<span/>');
 
 				/* Events */
-				// this.$add_line.on('click', this.AddItem.bind(this));
-				// this.$collapse.on('click', this.OnCollapse.bind(this));
-				// this.$visible.on('click', this.OnVisible.bind(this));
-				this.$delete.on('click', this.Remove.bind(this));
+				this.$visible.on('click', this.Visible.bind(this));
+				this.$remove.on('click', this.Remove.bind(this));
+				this.$add_line.on('click', () => this.AddRecord(0));
+				this.$collapse.on('click', this.CollapseRecords.bind(this));
 
 				/* Building DOM */
 				this.$list.append(
 					$('<div/>', {class: 'control glob_tabu'}).append(
 						this.$visible,
-						this.$delete
+						this.$remove
 					),
 					this.$wrap.append(
 						$('<div/>', {class: 'title'}).append(this.$header),
@@ -459,50 +456,94 @@ namespace Site {
 					localStorage.setItem('EstimateTableIter', (this.id + 1).toString());
 
 					this.Save();
-					this.$discount.on('blur', this.EnterPercent.bind(this));
 				} else {
 					this.CreateData(data.id, data.header, data.discount, data.datecr, data.datemd);
+
+					Site.Common.DB.Connect().then((result: IDBDatabase) => {
+						let transactionRecord = result.transaction('estimate_record', 'readonly');
+						let storeRecord = transactionRecord.objectStore('estimate_record');
+						let tableIndex = storeRecord.index('tid');
+						let requestRecord = tableIndex.openCursor(IDBKeyRange.only(this.id));
+
+						requestRecord.onsuccess = (event) => {
+							let cursor = event.target.result;
+
+							if (!cursor) { this.Sum(); return; }
+							this.AddRecord(cursor.primaryKey, cursor.value);
+							cursor.continue();
+						}
+					});
 				}
 
+				this.$discount.on('focus', EmptyIfZero);
+				this.$discount.on('input', this.Input.bind(this));
+				this.$discount.on('blur', this.EnterPercent.bind(this));
 				this.Fill();
 				this.AutosaveEnable();
-
-				// this.AddItem();
-				//
-				// this.Sum();
 			}
 
-			private Fill() {
+			public Sum(): void {
+				let sum = 0;
+				for (let i in this.records) sum += this.records[i].GetSum();
+				this.sum = (this.discount) ? Number((sum - (sum * this.discount / 100)).toFixed(2)) : sum;
+
+				this.$total.text(this.sum);
+			}
+
+			private AddRecord(id: number, data: TypeRecordData | null = null): void {
+				let _record = new Record(id, this.id, data, this.$tr_sum, this.controller, this);
+				let _id = _record.GetId();
+				this.records[_id] = _record;
+			}
+
+			public RemoveRecord(id: number): void {
+				delete this.records[id];
+				this.Sum();
+			}
+
+			private CollapseRecords(): void {
+				this.collapse = !this.collapse;
+
+				if (this.collapse) {
+					this.$table.find('tr.line').addClass('glob_print');
+					this.$add_line.addClass('glob_hide');
+				} else {
+					this.$table.find('tr.line').removeClass('glob_print');
+					this.$add_line.removeClass('glob_hide');
+				}
+			}
+
+			private Fill(): void {
 				this.$header.val(this.header).trigger('input');
 				this.$discount.val(this.discount).trigger('blur');
 			}
 
-			private AutosaveEnable() {
+			private AutosaveEnable(): void {
 				this.$header.on('input', this.Commit.bind(this));
 				this.$discount.on('input', this.Commit.bind(this));
 			}
 
-			CreateData(id: number, header: string, discount: number, datecr: string | boolean = false, datemd: string | boolean = false) {
+			private CreateData(id: number, header: string, discount: number, datecr: string | boolean = false, datemd: string | boolean = false): void {
 				this.id = id;
 				if (datecr) this.datecr = (datecr === true) ? GetDate() : datecr;
 
 				this.UpdateData(header, discount, datemd);
 			}
 
-			UpdateData(header: string, discount: number, datemd: string | boolean = false) {
+			private UpdateData(header: string, discount: number, datemd: string | boolean = false): void {
 				if (datemd) this.datemd = (datemd === true) ? GetDate() : datemd;
 
 				this.header = header;
 				this.discount = discount;
 			}
 
-			private Commit() {
+			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
 				this.controller.SaveState(Controller.STATE_EDIT);
 			}
 
-			private UpdateDataAndSave() {
+			private UpdateDataAndSave(): void {
 				this.UpdateData(
 					this.$header.val().toString(),
 					this.GetDiscount(),
@@ -511,7 +552,7 @@ namespace Site {
 				this.Save();
 			}
 
-			private Save() {
+			private Save(): void {
 				Site.Common.DB.Connect().then((result: IDBDatabase) => {
 					let transaction = result.transaction('estimate_table', 'readwrite');
 					let store = transaction.objectStore('estimate_table');
@@ -532,13 +573,30 @@ namespace Site {
 
 			private GetDiscount(): number {
 				let discount = parseFloat(this.$discount.val().toString());
-				if (isNaN(this.discount)) discount = 0;
+				if (isNaN(discount)) discount = 0;
 
-				return discount
+				return discount;
+			}
+
+			private Input(): void {
+				this.discount = this.GetDiscount();
+				this.Sum();
 			}
 
 			private EnterPercent(): void {
 				this.$discount.val(this.GetDiscount());
+			}
+
+			private Visible(): void {
+				this.visible = !this.visible;
+
+				if (this.visible) {
+					this.$visible.removeClass('show').attr('title', 'Скрыть таблицу');
+					this.$wrap.removeClass('hide');
+				} else {
+					this.$visible.addClass('show').attr('title', 'Показать таблицу');
+					this.$wrap.addClass('hide');
+				}
 			}
 
 			private Remove(): void {
@@ -552,143 +610,225 @@ namespace Site {
 				this.$list.remove();
 			}
 
-
-
-
-
-			public AddItem(): void {
-				let _id = ++this.iter;
-				let item = new Item(_id, this);
-				this.items[_id] = item;
-
-				this.$tr_sum.before(item.GetElem());
-
-				this.Sum();
-			}
-
-			public Sum(): void {
-				let _sum = 0;
-				for (let i in this.items) _sum += this.items[i].GetSum();
-
-				this.$sum.text(_sum.toFixed(2));
-				this.$total.text((_sum - (_sum * this.discount / 100)).toFixed(2));
-			}
-
-			public RemoveItem(id: number): void {
-				delete this.items[id];
-				this.Sum();
-			}
-
-			private OnCollapse(): void {
-				this.collapse = !this.collapse;
-
-				if (this.collapse) {
-					this.$table.find('tr.line').addClass('glob_print');
-					this.$add_line.addClass('glob_hide');
-				} else {
-					this.$table.find('tr.line').removeClass('glob_print');
-					this.$add_line.removeClass('glob_hide');
-				}
-			}
-
-			private OnVisible(): void {
-				this.visible = !this.visible;
-
-				if (this.visible) this.$wrap.removeClass('glob_hide');
-				else this.$wrap.addClass('glob_hide');
-			}
-
 		}
 
-		class Item {
+		type TypeRecordData = { id: number, tid: number, datecr: string, datemd : string, name: string, count: number, unit: string, price: number };
+
+		class Record {
 			/* Variables */
-			private list				: Table;
-			private id					: number;
-			private sum					: number;
+			private id								: number;
+			private tid								: number;
+			private datecr							: string;
+			private datemd							: string;
+
+			private name							: string;
+			private count							: number;
+			private unit							: string;
+			private price							: number;
+
+			private sum								: number;
+
+			private readonly controller				: Controller;
+			private readonly table					: Table;
+			private readonly autosave				: number;
+			private timer							?: number;
 
 			/* Elements */
-			private $tr					: JQuery;
-			private $remove				: JQuery;
-			private $name				: JQuery;
-			private $count				: JQuery;
-			private $unit				: JQuery;
-			private $price				: JQuery;
-			private $sum				: JQuery;
+			private readonly $before				: JQuery;
+			private readonly $tr					: JQuery;
+			private readonly $remove				: JQuery;
+			private readonly $name					: JQuery;
+			private readonly $count					: JQuery;
+			private readonly $unit					: JQuery;
+			private readonly $price					: JQuery;
+			private readonly $sum					: JQuery;
 
-			constructor(id: number, list: Table) {
+			constructor(id: number, tid: number, data: TypeRecordData | null, $before: JQuery, controller: Controller, table: Table) {
 				/* Set variables */
-				this.list		= list;
-				this.id			= id;
-				this.sum		= 0;
+				this.id								= id;
+				this.tid							= tid;
+
+				this.sum							= 0;
+
+				this.controller						= controller;
+				this.table							= table;
+				this.timer							= null;
+				this.autosave						= 2000;
 
 				/* Set elements */
-				this.$remove	= $('<span/>', {class: 'item del negative', title: 'Удалить строку'});
-
-				this.$name		= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$count		= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$unit		= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$price		= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$sum		= $('<span/>');
+				this.$before						= $before;
+				this.$tr							= $('<tr/>', {class: 'line'})
+				this.$remove						= $('<span/>', {class: 'item del negative', title: 'Удалить строку'});
+				this.$name							= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$count							= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$unit							= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$price							= $('<input/>', {type: 'text', placeholder: '...🖊'});
+				this.$sum							= $('<span/>');
 
 				/* Events */
 				this.$remove.on('click', this.Remove.bind(this));
-				this.$count.on('input', this.Input.bind(this));
-				this.$price.on('input', this.Input.bind(this));
-				this.$count.on('blur', this.Enter.bind(this));
-				this.$price.on('blur', this.Enter.bind(this));
 
 				/* Building DOM */
-				this.$tr = $('<tr/>', {class: 'line'}).append(
+				this.$tr.append(
 					$('<td/>', {class: 'number glob_tabu'}).append(this.$remove),
 					$('<td/>').append(this.$name, $('<span/>', {class: 'glob_print'})),
-					$('<td/>', {class: 'number'}).append(this.$count.val('0')),
+					$('<td/>', {class: 'number'}).append(this.$count),
 					$('<td/>', {class: 'number'}).append(this.$unit),
-					$('<td/>', {class: 'number'}).append(this.$price.val('0')),
+					$('<td/>', {class: 'number'}).append(this.$price),
 					$('<td/>', {class: 'number'}).append(this.$sum)
 				);
 
 				/* Duplicate */
 				DuplicateInit(this.$name);
-				DuplicateInit(this.$unit);
 				DuplicateInit(this.$count, 'blur');
+				DuplicateInit(this.$unit);
 				DuplicateInit(this.$price, 'blur');
 
-				this.$sum.text(this.Sum());
+				this.$before.before(this.$tr);
+
+				if (!this.id) {
+					this.CreateData(Number(localStorage.getItem('EstimateLineIter')) || 1, '', 0, '', 0, true, true);
+					localStorage.setItem('EstimateLineIter', (this.id + 1).toString());
+
+					this.Save();
+				} else {
+					this.CreateData(data.id, data.name, data.count, data.unit, data.price, data.datecr, data.datemd);
+				}
+
+				this.Fill();
+				this.AutosaveEnable();
+				this.Sum();
+				this.$sum.text(this.sum);
+				this.$count.on('blur', this.EnterCount.bind(this));
+				this.$price.on('blur', this.EnterPrice.bind(this));
+				this.$count.on('input', this.Input.bind(this));
+				this.$price.on('input', this.Input.bind(this));
+				this.$count.on('focus', EmptyIfZero);
+				this.$price.on('focus', EmptyIfZero);
 			}
 
-			public GetElem(): JQuery {
-				return this.$tr;
+			public GetId(): number {
+				return this.id;
 			}
 
 			public GetSum(): number {
 				return this.sum;
 			}
 
-			private Sum(): number {
-				let _price = +(parseFloat(this.$price.val().toString()).toFixed(2));
-				let _count = +(parseFloat(this.$count.val().toString()).toFixed(2));
-				if (isNaN(_count)) _count = 0;
-				if (isNaN(_price)) _price = 0;
+			private Fill(): void {
+				this.$name.val(this.name).trigger('input');
+				this.$count.val(this.count).trigger('blur');
+				this.$unit.val(this.unit).trigger('input');
+				this.$price.val(this.price).trigger('blur');
+			}
 
-				return this.sum = +((_price * _count).toFixed(2));
+			private AutosaveEnable(): void {
+				this.$name.on('input', this.Commit.bind(this));
+				this.$count.on('input', this.Commit.bind(this));
+				this.$unit.on('input', this.Commit.bind(this));
+				this.$price.on('input', this.Commit.bind(this));
+			}
+
+			private CreateData(id: number, name: string, count: number, unit: string, price: number, datecr: string | boolean = false, datemd: string | boolean = false): void {
+				this.id = id;
+				if (datecr) this.datecr = (datecr === true) ? GetDate() : datecr;
+
+				this.UpdateData(name, count, unit, price, datemd);
+			}
+
+			private UpdateData(name: string, count: number, unit: string, price: number, datemd: string | boolean = false): void {
+				if (datemd) this.datemd = (datemd === true) ? GetDate() : datemd;
+
+				this.name = name;
+				this.count = count;
+				this.unit = unit;
+				this.price = price;
+			}
+
+			private Commit(): void {
+				clearTimeout(this.timer);
+				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
+				this.controller.SaveState(Controller.STATE_EDIT);
+			}
+
+			private UpdateDataAndSave(): void {
+				let count = parseFloat(this.$count.val().toString());
+				if (isNaN(count)) count = 0;
+
+				let price = parseFloat(this.$price.val().toString());
+				if (isNaN(price)) price = 0;
+
+				this.UpdateData(
+					this.$name.val().toString(),
+					count,
+					this.$unit.val().toString(),
+					price,
+					true
+				);
+				this.Save();
+			}
+
+			private Save(): void {
+				Site.Common.DB.Connect().then((result: IDBDatabase) => {
+					let transaction = result.transaction('estimate_record', 'readwrite');
+					let store = transaction.objectStore('estimate_record');
+					let data = {
+						id: this.id,
+						tid: this.tid,
+						datecr: this.datecr,
+						datemd: this.datemd,
+
+						name: this.name,
+						count: this.count,
+						unit: this.unit,
+						price: this.price
+					};
+
+					store.put(data);
+					this.controller.SaveState(Controller.STATE_SAVE);
+				});
+			}
+
+			private GetCount(): number {
+				let count = parseFloat(this.$count.val().toString());
+				if (isNaN(count)) count = 0;
+
+				return count;
+			}
+
+			private EnterCount(): void {
+				this.$count.val(this.GetCount());
+			}
+
+			private GetPrice(): number {
+				let price = +parseFloat(this.$price.val().toString()).toFixed(2);
+				if (isNaN(price)) price = 0;
+
+				return price;
+			}
+
+			private EnterPrice(): void {
+				this.$price.val(this.GetPrice());
 			}
 
 			private Input(): void {
-				this.$sum.text(this.Sum());
-				this.list.Sum();
+				this.Sum();
+				this.$sum.text(this.sum);
+				this.table.Sum();
 			}
 
-			private Enter(e): void {
-				let $input = $(e.currentTarget);
-
-				let val = +(parseFloat($input.val().toString()).toFixed(2));
-				if (isNaN(val)) val = 0;
-
-				$input.val(val);
+			private Sum(): void {
+				this.sum = +((this.GetPrice() * this.GetCount()).toFixed(2));
 			}
 
 			private Remove(): void {
-				this.list.RemoveItem(this.id);
+				Site.Common.DB.Connect().then((result: IDBDatabase) => {
+					let transaction = result.transaction('estimate_record', 'readwrite');
+					let store = transaction.objectStore('estimate_record');
+					store.delete(this.id);
+				});
+
+				this.table.RemoveRecord(this.id);
 				this.$tr.remove();
 			}
 

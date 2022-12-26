@@ -13,9 +13,10 @@
 //$size5XL    : 1920;
 
 /* Palette */
+$color-light							: #FFFFFF;
 $color-primary							: #428192;
 $color-primary-light					: #4C97AB;
-$color-primary-text						: #FFFFFF;
+$color-primary-text						: $color-light;
 
 $color-secondary						: #CBDCE1;
 
@@ -33,6 +34,9 @@ $color-btn-text 						: $color-primary-text;
 $color-btn-bg 							: $color-primary;
 $color-btn-bg-hover 					: $color-primary-light;
 $color-btn-bg-active 					: $color-primary-light;
+
+$color-select-border 					: $color-primary;
+$color-select_fill						: $color-light;
 
 $color-btn-border 						: $color-primary;
 $color-btn-border-hover 				: $color-primary-light;

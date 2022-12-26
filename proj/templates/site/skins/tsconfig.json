@@ -4,11 +4,11 @@
 		"target": "esnext",
 		"lib" : ["ESNext", "DOM"],
 		"rootDirs": ["./"],
-		"outDir": "../js",
+		"outDir": "../js/skins",
 		"declaration": true,
 		"sourceMap": true,
 		"alwaysStrict": true
 	},
-	"include": ["**/*", "../../../../base/template/js/common.d.ts", "../js/skins/select.d.ts"],
+	"include": ["**/*"],
 	"exclude": ["node_module"]
 }

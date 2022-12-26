@@ -26,5 +26,6 @@ input[type="button"] { @include MixBtn; outline: none; }
 @include MixScreen(null, null, false, true) { @include MixMain((display_print: revert, display_tabu: none)); }
 
 @import "template";
+@import "skins";
 @import "general";
 @import "catalogs";

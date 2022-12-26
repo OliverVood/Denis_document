@@ -74,7 +74,10 @@ namespace Site {
 						let store = result.createObjectStore('estimate_table', {keyPath: 'id'});
 						store.createIndex('eid', 'eid');
 					}
-					if (!result.objectStoreNames.contains('estimate_record')) result.createObjectStore('estimate_record', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('estimate_record')) {
+						let store = result.createObjectStore('estimate_record', {keyPath: 'id'});
+						store.createIndex('tid', 'tid');
+					}
 				});
 			}
 
