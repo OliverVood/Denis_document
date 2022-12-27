@@ -6,7 +6,7 @@ namespace Site {
 			public static main		: Base.Common.Section;
 			public static footer	: Base.Common.Section;
 
-			public static Initialization() {
+			public static Initialization(): void {
 				Layout.header = new Base.Common.Section($('header'));
 				Layout.main = new Base.Common.Section($('main'));
 				Layout.footer = new Base.Common.Section($('footer'));
@@ -32,19 +32,18 @@ namespace Site {
 			static NAME = 'desktop';
 			static EXECUTE = '';
 
-			static Connect(execute = ['transaction']) {
+			static Connect(execute = ['transaction']): Promise<any> {
 
 				return new Promise((resolve, reject) => {
 					let request = window.indexedDB.open(DB.NAME, DB.VERSION);
 
 					/* Check structure */
-					request.onupgradeneeded = (event) => {
+					request.onupgradeneeded = event => {
 						DB.EXECUTE = 'version';
 						if (execute.includes('version')) resolve(event.target.result);
 					}
 
-					/* Success */
-					request.onsuccess = (event) => {
+					request.onsuccess = event => {
 						request.result.onversionchange = () => {
 							request.result.close();
 							alert("База данных устарела, пожалуйста, перезагрузите страницу.");
@@ -54,8 +53,7 @@ namespace Site {
 						if (execute.includes('transaction')) resolve(event.target.result);
 					}
 
-					/* Error db */
-					request.onerror = (event) => {
+					request.onerror = event => {
 						console.error("Error: ", event, request.error);
 						reject(event);
 					}
@@ -67,7 +65,81 @@ namespace Site {
 				});
 			}
 
-			static CheckStructure() {
+			static Get(db: IDBDatabase, storeName: string, id: number): Promise<any> {
+				return new Promise((resolve, reject) => {
+					let transaction = db.transaction(storeName, 'readonly');
+					let store = transaction.objectStore(storeName);
+					let request = store.get(id);
+
+					request.onsuccess = event => {
+						resolve(event.target.result);
+					}
+
+					request.onerror = event => {
+						console.error("Error: ", event, request.error);
+						reject(event);
+					}
+				});
+			}
+
+			static Cursor(db: IDBDatabase, storeName: string, funcContinue: Function, funcEnd?: Function)/*: Promise<any>*/ {
+				// return new Promise((resolve, reject) => {
+					let transaction = db.transaction(storeName, 'readonly');
+					let store = transaction.objectStore(storeName);
+					let request = store.openCursor();
+
+					request.onsuccess = event => {
+						let cursor = event.target.result;
+
+						if (!cursor) { if (funcEnd) funcEnd(); return; }
+
+						funcContinue(cursor);
+						cursor.continue();
+					}
+
+					request.onerror = event => {
+						console.error("Error: ", event, request.error);
+						// reject(event);
+					}
+				// });
+			}
+
+			static CursorIndex(db: IDBDatabase, storeName: string, indexName: string, range: IDBKeyRange, funcContinue: Function, funcEnd?: Function)/*: Promise<any>*/ {
+				// return new Promise((resolve, reject) => {
+					let transaction = db.transaction(storeName, 'readonly');
+					let store = transaction.objectStore(storeName);
+					let index = store.index(indexName);
+					let request = index.openCursor(range);
+
+					request.onsuccess = event => {
+						let cursor = event.target.result;
+
+						if (!cursor) { if (funcEnd) funcEnd(); return; }
+
+						funcContinue(cursor);
+						cursor.continue();
+					}
+
+					request.onerror = event => {
+						console.error("Error: ", event, request.error);
+						// reject(event);
+					}
+				// });
+			}
+
+			static Put(db: IDBDatabase, storeName: string, data: any): void {
+				let transaction = db.transaction(storeName, 'readwrite');
+				let store = transaction.objectStore(storeName);
+				store.put(data);
+			}
+
+			static Delete(db: IDBDatabase, storeName: string, id: number): void {
+				let transaction = db.transaction(storeName, 'readwrite');
+				let store = transaction.objectStore(storeName);
+				store.delete(id);
+			}
+
+			static CheckStructure(): void {
 				DB.Connect(['version']).then((result: IDBDatabase) => {
 					if (!result.objectStoreNames.contains('estimate')) result.createObjectStore('estimate', {keyPath: 'id'});
 					if (!result.objectStoreNames.contains('estimate_table')) {
@@ -77,18 +149,6 @@ namespace Site {
 					if (!result.objectStoreNames.contains('estimate_record')) {
 						let store = result.createObjectStore('estimate_record', {keyPath: 'id'});
 						store.createIndex('tid', 'tid');
-					}
-				});
-			}
-
-			static Cursor(name: string, success: Function) {
-				DB.Connect(['transaction']).then((result: IDBDatabase) => {
-					let transaction = result.transaction(name, 'readonly');
-					let store = transaction.objectStore(name);
-					let request = store.openCursor();
-
-					request.onsuccess = (event) => {
-						success(event.target.result);
 					}
 				});
 			}

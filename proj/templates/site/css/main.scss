@@ -6,6 +6,7 @@
 @import "fonts";
 
 a { cursor: pointer; }
+h1 { margin: 0 0 2rem; text-align: center; }
 input[type="button"] { @include MixBtn; outline: none; }
 .hide { display: none; }
 

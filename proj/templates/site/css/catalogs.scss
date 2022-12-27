@@ -5,10 +5,11 @@
 	> .control {
 		display: flex;
 		> .btns {
-			flex: auto; display: flex;
+			flex: auto; display: flex; padding-bottom: 1rem; border-bottom: 1px solid $color-neutral;
 			> * {
+				&.new { background-image: url("img/ui/doc/new.svg"); }
 				&.print { background-image: url("img/ui/print.svg"); }
-				&.add_table { background-image: url("img/ui/add table.svg"); }
+				//&.add_table { background-image: url("img/ui/doc/new.svg"); }
 				&:not(:last-child) { margin-right: 0.5rem; }
 			}
 		}

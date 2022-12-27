@@ -36,8 +36,8 @@ namespace Site {
 			private readonly $btns					: JQuery;
 			private readonly $info					: JQuery;
 			private readonly $state					: JQuery;
-			private readonly $list					: JQuery;
-			private readonly $optgroup_old			: JQuery;
+			private readonly $btn_new				: JQuery;
+			private readonly $select				: JQuery;
 			private readonly btn_add				: JQuery;
 			private readonly btn_print				: JQuery;
 			private readonly $container				: JQuery;
@@ -47,23 +47,21 @@ namespace Site {
 				this.$view = $(selector);
 				this.$control = $('<div/>', {class: 'control glob_tabu'});
 				this.$btns = $('<div/>', {class: 'btns'});
-				this.$info = $('<div/>', {class: 'info'});
-				this.$state = $('<span/>', {class: 'state'});
-				this.$list = $('<select/>');
-				this.$optgroup_old = $('<optgroup/>', {label: 'Сохранённые сметы:'});
+				this.$btn_new = $('<input/>', {type: 'button', class: 'img new', value: 'Новая'});
+				this.$select = $('<select/>');
 				this.btn_add = $('<input/>', {type: 'button', value: 'Добавить таблицу', disabled: true, class: 'img add_table'});
 				this.btn_print = $('<input/>', {type: 'button', value: 'Печать', disabled: true, class: 'img print'});
+				this.$info = $('<div/>', {class: 'info'});
+				this.$state = $('<span/>', {class: 'state'});
 				this.$container = $('<div/>', {class: 'container'});
 
 				/* Building DOM */
 				this.$view.append(
 					this.$control.append(
 						this.$btns.append(
-							this.$list.append(
-								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету'),
-								$('<optgroup/>', {label: 'Действие:'}).append(
-									$('<option/>', {value: '0'}).text('Создать новую')
-								)
+							this.$btn_new,
+							this.$select.append(
+								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету')
 							),
 							this.btn_add,
 							this.btn_print
@@ -75,28 +73,40 @@ namespace Site {
 					this.$container
 				);
 
-				Site.Common.DB.Cursor('estimate', (cursor) => {
-					if (!cursor) { new Skins.Select(this.$list, this.DeleteEstimate); return; }
+				Site.Common.DB.Connect().then((result: IDBDatabase) => {
+					Site.Common.DB.Cursor(result, 'estimate', cursor => {
+						let key = cursor.key;
+						let value = cursor.value;
 
-					let key = cursor.key;
-					let value = cursor.value;
-
-					this.$optgroup_old.append(
-						$('<option/>', {value: key}).text(`Изменено ${value.datemd} (от ${value.datecr})`)
-					);
-					this.$list.append(this.$optgroup_old);
-
-					cursor.continue();
+						this.$select.append(
+							$('<option/>', {value: key}).text(`Изменено ${value.datemd} (от ${value.datecr})`)
+						);
+					}, () => {
+						new Skins.Select(this.$select, this.DeleteEstimate);
+					});
 				});
 
 				/* Events */
-				this.$list.on('change', this.CreateEstimate.bind(this));
+				this.$btn_new.on('click', this.NewEstimate.bind(this))
+				this.$select.on('change', this.CreateEstimate.bind(this));
+			}
+
+			private NewEstimate() {
+				this.$container.empty();
+
+				this.estimate = new Estimate(0, this.$container, this);
+
+				this.btn_add.removeAttr('disabled');
+				this.btn_print.removeAttr('disabled');
+
+				this.btn_add.off('click.estimate').on('click.estimate', () => this.estimate.AddTable(0));
+				this.btn_print.off('click.estimate').on('click.estimate', () => window.print());
 			}
 
 			private CreateEstimate() {
 				this.$container.empty();
 
-				this.estimate = new Estimate(Number(this.$list.val()), this.$container, this);
+				this.estimate = new Estimate(Number(this.$select.val()), this.$container, this);
 
 				this.btn_add.removeAttr('disabled');
 				this.btn_print.removeAttr('disabled');
@@ -106,40 +116,15 @@ namespace Site {
 			}
 
 			private DeleteEstimate(id: number) {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transactionEstimate = result.transaction('estimate', 'readwrite');
-					let storeEstimate = transactionEstimate.objectStore('estimate');
-					storeEstimate.delete(id);
-
-					let transactionTable = result.transaction('estimate_table', 'readonly');
-					let storeTable = transactionTable.objectStore('estimate_table');
-					let estimateIndex = storeTable.index('eid');
-					let requestTable = estimateIndex.openCursor(IDBKeyRange.only(id));
-
-					requestTable.onsuccess = (event) => {
-						let cursor = event.target.result;
-
-						if (!cursor) return;
-
-						result.transaction('estimate_table', 'readwrite').objectStore('estimate_table').delete(cursor.value.id);
-
-						let transactionRecord = result.transaction('estimate_record', 'readonly');
-						let storeRecord = transactionRecord.objectStore('estimate_record');
-						let tableIndex = storeRecord.index('tid');
-						let requestRecord = tableIndex.openCursor(IDBKeyRange.only(cursor.value.id));
-
-						requestRecord.onsuccess = (event) => {
-							let cursor = event.target.result;
-
-							if (!cursor) return;
-							result.transaction('estimate_record', 'readwrite').objectStore('estimate_record').delete(cursor.value.id);
-							cursor.continue();
-						}
-
-						cursor.continue();
-					}
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
+					Site.Common.DB.CursorIndex(db, 'estimate_table', 'eid', IDBKeyRange.only(id), cursor => {
+						Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(cursor.value.id), cursor => {
+							Site.Common.DB.Delete(db, 'estimate_record', cursor.value.id);
+						});
+						Site.Common.DB.Delete(db, 'estimate_table', cursor.value.id);
+					});
+					Site.Common.DB.Delete(db, 'estimate', id);
 				});
-				console.log('Delete ', id);
 			}
 
 			public SaveState(state: number) {
@@ -254,30 +239,15 @@ namespace Site {
 					this.Fill();
 					this.AutosaveEnable();
 				} else {
-					Site.Common.DB.Connect().then((result: IDBDatabase) => {
-						let transactionEstimate = result.transaction('estimate', 'readonly');
-						let storeEstimate = transactionEstimate.objectStore('estimate');
-						let requestEstimate = storeEstimate.get(this.id);
-
-						requestEstimate.onsuccess = (event) => {
-							let result = event.target.result;
+					Site.Common.DB.Connect().then((db: IDBDatabase) => {
+						Site.Common.DB.Get(db, 'estimate', this.id).then((result) => {
 							this.CreateData(result.id, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
 							this.Fill();
 							this.AutosaveEnable();
-						}
-
-						let transactionTable = result.transaction('estimate_table', 'readonly');
-						let storeTable = transactionTable.objectStore('estimate_table');
-						let estimateIndex = storeTable.index('eid');
-						let requestTable = estimateIndex.openCursor(IDBKeyRange.only(this.id));
-
-						requestTable.onsuccess = (event) => {
-							let cursor = event.target.result;
-
-							if (!cursor) return;
+						});
+						Site.Common.DB.CursorIndex(db, 'estimate_table', 'eid', IDBKeyRange.only(this.id), cursor => {
 							this.AddTable(cursor.primaryKey, cursor.value);
-							cursor.continue();
-						}
+						});
 					});
 				}
 			}
@@ -342,9 +312,7 @@ namespace Site {
 			}
 
 			private Save(): void {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transaction = result.transaction('estimate', 'readwrite');
-					let store = transaction.objectStore('estimate');
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					let data = {
 						id: this.id,
 						datecr: this.datecr,
@@ -356,8 +324,7 @@ namespace Site {
 						phone: this.phone,
 						date: this.date
 					};
-
-					store.put(data);
+					Site.Common.DB.Put(db, 'estimate', data);
 					this.controller.SaveState(Controller.STATE_SAVE);
 				});
 			}
@@ -369,7 +336,7 @@ namespace Site {
 		class Table {
 			/* Variables */
 			private id								: number;
-			private eid								: number;
+			private readonly eid					: number;
 			private datecr							: string;
 			private datemd							: string;
 
@@ -380,7 +347,7 @@ namespace Site {
 
 			private readonly controller				: Controller;
 			private readonly estimate				: Estimate;
-			private records							: {[key: number]: Record};
+			private readonly records				: {[key: number]: Record};
 			private readonly autosave				: number;
 			private timer							?: number;
 			private visible							: boolean;
@@ -496,19 +463,12 @@ namespace Site {
 				} else {
 					this.CreateData(data.id, data.header, data.discount, data.datecr, data.datemd);
 
-					Site.Common.DB.Connect().then((result: IDBDatabase) => {
-						let transactionRecord = result.transaction('estimate_record', 'readonly');
-						let storeRecord = transactionRecord.objectStore('estimate_record');
-						let tableIndex = storeRecord.index('tid');
-						let requestRecord = tableIndex.openCursor(IDBKeyRange.only(this.id));
-
-						requestRecord.onsuccess = (event) => {
-							let cursor = event.target.result;
-
-							if (!cursor) { this.Sum(); return; }
+					Site.Common.DB.Connect().then((db: IDBDatabase) => {
+						Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(this.id), cursor => {
 							this.AddRecord(cursor.primaryKey, cursor.value);
-							cursor.continue();
-						}
+						}, () => {
+							this.Sum();
+						});
 					});
 				}
 
@@ -590,9 +550,7 @@ namespace Site {
 			}
 
 			private Save(): void {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transaction = result.transaction('estimate_table', 'readwrite');
-					let store = transaction.objectStore('estimate_table');
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					let data = {
 						id: this.id,
 						eid: this.eid,
@@ -602,8 +560,7 @@ namespace Site {
 						header: this.header,
 						discount: this.discount
 					};
-
-					store.put(data);
+					Site.Common.DB.Put(db, 'estimate_table', data);
 					this.controller.SaveState(Controller.STATE_SAVE);
 				});
 			}
@@ -637,10 +594,8 @@ namespace Site {
 			}
 
 			private Remove(): void {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transaction = result.transaction('estimate_table', 'readwrite');
-					let store = transaction.objectStore('estimate_table');
-					store.delete(this.id);
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
+					Site.Common.DB.Delete(db, 'estimate_table', this.id);
 				});
 
 				this.estimate.RemoveTable(this.id);
@@ -724,8 +679,8 @@ namespace Site {
 				this.$before.before(this.$tr);
 
 				if (!this.id) {
-					this.CreateData(Number(localStorage.getItem('EstimateLineIter')) || 1, '', 0, '', 0, true, true);
-					localStorage.setItem('EstimateLineIter', (this.id + 1).toString());
+					this.CreateData(Number(localStorage.getItem('EstimateRecordIter')) || 1, '', 0, '', 0, true, true);
+					localStorage.setItem('EstimateRecordIter', (this.id + 1).toString());
 
 					this.Save();
 				} else {
@@ -806,9 +761,7 @@ namespace Site {
 			}
 
 			private Save(): void {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transaction = result.transaction('estimate_record', 'readwrite');
-					let store = transaction.objectStore('estimate_record');
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					let data = {
 						id: this.id,
 						tid: this.tid,
@@ -820,8 +773,7 @@ namespace Site {
 						unit: this.unit,
 						price: this.price
 					};
-
-					store.put(data);
+					Site.Common.DB.Put(db, 'estimate_record', data);
 					this.controller.SaveState(Controller.STATE_SAVE);
 				});
 			}
@@ -859,10 +811,8 @@ namespace Site {
 			}
 
 			private Remove(): void {
-				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					let transaction = result.transaction('estimate_record', 'readwrite');
-					let store = transaction.objectStore('estimate_record');
-					store.delete(this.id);
+				Site.Common.DB.Connect().then((db: IDBDatabase) => {
+					Site.Common.DB.Delete(db, 'estimate_record', this.id);
 				});
 
 				this.table.RemoveRecord(this.id);
