@@ -3,11 +3,11 @@ namespace Skins {
 	export class Select {
 		/* Variables */
 		open					: boolean;
-		im						: boolean;
 		closing					: boolean;
 
 		/* Elements */
 		$skin					: JQuery;
+		$placeholder			: JQuery;
 
 		constructor(elem: string | JQuery, funcDelete: Function | null = null) {
 			/* Set variables */
@@ -16,21 +16,21 @@ namespace Skins {
 
 			/* Set elements */
 			this.$skin = $('<div>', {class: 'skin select'});
-			let $placeholder = $('<div>', {class: 'placeholder'});
+			this.$placeholder = $('<div>', {class: 'placeholder'});
 			let $content = $('<div>', {class: 'content'});
 			let $elem = (typeof elem === 'string') ? $(elem) : elem;
 
 			/* Events */
 			this.$skin.on('click', this.OnSkin.bind(this));
+			this.$placeholder.on('click', this.Switch.bind(this));
 			$(document).on('click', this.OnDocument.bind(this));
-			$placeholder.on('click', this.Switch.bind(this));
 
 			this.ScanElem($elem, $content, funcDelete);
 
 			$elem.hide();
 
 			this.$skin.append(
-				$placeholder.text('Выберите'),
+				this.$placeholder,
 				$content
 			);
 
@@ -88,6 +88,8 @@ namespace Skins {
 			let $select = $('<div/>', {class: 'select'});
 			let $delete = $('<div/>', {class: 'delete'});
 
+			if ($elem.is(':checked')) this.$placeholder.text(text);
+
 			/* Building DOM */
 			$option.append(
 				$select,
@@ -95,7 +97,12 @@ namespace Skins {
 			);
 
 			/* Events */
-			$select.on('click', () => { $elem.prop('selected', true); $elem.trigger('change'); this.Close(); });
+			$select.on('click', () => {
+				$elem.prop('selected', true);
+				$elem.trigger('change');
+				this.$placeholder.text(text);
+				this.Close();
+			});
 			if (funcDelete) $delete.on('click', () => funcDelete(Number(value)));
 
 			$select.text(text);
@@ -115,7 +122,7 @@ namespace Skins {
 			$optgroup.append(
 				$label.text(label),
 				$content
-			)
+			);
 
 			$parent.append($optgroup);
 		}

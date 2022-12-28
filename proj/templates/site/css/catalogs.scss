@@ -8,8 +8,6 @@
 			flex: auto; display: flex; padding-bottom: 1rem; border-bottom: 1px solid $color-neutral;
 			> * {
 				&.new { background-image: url("img/ui/doc/new.svg"); }
-				&.print { background-image: url("img/ui/print.svg"); }
-				//&.add_table { background-image: url("img/ui/doc/new.svg"); }
 				&:not(:last-child) { margin-right: 0.5rem; }
 			}
 		}
@@ -21,7 +19,16 @@
 		}
 	}
 	> .container {
+		margin-top: 2rem;
 		> .wrap {
+			> .btns {
+				display: flex;
+				> * {
+					&.print { background-image: url("img/ui/print.svg"); }
+					&.add_table { background-image: url("img/ui/doc/new.svg"); }
+					&:not(:last-child) { margin-right: 0.5rem; }
+				}
+			}
 			> .header {
 				display: flex; align-items: center;
 				> .caption { flex: auto; font-size: 5rem; font-weight: bold; }

@@ -24,10 +24,15 @@ namespace Site {
 			if ($th.val() === '0') $th.val('');
 		}
 
+		type TypeStateEdit = 1;
+		type TypeStateSave = 2;
+		type TypeStateAutoSave = TypeStateEdit | TypeStateSave;
+
 		export class Controller {
 			/* Variables */
-			static readonly STATE_EDIT				= 1;
-			static readonly STATE_SAVE				= 2;
+			static readonly STATE_EDIT				: TypeStateEdit = 1;
+			static readonly STATE_SAVE				: TypeStateSave = 2;
+			private states_sources					: { estimate: TypeStateAutoSave, table: TypeStateAutoSave, record: TypeStateAutoSave };
 			private estimate						: Estimate;
 
 			/* Elements */
@@ -38,22 +43,18 @@ namespace Site {
 			private readonly $state					: JQuery;
 			private readonly $btn_new				: JQuery;
 			private readonly $select				: JQuery;
-			private readonly btn_add				: JQuery;
-			private readonly btn_print				: JQuery;
 			private readonly $container				: JQuery;
 
 			constructor(selector: string) {
 				/* Set elements */
-				this.$view = $(selector);
-				this.$control = $('<div/>', {class: 'control glob_tabu'});
-				this.$btns = $('<div/>', {class: 'btns'});
-				this.$btn_new = $('<input/>', {type: 'button', class: 'img new', value: 'Новая'});
-				this.$select = $('<select/>');
-				this.btn_add = $('<input/>', {type: 'button', value: 'Добавить таблицу', disabled: true, class: 'img add_table'});
-				this.btn_print = $('<input/>', {type: 'button', value: 'Печать', disabled: true, class: 'img print'});
-				this.$info = $('<div/>', {class: 'info'});
-				this.$state = $('<span/>', {class: 'state'});
-				this.$container = $('<div/>', {class: 'container'});
+				this.$view 							= $(selector);
+				this.$control 						= $('<div/>', {class: 'control glob_tabu'});
+				this.$btns 							= $('<div/>', {class: 'btns'});
+				this.$btn_new 						= $('<input/>', {type: 'button', class: 'img new', value: 'Новая'});
+				this.$select 						= $('<select/>');
+				this.$info 							= $('<div/>', {class: 'info'});
+				this.$state 						= $('<span/>', {class: 'state'});
+				this.$container 					= $('<div/>', {class: 'container'});
 
 				/* Building DOM */
 				this.$view.append(
@@ -62,9 +63,7 @@ namespace Site {
 							this.$btn_new,
 							this.$select.append(
 								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету')
-							),
-							this.btn_add,
-							this.btn_print
+							)
 						),
 						this.$info.append(
 							this.$state
@@ -88,31 +87,29 @@ namespace Site {
 
 				/* Events */
 				this.$btn_new.on('click', this.NewEstimate.bind(this))
-				this.$select.on('change', this.CreateEstimate.bind(this));
+				this.$select.on('change', this.LoadEstimate.bind(this));
 			}
 
 			private NewEstimate() {
 				this.$container.empty();
+				this.states_sources = {
+					estimate: Controller.STATE_SAVE,
+					table: Controller.STATE_SAVE,
+					record: Controller.STATE_SAVE
+				};
 
 				this.estimate = new Estimate(0, this.$container, this);
-
-				this.btn_add.removeAttr('disabled');
-				this.btn_print.removeAttr('disabled');
-
-				this.btn_add.off('click.estimate').on('click.estimate', () => this.estimate.AddTable(0));
-				this.btn_print.off('click.estimate').on('click.estimate', () => window.print());
 			}
 
-			private CreateEstimate() {
+			private LoadEstimate() {
 				this.$container.empty();
+				this.states_sources = {
+					estimate: Controller.STATE_SAVE,
+					table: Controller.STATE_SAVE,
+					record: Controller.STATE_SAVE
+				};
 
 				this.estimate = new Estimate(Number(this.$select.val()), this.$container, this);
-
-				this.btn_add.removeAttr('disabled');
-				this.btn_print.removeAttr('disabled');
-
-				this.btn_add.off('click.estimate').on('click.estimate', () => this.estimate.AddTable(0));
-				this.btn_print.off('click.estimate').on('click.estimate', () => window.print());
 			}
 
 			private DeleteEstimate(id: number) {
@@ -127,14 +124,22 @@ namespace Site {
 				});
 			}
 
-			public SaveState(state: number) {
+			public SaveState(state: TypeStateAutoSave, source: 'estimate' | 'table' | 'record') {
+				let old_sum = 0;
+				for (let i in this.states_sources) if (this.states_sources[i] === Controller.STATE_EDIT) old_sum++;
+
+				this.states_sources[source] = state;
+
+				let new_sum = 0;
+				for (let i in this.states_sources) if (this.states_sources[i] === Controller.STATE_EDIT) new_sum++;
+
 				let _class = '';
 				let _text = '';
 				switch (state) {
-					case Controller.STATE_EDIT: _class = 'edit'; _text = 'Изменено'; break;
-					case Controller.STATE_SAVE: _class = 'save'; _text = 'Сохранено'; break;
+					case Controller.STATE_EDIT: if (!old_sum) { _class = 'edit'; _text = 'Изменено'; } break;
+					case Controller.STATE_SAVE: if (old_sum && !new_sum) { _class = 'save'; _text = 'Сохранено'; } break;
 				}
-				this.$state.removeClass().addClass(_class).text(_text);
+				if (_class) this.$state.removeClass().addClass(_class).text(_text);
 			}
 
 		}
@@ -158,6 +163,9 @@ namespace Site {
 
 			/* Elements */
 			private readonly $container				: JQuery;
+			private readonly $btns					: JQuery;
+			private readonly $btn_add				: JQuery;
+			private readonly $btn_print				: JQuery;
 			private readonly $wrap					: JQuery;
 			private readonly $header				: JQuery;
 			private readonly $caption				: JQuery;
@@ -180,6 +188,10 @@ namespace Site {
 
 				/* Set elements */
 				this.$container 					= $container;
+
+				this.$btns 							= $('<div/>', {class: 'btns'});
+				this.$btn_add 						= $('<input/>', {type: 'button', value: 'Добавить таблицу', class: 'img add_table'});
+				this.$btn_print 					= $('<input/>', {type: 'button', value: 'Печать', class: 'img print'});
 				this.$wrap							= $('<div/>', {class: 'wrap'});
 				this.$header						= $('<div/>', {class: 'header'});
 				this.$caption						= $('<div/>', {class: 'caption'});
@@ -191,8 +203,16 @@ namespace Site {
 				this.$contact_date					= $('<input/>', {type: 'date', class: 'number'});
 				this.$lists							= $('<div/>', {class: 'lists'});
 
+				/* Events */
+				this.$btn_add.on('click.estimate', () => this.AddTable(0));
+				this.$btn_print.on('click.estimate', () => window.print());
+
 				/* Building DOM */
 				this.$wrap.append(
+					this.$btns.append(
+						this.$btn_add,
+						this.$btn_print
+					),
 					this.$header.append(
 						this.$caption.text('Смета'),
 						this.$contacts.append(
@@ -296,7 +316,7 @@ namespace Site {
 			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
-				this.controller.SaveState(Controller.STATE_EDIT);
+				this.controller.SaveState(Controller.STATE_EDIT, 'estimate');
 			}
 
 			private UpdateDataAndSave(): void {
@@ -325,7 +345,7 @@ namespace Site {
 						date: this.date
 					};
 					Site.Common.DB.Put(db, 'estimate', data);
-					this.controller.SaveState(Controller.STATE_SAVE);
+					this.controller.SaveState(Controller.STATE_SAVE, 'estimate');
 				});
 			}
 
@@ -537,7 +557,7 @@ namespace Site {
 			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
-				this.controller.SaveState(Controller.STATE_EDIT);
+				this.controller.SaveState(Controller.STATE_EDIT, 'table');
 			}
 
 			private UpdateDataAndSave(): void {
@@ -561,7 +581,7 @@ namespace Site {
 						discount: this.discount
 					};
 					Site.Common.DB.Put(db, 'estimate_table', data);
-					this.controller.SaveState(Controller.STATE_SAVE);
+					this.controller.SaveState(Controller.STATE_SAVE, 'table');
 				});
 			}
 
@@ -740,7 +760,7 @@ namespace Site {
 			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
-				this.controller.SaveState(Controller.STATE_EDIT);
+				this.controller.SaveState(Controller.STATE_EDIT, 'record');
 			}
 
 			private UpdateDataAndSave(): void {
@@ -774,7 +794,7 @@ namespace Site {
 						price: this.price
 					};
 					Site.Common.DB.Put(db, 'estimate_record', data);
-					this.controller.SaveState(Controller.STATE_SAVE);
+					this.controller.SaveState(Controller.STATE_SAVE, 'record');
 				});
 			}
 
