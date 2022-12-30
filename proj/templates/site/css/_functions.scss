@@ -43,3 +43,10 @@
 		&:active, &:focus-visible { border-color: $color-negative-btn-border-active; background-color: $color-negative-btn-bg-active; }
 	}
 }
+
+@mixin MixText {
+	padding: 0.6rem 1.6rem; border: 0.2rem solid $color-text-border; outline: none;
+	&:hover { border-color: $color-text-border-hover; }
+	&:active, &:focus-visible { border-color: $color-text-border-active; }
+	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-primary-text; }
+}

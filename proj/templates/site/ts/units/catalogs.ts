@@ -78,19 +78,25 @@ namespace Site {
 						let value = cursor.value;
 
 						this.$select.append(
-							$('<option/>', {value: key}).text(`Изменено ${value.datemd} (от ${value.datecr})`)
+							$('<option/>', {value: key}).text(`«${value.name}» от ${value.datecr}`)
 						);
 					}, () => {
-						new Skins.Select(this.$select, this.DeleteEstimate);
+						new Skins.Select(this.$select, this.QuestionDelete, {self: this});
 					});
 				});
 
 				/* Events */
-				this.$btn_new.on('click', this.NewEstimate.bind(this))
+				this.$btn_new.on('click', this.OnCreateEstimate.bind(this))
 				this.$select.on('change', this.LoadEstimate.bind(this));
 			}
 
-			private NewEstimate() {
+			private OnCreateEstimate() {
+				let $input = $('<input/>', {type: 'text', placeholder: 'Название'});
+				Site.Common.Window.Interactive($input, null, [['yes', 'Создать', false]], () => this.NewEstimate($input.closest('.instance').children('.space'), $input.val().toString().trim()));
+			}
+
+			private NewEstimate(space: JQuery, name: string): void {
+				if (name === '') return;
 				this.$container.empty();
 				this.states_sources = {
 					estimate: Controller.STATE_SAVE,
@@ -98,7 +104,8 @@ namespace Site {
 					record: Controller.STATE_SAVE
 				};
 
-				this.estimate = new Estimate(0, this.$container, this);
+				this.estimate = new Estimate(0, name, this.$container, this);
+				space.trigger('click');
 			}
 
 			private LoadEstimate() {
@@ -109,7 +116,11 @@ namespace Site {
 					record: Controller.STATE_SAVE
 				};
 
-				this.estimate = new Estimate(Number(this.$select.val()), this.$container, this);
+				this.estimate = new Estimate(Number(this.$select.val()), '', this.$container, this);
+			}
+
+			private QuestionDelete(id: number, data: any) {
+				Site.Common.Window.Interactive(Site.Common.GetMessageBlock('Удалить смету?'), null, [['yes', 'Да'], ['no', 'Нет']], () => data.self.DeleteEstimate(id));
 			}
 
 			private DeleteEstimate(id: number) {
@@ -150,6 +161,7 @@ namespace Site {
 			private datecr							: string;
 			private datemd							: string;
 
+			private name							: string;
 			private company							: string;
 			private address							: string;
 			private phone							: string;
@@ -177,7 +189,7 @@ namespace Site {
 			private readonly $contact_date			: JQuery;
 			private readonly $lists					: JQuery;
 
-			constructor(id: number, $container: JQuery, controller: Controller) {
+			constructor(id: number, name, $container: JQuery, controller: Controller) {
 				/* Set variables */
 				this.id								= id;
 
@@ -252,7 +264,7 @@ namespace Site {
 				this.$container.append(this.$wrap);
 
 				if (!this.id) {
-					this.CreateData(Number(localStorage.getItem('EstimateIter')) || 1, '', '', '', '', Site.Common.UIDate.Today(), true, true);
+					this.CreateData(Number(localStorage.getItem('EstimateIter')) || 1, name, '', '', '', '', Site.Common.UIDate.Today(), true, true);
 					localStorage.setItem('EstimateIter', (this.id + 1).toString());
 
 					this.Save();
@@ -261,7 +273,7 @@ namespace Site {
 				} else {
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
 						Site.Common.DB.Get(db, 'estimate', this.id).then((result) => {
-							this.CreateData(result.id, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
+							this.CreateData(result.id, result.name, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
 							this.Fill();
 							this.AutosaveEnable();
 						});
@@ -296,8 +308,9 @@ namespace Site {
 				this.$contact_date.on('input', this.Commit.bind(this));
 			}
 
-			private CreateData(id: number, company: string, address: string, mail: string, phone: string, date: string, datecr: string | boolean = false, datemd: string | boolean = false): void {
+			private CreateData(id: number, name: string, company: string, address: string, mail: string, phone: string, date: string, datecr: string | boolean = false, datemd: string | boolean = false): void {
 				this.id = id;
+				this.name = name;
 				if (datecr) this.datecr = (datecr === true) ? GetDate() : datecr;
 
 				this.UpdateData(company, address, mail, phone, date, datemd);
@@ -335,6 +348,7 @@ namespace Site {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					let data = {
 						id: this.id,
+						name: this.name,
 						datecr: this.datecr,
 						datemd: this.datemd,
 
@@ -420,7 +434,7 @@ namespace Site {
 
 				/* Events */
 				this.$visible.on('click', this.Visible.bind(this));
-				this.$remove.on('click', this.Remove.bind(this));
+				this.$remove.on('click', this.QuestionRemove.bind(this));
 				this.$add_line.on('click', () => this.AddRecord(0));
 				this.$collapse.on('click', this.CollapseRecords.bind(this));
 
@@ -613,8 +627,15 @@ namespace Site {
 				}
 			}
 
+			private QuestionRemove() {
+				Site.Common.Window.Interactive(Site.Common.GetMessageBlock('Удалить таблицу?'), null, [['yes', 'Да'], ['no', 'Нет']], this.Remove.bind(this));
+			}
+
 			private Remove(): void {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
+					Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(this.id), cursor => {
+						Site.Common.DB.Delete(db, 'estimate_record', cursor.value.id);
+					});
 					Site.Common.DB.Delete(db, 'estimate_table', this.id);
 				});
 
@@ -678,7 +699,7 @@ namespace Site {
 				this.$sum							= $('<span/>');
 
 				/* Events */
-				this.$remove.on('click', this.Remove.bind(this));
+				this.$remove.on('click', this.QuestionRemove.bind(this));
 
 				/* Building DOM */
 				this.$tr.append(
@@ -828,6 +849,10 @@ namespace Site {
 
 			private Sum(): void {
 				this.sum = +((this.GetPrice() * this.GetCount()).toFixed(2));
+			}
+
+			private QuestionRemove() {
+				Site.Common.Window.Interactive(Site.Common.GetMessageBlock('Удалить запись?'), null, [['yes', 'Да'], ['no', 'Нет']], this.Remove.bind(this));
 			}
 
 			private Remove(): void {

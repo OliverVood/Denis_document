@@ -41,7 +41,7 @@
 		public function RenderSections() { ?>
 			<header><?php Layout::instance()->header->Browse(); ?></header>
 			<main>
-				<div>
+				<div class = "document">
 					<?php Layout::instance()->main->Browse(); ?>
 				</div>
 			</main>

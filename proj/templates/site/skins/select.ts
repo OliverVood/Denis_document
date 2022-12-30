@@ -9,7 +9,7 @@ namespace Skins {
 		$skin					: JQuery;
 		$placeholder			: JQuery;
 
-		constructor(elem: string | JQuery, funcDelete: Function | null = null) {
+		constructor(elem: string | JQuery, funcDelete: Function | null = null, data: Object = {}) {
 			/* Set variables */
 			this.open			= false;
 			this.closing		= true;
@@ -25,7 +25,7 @@ namespace Skins {
 			this.$placeholder.on('click', this.Switch.bind(this));
 			$(document).on('click', this.OnDocument.bind(this));
 
-			this.ScanElem($elem, $content, funcDelete);
+			this.ScanElem($elem, $content, funcDelete, data);
 
 			$elem.hide();
 
@@ -63,19 +63,19 @@ namespace Skins {
 			this.open = false;
 		}
 
-		private ScanElem($elem: JQuery, $parent: JQuery, funcDelete: Function | null) {
+		private ScanElem($elem: JQuery, $parent: JQuery, funcDelete: Function | null, data: Object = {}) {
 			let self = this;
 
 			$elem.children().each(function(i, item) {
 				let $item = $(item);
 				switch ($item.prop('nodeName')) {
-					case 'OPTION': self.RenderOption($item, $parent, funcDelete); break;
-					case 'OPTGROUP': self.RenderOptgroup($item, $parent, funcDelete); break;
+					case 'OPTION': self.RenderOption($item, $parent, funcDelete, data); break;
+					case 'OPTGROUP': self.RenderOptgroup($item, $parent, funcDelete, data); break;
 				}
 			});
 		}
 
-		private RenderOption($elem: JQuery, $parent: JQuery, funcDelete: Function | null) {
+		private RenderOption($elem: JQuery, $parent: JQuery, funcDelete: Function | null, data: Object = {}) {
 			/* Variables */
 			let text = $elem.text();
 			let value = $elem.attr('value');
@@ -103,21 +103,21 @@ namespace Skins {
 				this.$placeholder.text(text);
 				this.Close();
 			});
-			if (funcDelete) $delete.on('click', () => funcDelete(Number(value)));
+			if (funcDelete) $delete.on('click', () => funcDelete(Number(value), data));
 
 			$select.text(text);
 
 			$parent.append($option);
 		}
 
-		private RenderOptgroup($elem: JQuery, $parent: JQuery, funcDelete: Function | null) {
+		private RenderOptgroup($elem: JQuery, $parent: JQuery, funcDelete: Function | null, data: Object = {}) {
 			let label = $elem.attr('label');
 
 			let $optgroup = $('<div/>', {class: 'optgroup'});
 			let $label = $('<div/>', {class: 'label'});
 			let $content = $('<div/>', {class: 'content'});
 
-			this.ScanElem($elem, $content, funcDelete);
+			this.ScanElem($elem, $content, funcDelete, data);
 
 			$optgroup.append(
 				$label.text(label),
