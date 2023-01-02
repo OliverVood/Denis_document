@@ -114,8 +114,11 @@
 	}
 
 	@media print {
-		> .container > .wrap > .lists > .list > .wrap > table tr.total > td {
-			&:nth-child(3), &:nth-child(4) { font-weight: bold; }
+		> .container {
+			margin-top: 0;
+			> .wrap > .lists > .list > .wrap > table tr.total > td {
+				&:nth-child(3), &:nth-child(4) { font-weight: bold; }
+			}
 		}
 		input { display: none; }
 	}

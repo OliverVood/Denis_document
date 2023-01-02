@@ -1,31 +1,4 @@
-@use "variables" as *;
-
-@mixin Select {
-
-	&.select {
-		cursor: default;
-		> .placeholder { display: inline-block; padding: 0.6rem 2.8rem 0.6rem 1.6rem; border: 0.2rem solid $color-select-border; background-color: $color-light; background-image: url("img/ui/primary/arrow/top.svg"); background-size: 1.2rem; background-position: center right 0.6rem; background-repeat: no-repeat; user-select: none; cursor: pointer; }
-		> .content { display: none; position: absolute; margin-top: 0.2rem; background-color: $color-select_fill; box-shadow: $shadow; }
-		.option {
-			display: flex;
-			> .select { flex: auto; padding: 0.6rem 1.6rem; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
-			> .delete { width: 40px; border-left: 1px dashed $color-light; background-image: url("img/ui/primary/delete.svg"); background-size: 1.4rem; background-position: center; background-repeat: no-repeat; cursor: pointer; }
-			&:hover {
-				background-color: $color-primary-light; color: $color-primary-text;
-				> .delete { background-image: url("img/ui/white/delete.svg"); }
-			}
-			&.selected { background-color: $color-primary; color: $color-primary-text; }
-			&.disabled { background-color: $color-neutral; color: $color-primary-text; }
-			&.hidden { display: none; }
-		}
-		.label { padding: 0.6rem 1.6rem; white-space: nowrap; text-overflow: ellipsis; font-weight: bold; }
-		&.open {
-			> .placeholder { background-image: url("img/ui/primary/arrow/bottom.svg"); }
-			> .content { display: block; }
-		}
-	}
-
-}
+@use "skins/select" as *;
 
 .skin {
 	@include Select;

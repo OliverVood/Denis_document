@@ -3,7 +3,8 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
-	require 'views/work.tpl';
+	require 'views/estimate.tpl';
+	require 'views/certificate.tpl';
 
 	use Base\Units;
 	use Base\Instance;
@@ -11,23 +12,31 @@
 	use Base\Action;
 	use Proj\Units\Consts;
 	use Proj\Site\Templates\Layout;
-	use Proj\Site\Templates\Catalogs\Work;
+	use Proj\Site\Templates\Catalogs\Estimate;
+	use Proj\Site\Templates\Catalogs\Certificate;
 
 	class Catalogs extends Units implements Consts\Catalogs {
 		use Instance;
 
-		private Action $act_catalogs;
+		private Action $act_estimate;
+		private Action $act_certificate;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 
-			$this->act_catalogs = new Action('null', 'null');
+			$this->act_estimate = new Action('estimate', 'null');
+			$this->act_certificate = new Action('certificate', 'null');
 
-			Controller::instance()->view->Push($this->act_catalogs, [$this, 'OutCatalog']);
+			Controller::instance()->view->Push($this->act_estimate, [$this, 'OutEstimate']);
+			Controller::instance()->view->Push($this->act_certificate, [$this, 'OutCertificate']);
 		}
 
-		public function OutCatalog() {
-			Layout::instance()->main->Push(Work::object()->ToVar());
+		public function OutEstimate() {
+			Layout::instance()->main->Push(Estimate::object()->ToVar());
+		}
+
+		public function OutCertificate() {
+			Layout::instance()->main->Push(Certificate::object()->ToVar());
 		}
 
 	}

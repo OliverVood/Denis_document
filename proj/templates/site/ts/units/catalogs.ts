@@ -33,6 +33,7 @@ namespace Site {
 			static readonly STATE_EDIT				: TypeStateEdit = 1;
 			static readonly STATE_SAVE				: TypeStateSave = 2;
 			private states_sources					: { estimate: TypeStateAutoSave, table: TypeStateAutoSave, record: TypeStateAutoSave };
+			private estimateId						: number | null;
 			private estimate						: Estimate;
 
 			/* Elements */
@@ -46,6 +47,9 @@ namespace Site {
 			private readonly $container				: JQuery;
 
 			constructor(selector: string) {
+				/**/
+				this.estimateId						= null;
+
 				/* Set elements */
 				this.$view 							= $(selector);
 				this.$control 						= $('<div/>', {class: 'control glob_tabu'});
@@ -77,9 +81,7 @@ namespace Site {
 						let key = cursor.key;
 						let value = cursor.value;
 
-						this.$select.append(
-							$('<option/>', {value: key}).text(`«${value.name}» от ${value.datecr}`)
-						);
+						this.AddOption(key, value.datecr, value.name);
 					}, () => {
 						new Skins.Select(this.$select, this.QuestionDelete, {self: this});
 					});
@@ -95,7 +97,7 @@ namespace Site {
 				Site.Common.Window.Interactive($input, null, [['yes', 'Создать', false]], () => this.NewEstimate($input.closest('.instance').children('.space'), $input.val().toString().trim()));
 			}
 
-			private NewEstimate(space: JQuery, name: string): void {
+			private NewEstimate($space: JQuery, name: string): void {
 				if (name === '') return;
 				this.$container.empty();
 				this.states_sources = {
@@ -105,7 +107,16 @@ namespace Site {
 				};
 
 				this.estimate = new Estimate(0, name, this.$container, this);
-				space.trigger('click');
+				let data = this.estimate.GetDate();
+				this.estimateId = data.id;
+				$space.trigger('click');
+				this.AddOption(data.id, data.datecr, data.name);
+			}
+
+			private AddOption(id: number, datecr: string, name: string) {
+				this.$select.append(
+					$('<option/>', {value: id}).text(`«${name}» от ${datecr}`)
+				);
 			}
 
 			private LoadEstimate() {
@@ -117,6 +128,9 @@ namespace Site {
 				};
 
 				this.estimate = new Estimate(Number(this.$select.val()), '', this.$container, this);
+
+				let data = this.estimate.GetDate();
+				this.estimateId = data.id;
 			}
 
 			private QuestionDelete(id: number, data: any) {
@@ -133,6 +147,9 @@ namespace Site {
 					});
 					Site.Common.DB.Delete(db, 'estimate', id);
 				});
+
+				this.$select.children(`option[value="${id}"]`).remove();
+				if (id === this.estimateId) this.$container.empty();
 			}
 
 			public SaveState(state: TypeStateAutoSave, source: 'estimate' | 'table' | 'record') {
@@ -201,7 +218,7 @@ namespace Site {
 				/* Set elements */
 				this.$container 					= $container;
 
-				this.$btns 							= $('<div/>', {class: 'btns'});
+				this.$btns 							= $('<div/>', {class: 'btns glob_tabu'});
 				this.$btn_add 						= $('<input/>', {type: 'button', value: 'Добавить таблицу', class: 'img add_table'});
 				this.$btn_print 					= $('<input/>', {type: 'button', value: 'Печать', class: 'img print'});
 				this.$wrap							= $('<div/>', {class: 'wrap'});
@@ -282,6 +299,15 @@ namespace Site {
 						});
 					});
 				}
+			}
+
+			public GetDate(): {id: number, datecr: string, name: string} {
+				return {
+					id: this.id,
+					datecr: this.datecr,
+
+					name: this.name
+				};
 			}
 
 			public AddTable(id: number, data: TypeTableData | null = null): void {

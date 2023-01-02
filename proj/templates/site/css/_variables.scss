@@ -31,12 +31,10 @@ $color-neutral-extra-light				: #EAEAEA;
 /* Color elements */
 $color-btn-text 						: $color-primary-text;
 
+/* button */
 $color-btn-bg 							: $color-primary;
 $color-btn-bg-hover 					: $color-primary-light;
 $color-btn-bg-active 					: $color-primary-light;
-
-$color-select-border 					: $color-primary;
-$color-select_fill						: $color-light;
 
 $color-btn-border 						: $color-primary;
 $color-btn-border-hover 				: $color-primary-light;
@@ -49,6 +47,12 @@ $color-negative-btn-bg-active			: $color-negative-light;
 $color-negative-btn-border				: $color-negative;
 $color-negative-btn-border-hover		: $color-negative-light;
 $color-negative-btn-border-active		: $color-negative;
+
+/* Select */
+$color-select-border 					: $color-primary;
+$color-select-border-hover				: $color-primary-light;
+$color-select-border-active				: $color-primary-light;
+$color-select_fill						: $color-light;
 
 $color-text-border 						: $color-primary;
 $color-text-border-hover 				: $color-primary-light;

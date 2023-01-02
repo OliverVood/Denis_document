@@ -4,7 +4,7 @@
 
 	use Base\Templates\View;
 
-	class Work extends View {
+	class Estimate extends View {
 
 		public function ToVar(): string {
 			$this->Start();
@@ -14,7 +14,7 @@
 
 		public function Render() { ?>
 			<div class = "view catalogs work">
-				<h1>Работа со сметами</h1>
+				<h1 class = "glob_tabu">Работа со сметами</h1>
 				<script>
 					let Estimate = new Site.Catalogs.Controller('.view.catalogs.work');
 				</script>

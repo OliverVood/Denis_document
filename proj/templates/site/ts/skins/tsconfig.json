@@ -4,7 +4,7 @@
 		"target": "esnext",
 		"lib" : ["ESNext", "DOM"],
 		"rootDirs": ["./"],
-		"outDir": "../js/skins",
+		"outDir": "../../js/skins",
 		"declaration": true,
 		"sourceMap": true,
 		"alwaysStrict": true

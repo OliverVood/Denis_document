@@ -2,6 +2,18 @@
 
 @use "variables" as *;
 
+@function GetImageUI($file) {
+	@return url('img/ui/' + $file);
+}
+
+@function GetImageUIWhite($file) {
+	@return GetImageUI('white/' + $file);
+}
+
+@function GetImageUIPrimary($file) {
+	@return GetImageUI('primary/' + $file);
+}
+
 @function GetValue($defaults, $params, $name) {
 	@if ($params != null) {
 		$temp: map.get($params, $name);
