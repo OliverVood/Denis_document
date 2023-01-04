@@ -28,33 +28,39 @@ namespace Site {
 		type TypeStateSave = 2;
 		type TypeStateAutoSave = TypeStateEdit | TypeStateSave;
 
-		export class Controller {
+		class Controller {
 			/* Variables */
 			static readonly STATE_EDIT				: TypeStateEdit = 1;
 			static readonly STATE_SAVE				: TypeStateSave = 2;
-			private states_sources					: { estimate: TypeStateAutoSave, table: TypeStateAutoSave, record: TypeStateAutoSave };
-			private estimateId						: number | null;
-			private estimate						: Estimate;
+			protected states_sources				: { document: TypeStateAutoSave, table: TypeStateAutoSave, record: TypeStateAutoSave };
+			protected documentId					: number | null;
+			protected document						: Document;
+			protected tables_names					: { [key: string]: string };
+			protected iters_names					: { [key: string]: string };
+			protected texts							: { [key: string]: string };
 
 			/* Elements */
-			private readonly $view					: JQuery;
-			private readonly $control				: JQuery;
-			private readonly $btns					: JQuery;
-			private readonly $info					: JQuery;
-			private readonly $state					: JQuery;
-			private readonly $btn_new				: JQuery;
-			private readonly $select				: JQuery;
-			private readonly $container				: JQuery;
+			protected $view							: JQuery;
+			protected $control						: JQuery;
+			protected $btns							: JQuery;
+			protected $info							: JQuery;
+			protected $state						: JQuery;
+			protected $btn_new						: JQuery;
+			protected $select						: JQuery;
+			protected $container					: JQuery;
 
-			constructor(selector: string) {
-				/**/
-				this.estimateId						= null;
+			constructor(selector: string, tables_names: {[key: string]: string}, iters_names: {[key: string]: string}, texts: {[key: string]: string}) {
+				/* Variables */
+				this.documentId						= null;
+				this.tables_names					= tables_names;
+				this.iters_names					= iters_names;
+				this.texts							= texts;
 
 				/* Set elements */
 				this.$view 							= $(selector);
 				this.$control 						= $('<div/>', {class: 'control glob_tabu'});
 				this.$btns 							= $('<div/>', {class: 'btns'});
-				this.$btn_new 						= $('<input/>', {type: 'button', class: 'img new', value: 'Новая'});
+				this.$btn_new 						= $('<input/>', {type: 'button', class: 'img new', value: this.texts['new']});
 				this.$select 						= $('<select/>');
 				this.$info 							= $('<div/>', {class: 'info'});
 				this.$state 						= $('<span/>', {class: 'state'});
@@ -66,7 +72,7 @@ namespace Site {
 						this.$btns.append(
 							this.$btn_new,
 							this.$select.append(
-								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text('Выберите смету')
+								$('<option/>', {value: '', selected: true, disabled: true, hidden: true}).text(this.texts['select'])
 							)
 						),
 						this.$info.append(
@@ -77,82 +83,94 @@ namespace Site {
 				);
 
 				Site.Common.DB.Connect().then((result: IDBDatabase) => {
-					Site.Common.DB.Cursor(result, 'estimate', cursor => {
+					Site.Common.DB.Cursor(result, this.tables_names['document'], cursor => {
 						let key = cursor.key;
 						let value = cursor.value;
 
 						this.AddOption(key, value.datecr, value.name);
 					}, () => {
-						new Skins.Select(this.$select, this.QuestionDelete, {self: this});
+						new Skins.Select(this.$select, this.OnDeleteDocument, {self: this});
 					});
 				});
 
 				/* Events */
-				this.$btn_new.on('click', this.OnCreateEstimate.bind(this))
-				this.$select.on('change', this.LoadEstimate.bind(this));
+				this.$btn_new.on('click', this.OnCreateDocument.bind(this));
+				this.$select.on('change', this.LoadDocument.bind(this));
 			}
 
-			private OnCreateEstimate() {
-				let $input = $('<input/>', {type: 'text', placeholder: 'Название'});
-				Site.Common.Window.Interactive($input, null, [['yes', 'Создать', false]], () => this.NewEstimate($input.closest('.instance').children('.space'), $input.val().toString().trim()));
+			public GetTableName(alias: string): string {
+				return this.tables_names[alias];
 			}
 
-			private NewEstimate($space: JQuery, name: string): void {
-				if (name === '') return;
-				this.$container.empty();
-				this.states_sources = {
-					estimate: Controller.STATE_SAVE,
-					table: Controller.STATE_SAVE,
-					record: Controller.STATE_SAVE
-				};
-
-				this.estimate = new Estimate(0, name, this.$container, this);
-				let data = this.estimate.GetDate();
-				this.estimateId = data.id;
-				$space.trigger('click');
-				this.AddOption(data.id, data.datecr, data.name);
+			public GetIterName(alias: string): string {
+				return this.iters_names[alias];
 			}
 
-			private AddOption(id: number, datecr: string, name: string) {
+			public GetTextName(alias: string): string {
+				return this.texts[alias];
+			}
+
+			protected AddOption(id: number, datecr: string, name: string): void {
 				this.$select.append(
 					$('<option/>', {value: id}).text(`«${name}» от ${datecr}`)
 				);
 			}
 
-			private LoadEstimate() {
+			protected OnCreateDocument(): void {
+				let $input = $('<input/>', {type: 'text', placeholder: 'Название'});
+				Site.Common.Window.Interactive($input, null, [['yes', 'Создать', false]], () => this.CreateDocument($input.closest('.instance').children('.space'), $input.val().toString().trim()));
+			}
+
+			protected CreateDocument($space: JQuery, name: string): void {
+				if (name === '') return;
 				this.$container.empty();
 				this.states_sources = {
-					estimate: Controller.STATE_SAVE,
+					document: Controller.STATE_SAVE,
 					table: Controller.STATE_SAVE,
 					record: Controller.STATE_SAVE
 				};
 
-				this.estimate = new Estimate(Number(this.$select.val()), '', this.$container, this);
-
-				let data = this.estimate.GetDate();
-				this.estimateId = data.id;
+				this.document = new Document(0, name, this.$container, this);
+				let data = this.document.GetDate();
+				this.documentId = data.id;
+				$space.trigger('click');
+				this.AddOption(data.id, data.datecr, data.name);
 			}
 
-			private QuestionDelete(id: number, data: any) {
-				Site.Common.Window.Interactive(Site.Common.GetMessageBlock('Удалить смету?'), null, [['yes', 'Да'], ['no', 'Нет']], () => data.self.DeleteEstimate(id));
+			private LoadDocument() {
+				this.$container.empty();
+				this.states_sources = {
+					document: Controller.STATE_SAVE,
+					table: Controller.STATE_SAVE,
+					record: Controller.STATE_SAVE
+				};
+
+				this.document = new Document(Number(this.$select.val()), '', this.$container, this);
+
+				let data = this.document.GetDate();
+				this.documentId = data.id;
 			}
 
-			private DeleteEstimate(id: number) {
+			private OnDeleteDocument(id: number, data: any) {
+				Site.Common.Window.Interactive(Site.Common.GetMessageBlock(data.self.texts['delete']), null, [['yes', 'Да'], ['no', 'Нет']], () => data.self.DeleteDocument(id));
+			}
+
+			private DeleteDocument(id: number) {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
-					Site.Common.DB.CursorIndex(db, 'estimate_table', 'eid', IDBKeyRange.only(id), cursor => {
-						Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(cursor.value.id), cursor => {
-							Site.Common.DB.Delete(db, 'estimate_record', cursor.value.id);
+					Site.Common.DB.CursorIndex(db, this.tables_names['table'], 'did', IDBKeyRange.only(id), cursor => {
+						Site.Common.DB.CursorIndex(db, this.tables_names['record'], 'tid', IDBKeyRange.only(cursor.value.id), cursor => {
+							Site.Common.DB.Delete(db, this.tables_names['record'], cursor.value.id);
 						});
-						Site.Common.DB.Delete(db, 'estimate_table', cursor.value.id);
+						Site.Common.DB.Delete(db, this.tables_names['table'], cursor.value.id);
 					});
-					Site.Common.DB.Delete(db, 'estimate', id);
+					Site.Common.DB.Delete(db, this.tables_names['document'], id);
 				});
 
 				this.$select.children(`option[value="${id}"]`).remove();
-				if (id === this.estimateId) this.$container.empty();
+				if (id === this.documentId) this.$container.empty();
 			}
 
-			public SaveState(state: TypeStateAutoSave, source: 'estimate' | 'table' | 'record') {
+			public SaveState(state: TypeStateAutoSave, source: 'document' | 'table' | 'record') {
 				let old_sum = 0;
 				for (let i in this.states_sources) if (this.states_sources[i] === Controller.STATE_EDIT) old_sum++;
 
@@ -172,7 +190,57 @@ namespace Site {
 
 		}
 
-		class Estimate {
+		export class EstimateController extends Controller {
+
+			constructor(selector: string) {
+				let tables = {
+					document: 'estimate',
+					table: 'estimate_table',
+					record: 'estimate_record'
+				};
+				let iters = {
+					document: 'EstimateIter',
+					table: 'EstimateTableIter',
+					record: 'EstimateRecordIter'
+				};
+				let texts = {
+					name: 'Смета',
+					new: 'Новая',
+					select: 'Выберите смету',
+					delete: 'Удалить смету?'
+				};
+
+				super(selector, tables, iters, texts);
+			}
+
+		}
+
+		export class CertificateController extends Controller {
+
+			constructor(selector: string) {
+				let tables = {
+					document: 'certificate',
+					table: 'certificate_table',
+					record: 'certificate_record'
+				};
+				let iters = {
+					document: 'CertificateIter',
+					table: 'CertificateTableIter',
+					record: 'CertificateRecordIter'
+				};
+				let texts = {
+					name: 'Акт выполненых работ',
+					new: 'Новый',
+					select: 'Выберите акт',
+					delete: 'Удалить акт?'
+				};
+
+				super(selector, tables, iters, texts);
+			}
+
+		}
+
+		class Document {
 			/* Variables */
 			private id								: number;
 			private datecr							: string;
@@ -233,8 +301,8 @@ namespace Site {
 				this.$lists							= $('<div/>', {class: 'lists'});
 
 				/* Events */
-				this.$btn_add.on('click.estimate', () => this.AddTable(0));
-				this.$btn_print.on('click.estimate', () => window.print());
+				this.$btn_add.on('click', () => this.AddTable(0));
+				this.$btn_print.on('click', () => window.print());
 
 				/* Building DOM */
 				this.$wrap.append(
@@ -243,7 +311,7 @@ namespace Site {
 						this.$btn_print
 					),
 					this.$header.append(
-						this.$caption.text('Смета'),
+						this.$caption.text(this.controller.GetTextName('name')),
 						this.$contacts.append(
 							$('<div/>').append(this.$contact_name),
 							$('<div/>').append(this.$contact_address),
@@ -281,20 +349,21 @@ namespace Site {
 				this.$container.append(this.$wrap);
 
 				if (!this.id) {
-					this.CreateData(Number(localStorage.getItem('EstimateIter')) || 1, name, '', '', '', '', Site.Common.UIDate.Today(), true, true);
-					localStorage.setItem('EstimateIter', (this.id + 1).toString());
+					let iter_name = this.controller.GetIterName('document');
+					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, name, '', '', '', '', Site.Common.UIDate.Today(), true, true);
+					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 					this.Fill();
 					this.AutosaveEnable();
 				} else {
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
-						Site.Common.DB.Get(db, 'estimate', this.id).then((result) => {
+						Site.Common.DB.Get(db, this.controller.GetTableName('document'), this.id).then((result) => {
 							this.CreateData(result.id, result.name, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
 							this.Fill();
 							this.AutosaveEnable();
 						});
-						Site.Common.DB.CursorIndex(db, 'estimate_table', 'eid', IDBKeyRange.only(this.id), cursor => {
+						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('table'), 'did', IDBKeyRange.only(this.id), cursor => {
 							this.AddTable(cursor.primaryKey, cursor.value);
 						});
 					});
@@ -355,7 +424,7 @@ namespace Site {
 			private Commit(): void {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.UpdateDataAndSave.bind(this), this.autosave);
-				this.controller.SaveState(Controller.STATE_EDIT, 'estimate');
+				this.controller.SaveState(Controller.STATE_EDIT, 'document');
 			}
 
 			private UpdateDataAndSave(): void {
@@ -384,19 +453,19 @@ namespace Site {
 						phone: this.phone,
 						date: this.date
 					};
-					Site.Common.DB.Put(db, 'estimate', data);
-					this.controller.SaveState(Controller.STATE_SAVE, 'estimate');
+					Site.Common.DB.Put(db, this.controller.GetTableName('document'), data);
+					this.controller.SaveState(Controller.STATE_SAVE, 'document');
 				});
 			}
 
 		}
 
-		type TypeTableData = { id: number, eid: number, datecr: string, datemd : string, header: string, discount: number };
+		type TypeTableData = { id: number, did: number, datecr: string, datemd : string, header: string, discount: number };
 
 		class Table {
 			/* Variables */
 			private id								: number;
-			private readonly eid					: number;
+			private readonly did					: number;
 			private datecr							: string;
 			private datemd							: string;
 
@@ -406,7 +475,7 @@ namespace Site {
 			private sum								: number;
 
 			private readonly controller				: Controller;
-			private readonly estimate				: Estimate;
+			private readonly document				: Document;
 			private readonly records				: {[key: number]: Record};
 			private readonly autosave				: number;
 			private timer							?: number;
@@ -428,15 +497,15 @@ namespace Site {
 			private readonly $discount				: JQuery;
 			private readonly $total					: JQuery;
 
-			constructor(id: number, eid: number, data: TypeTableData | null, $container: JQuery, controller: Controller, estimate: Estimate) {
+			constructor(id: number, did: number, data: TypeTableData | null, $container: JQuery, controller: Controller, document: Document) {
 				/* Set variables */
 				this.id								= id;
-				this.eid							= eid;
+				this.did							= did;
 
 				this.sum							= 0;
 
 				this.controller						= controller;
-				this.estimate						= estimate;
+				this.document						= document;
 				this.records 						= {};
 				this.timer							= null;
 				this.autosave						= 2000;
@@ -516,15 +585,16 @@ namespace Site {
 				this.$container.append(this.$list);
 
 				if (!this.id) {
-					this.CreateData(Number(localStorage.getItem('EstimateTableIter')) || 1, '', 0, true, true);
-					localStorage.setItem('EstimateTableIter', (this.id + 1).toString());
+					let iter_name = this.controller.GetIterName('table');
+					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', 0, true, true);
+					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
 					this.CreateData(data.id, data.header, data.discount, data.datecr, data.datemd);
 
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
-						Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(this.id), cursor => {
+						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('record'), 'tid', IDBKeyRange.only(this.id), cursor => {
 							this.AddRecord(cursor.primaryKey, cursor.value);
 						}, () => {
 							this.Sum();
@@ -613,14 +683,14 @@ namespace Site {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					let data = {
 						id: this.id,
-						eid: this.eid,
+						did: this.did,
 						datecr: this.datecr,
 						datemd: this.datemd,
 
 						header: this.header,
 						discount: this.discount
 					};
-					Site.Common.DB.Put(db, 'estimate_table', data);
+					Site.Common.DB.Put(db, this.controller.GetTableName('table'), data);
 					this.controller.SaveState(Controller.STATE_SAVE, 'table');
 				});
 			}
@@ -659,13 +729,13 @@ namespace Site {
 
 			private Remove(): void {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
-					Site.Common.DB.CursorIndex(db, 'estimate_record', 'tid', IDBKeyRange.only(this.id), cursor => {
-						Site.Common.DB.Delete(db, 'estimate_record', cursor.value.id);
+					Site.Common.DB.CursorIndex(db, this.controller.GetTableName('record'), 'tid', IDBKeyRange.only(this.id), cursor => {
+						Site.Common.DB.Delete(db, this.controller.GetTableName('record'), cursor.value.id);
 					});
-					Site.Common.DB.Delete(db, 'estimate_table', this.id);
+					Site.Common.DB.Delete(db, this.controller.GetTableName('table'), this.id);
 				});
 
-				this.estimate.RemoveTable(this.id);
+				this.document.RemoveTable(this.id);
 				this.$list.remove();
 			}
 
@@ -746,8 +816,9 @@ namespace Site {
 				this.$before.before(this.$tr);
 
 				if (!this.id) {
-					this.CreateData(Number(localStorage.getItem('EstimateRecordIter')) || 1, '', 0, '', 0, true, true);
-					localStorage.setItem('EstimateRecordIter', (this.id + 1).toString());
+					let iter_name = this.controller.GetIterName('record');
+					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', 0, '', 0, true, true);
+					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
@@ -840,7 +911,7 @@ namespace Site {
 						unit: this.unit,
 						price: this.price
 					};
-					Site.Common.DB.Put(db, 'estimate_record', data);
+					Site.Common.DB.Put(db, this.controller.GetTableName('record'), data);
 					this.controller.SaveState(Controller.STATE_SAVE, 'record');
 				});
 			}
@@ -883,7 +954,7 @@ namespace Site {
 
 			private Remove(): void {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
-					Site.Common.DB.Delete(db, 'estimate_record', this.id);
+					Site.Common.DB.Delete(db, this.controller.GetTableName('record'), this.id);
 				});
 
 				this.table.RemoveRecord(this.id);

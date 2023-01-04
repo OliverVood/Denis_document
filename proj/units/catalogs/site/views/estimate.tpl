@@ -16,7 +16,7 @@
 			<div class = "view catalogs work">
 				<h1 class = "glob_tabu">Работа со сметами</h1>
 				<script>
-					let Estimate = new Site.Catalogs.Controller('.view.catalogs.work');
+					let Estimate = new Site.Catalogs.EstimateController('.view.catalogs.work');
 				</script>
 			</div>
 		<?php }

@@ -16,7 +16,7 @@
 			<div class = "view catalogs work">
 				<h1 class = "glob_tabu">Работа с актами</h1>
 				<script>
-					// let Estimate = new Site.Catalogs.Controller('.view.catalogs.work');
+					let Certificate = new Site.Catalogs.CertificateController('.view.catalogs.work');
 				</script>
 			</div>
 		<?php }

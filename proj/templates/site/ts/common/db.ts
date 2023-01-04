@@ -118,10 +118,20 @@ namespace Site {
 					if (!result.objectStoreNames.contains('estimate')) result.createObjectStore('estimate', {keyPath: 'id'});
 					if (!result.objectStoreNames.contains('estimate_table')) {
 						let store = result.createObjectStore('estimate_table', {keyPath: 'id'});
-						store.createIndex('eid', 'eid');
+						store.createIndex('did', 'did');
 					}
 					if (!result.objectStoreNames.contains('estimate_record')) {
 						let store = result.createObjectStore('estimate_record', {keyPath: 'id'});
+						store.createIndex('tid', 'tid');
+					}
+
+					if (!result.objectStoreNames.contains('certificate')) result.createObjectStore('certificate', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('certificate_table')) {
+						let store = result.createObjectStore('certificate_table', {keyPath: 'id'});
+						store.createIndex('did', 'did');
+					}
+					if (!result.objectStoreNames.contains('certificate_record')) {
+						let store = result.createObjectStore('certificate_record', {keyPath: 'id'});
 						store.createIndex('tid', 'tid');
 					}
 				});
