@@ -134,6 +134,17 @@ namespace Site {
 						let store = result.createObjectStore('certificate_record', {keyPath: 'id'});
 						store.createIndex('tid', 'tid');
 					}
+
+
+					if (!result.objectStoreNames.contains('price_list')) result.createObjectStore('price_list', {keyPath: 'id'});
+					if (!result.objectStoreNames.contains('price_list_table')) {
+						let store = result.createObjectStore('price_list_table', {keyPath: 'id'});
+						store.createIndex('did', 'did');
+					}
+					if (!result.objectStoreNames.contains('price_list_record')) {
+						let store = result.createObjectStore('price_list_record', {keyPath: 'id'});
+						store.createIndex('tid', 'tid');
+					}
 				});
 			}
 

@@ -190,7 +190,17 @@ namespace Site {
 
 		}
 
-		export class EstimateController extends Controller {
+		class ActController extends Controller {
+
+			// protected document						: Document;
+
+			constructor(selector: string, tables_names: {[key: string]: string}, iters_names: {[key: string]: string}, texts: {[key: string]: string}) {
+				super(selector, tables_names, iters_names, texts);
+			}
+
+		}
+
+		export class EstimateController extends ActController {
 
 			constructor(selector: string) {
 				let tables = {
@@ -215,7 +225,7 @@ namespace Site {
 
 		}
 
-		export class CertificateController extends Controller {
+		export class CertificateController extends ActController {
 
 			constructor(selector: string) {
 				let tables = {
@@ -959,6 +969,31 @@ namespace Site {
 
 				this.table.RemoveRecord(this.id);
 				this.$tr.remove();
+			}
+
+		}
+
+		export class PriceListController extends Controller {
+
+			constructor(selector: string) {
+				let tables = {
+					document: 'price_list',
+					table: 'price_list_table',
+					record: 'price_list_record'
+				};
+				let iters = {
+					document: 'PriceListIter',
+					table: 'PriceListTableIter',
+					record: 'PriceListRecordIter'
+				};
+				let texts = {
+					// name: 'Акт выполненых работ',
+					new: 'Новый',
+					select: 'Выберите прайс-лист',
+					// delete: 'Удалить акт?'
+				};
+
+				super(selector, tables, iters, texts);
 			}
 
 		}
