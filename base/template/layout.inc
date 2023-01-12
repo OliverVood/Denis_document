@@ -13,13 +13,23 @@
 			self::$stylesheets[$name] = $url;
 		}
 
+		public static function AddVersionStylesheet(string $name, string $file_path_and_name, string $version): void {
+			if (isset(self::$stylesheets[$name])) die("Stylesheet «{$name}» exists");
+			self::$stylesheets[$name] ="{$file_path_and_name}.{$version}.css";
+		}
+
 		public static function BrowseStylesheets(): void {
 			foreach (self::$stylesheets as $url) { ?><link rel = "stylesheet" href = "<?= $url; ?>" type = "text/css"><?php }
 		}
 
-		public static function AddScripts(string $name, string $src) : void {
+		public static function AddScript(string $name, string $src) : void {
 			if (isset(self::$scripts[$name])) die("Script «{$name}» exists");
 			self::$scripts[$name] = $src;
+		}
+
+		public static function AddVersionScript(string $name, string $file_path_and_name, string $version) : void {
+			if (isset(self::$scripts[$name])) die("Script «{$name}» exists");
+			self::$scripts[$name] = "{$file_path_and_name}.{$version}.js";
 		}
 
 		public static function BrowseScripts(): void {

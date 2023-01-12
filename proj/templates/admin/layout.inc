@@ -4,6 +4,8 @@
 
 	use Base\Instance;
 	use Base\Templates\Section;
+	use Base\Templates\Versions as BaseVersions;
+	use Proj\Templates\Admin\Versions as AdminVersions;
 
 	class Layout extends \Base\Templates\Layout {
 		use Instance;
@@ -21,12 +23,12 @@
 			$this->main = new Section();
 			$this->footer = new Section();
 
-			self::AddScripts('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
-			self::AddScripts('base_common', '/base/template/js/common.js');
-			self::AddScripts('admin_common', '/proj/templates/admin/js/common.js');
-			self::AddScripts('admin_general', '/proj/templates/admin/js/general.js');
+			self::AddScript('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
+			self::AddVersionScript('base_common', '/base/template/js/common', BaseVersions\COMMON_JS);
+			self::AddVersionScript('admin_common', '/proj/templates/admin/js/common', AdminVersions\COMMON_JS);
+			self::AddVersionScript('admin_general', '/proj/templates/admin/js/general', AdminVersions\GENERAL_JS);
 
-			self::AddStylesheet('main', DIR_REL_TPL . 'admin/css/main.css');
+			self::AddVersionStylesheet('main', DIR_REL_TPL . 'admin/css/main', AdminVersions\MAIN_CSS);
 		}
 
 	}

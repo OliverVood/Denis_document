@@ -29,7 +29,8 @@ namespace Site {
 		type TypeStateAutoSave = TypeStateEdit | TypeStateSave;
 		type TypeActTableData = { id: number, did: number, datecr: string, datemd : string, header: string, discount: number };
 		type TypePriceListTableData = { id: number, did: number, datecr: string, datemd : string, header: string };
-		type TypeRecordData = { id: number, tid: number, datecr: string, datemd : string, name: string, count: number, unit: string, price: number };
+		type TypeActRecordData = { id: number, tid: number, datecr: string, datemd : string, name: string, count: number, unit: string, price: number };
+		type TypePriceListRecordData = { id: number, tid: number, datecr: string, datemd : string, name: string, price: string };
 
 		class ActController {
 			/* Variables */
@@ -61,7 +62,7 @@ namespace Site {
 
 				/* Set elements */
 				this.$view 							= $(selector);
-				this.$control 						= $('<div/>', {class: 'control glob_tabu'});
+				this.$control 						= $('<div/>', {class: 'control glob_print_tabu'});
 				this.$btns 							= $('<div/>', {class: 'btns'});
 				this.$btn_new 						= $('<input/>', {type: 'button', class: 'img new', value: this.texts['new']});
 				this.$select 						= $('<select/>');
@@ -289,7 +290,7 @@ namespace Site {
 				/* Set elements */
 				this.$container 					= $container;
 
-				this.$btns 							= $('<div/>', {class: 'btns glob_tabu'});
+				this.$btns 							= $('<div/>', {class: 'btns glob_print_tabu'});
 				this.$btn_add 						= $('<input/>', {type: 'button', value: 'Добавить таблицу', class: 'img add_table'});
 				this.$btn_print 					= $('<input/>', {type: 'button', value: 'Печать', class: 'img print'});
 				this.$wrap							= $('<div/>', {class: 'wrap'});
@@ -536,7 +537,7 @@ namespace Site {
 
 				/* Building DOM */
 				this.$list.append(
-					$('<div/>', {class: 'control glob_tabu'}).append(
+					$('<div/>', {class: 'control glob_print_tabu'}).append(
 						this.$visible,
 						this.$remove
 					),
@@ -545,7 +546,7 @@ namespace Site {
 						this.$table.append(
 							$('<thead/>').append(
 								$('<tr/>').append(
-									$('<th/>', {class: 'glob_tabu'}).append($('<span/>').text('+/-')),
+									$('<th/>', {class: 'glob_print_tabu'}).append($('<span/>').text('+/-')),
 									$('<th/>').text('Наименование'),
 									$('<th/>').text('Количество'),
 									$('<th/>').text('Единица измерения'),
@@ -555,13 +556,13 @@ namespace Site {
 							),
 							$('<tbody/>').append(
 								this.$tr_sum.append(
-									$('<td/>', {class: 'number glob_tabu'}).append(this.$add_line),
+									$('<td/>', {class: 'number glob_print_tabu'}).append(this.$add_line),
 									$('<td/>', {colspan: 3}),
 									$('<td/>').text('Всего'),
 									$('<td/>', {class: 'number'}).append(this.$sum),
 								),
 								$('<tr/>').append(
-									$('<td/>', {class: 'number glob_tabu'}).append(
+									$('<td/>', {class: 'number glob_print_tabu'}).append(
 										this.$collapse
 									),
 									$('<td/>', {colspan: 3}),
@@ -569,7 +570,7 @@ namespace Site {
 									$('<td/>', {class: 'number'}).append(this.$discount),
 								),
 								$('<tr/>', {class: 'total'}).append(
-									$('<td/>', {class: 'glob_tabu'}),
+									$('<td/>', {class: 'glob_print_tabu'}),
 									$('<td/>', {colspan: 3}),
 									$('<td/>').text('Итого'),
 									$('<td/>', {class: 'number'}).append(this.$total),
@@ -618,7 +619,7 @@ namespace Site {
 				this.$total.text(this.sum);
 			}
 
-			private AddRecord(id: number, data: TypeRecordData | null = null): void {
+			private AddRecord(id: number, data: TypeActRecordData | null = null): void {
 				let _record = new ActRecord(id, this.id, data, this.$tr_sum, this.controller, this);
 				let _id = _record.GetId();
 				this.records[_id] = _record;
@@ -771,7 +772,7 @@ namespace Site {
 			private readonly $price					: JQuery;
 			private readonly $sum					: JQuery;
 
-			constructor(id: number, tid: number, data: TypeRecordData | null, $before: JQuery, controller: ActController, table: ActTable) {
+			constructor(id: number, tid: number, data: TypeActRecordData | null, $before: JQuery, controller: ActController, table: ActTable) {
 				/* Set variables */
 				this.id								= id;
 				this.tid							= tid;
@@ -798,7 +799,7 @@ namespace Site {
 
 				/* Building DOM */
 				this.$tr.append(
-					$('<td/>', {class: 'number glob_tabu'}).append(this.$remove),
+					$('<td/>', {class: 'number glob_print_tabu'}).append(this.$remove),
 					$('<td/>').append(this.$name, $('<span/>', {class: 'glob_print'})),
 					$('<td/>', {class: 'number'}).append(this.$count),
 					$('<td/>', {class: 'number'}).append(this.$unit),
@@ -1005,7 +1006,7 @@ namespace Site {
 
 				/* Set elements */
 				this.$view 							= $(selector);
-				this.$control 						= $('<div/>', {class: 'control glob_tabu'});
+				this.$control 						= $('<div/>', {class: 'control glob_print_tabu'});
 				this.$btns 							= $('<div/>', {class: 'btns'});
 				this.$btn_new 						= $('<input/>', {type: 'button', class: 'img new', value: this.texts['new']});
 				this.$select 						= $('<select/>');
@@ -1183,7 +1184,7 @@ namespace Site {
 				/* Set elements */
 				this.$container 					= $container;
 
-				this.$btns 							= $('<div/>', {class: 'btns glob_tabu'});
+				this.$btns 							= $('<div/>', {class: 'btns glob_print_tabu'});
 				this.$btn_add 						= $('<input/>', {type: 'button', value: 'Добавить таблицу', class: 'img add_table'});
 				this.$btn_print 					= $('<input/>', {type: 'button', value: 'Печать', class: 'img print'});
 				this.$wrap							= $('<div/>', {class: 'wrap'});
@@ -1413,7 +1414,7 @@ namespace Site {
 				this.$remove						= $('<span/>', {class: 'delete negative', title: "Удалить таблицу"});
 				this.$add_line 						= $('<span/>', {class: 'item add', title: 'Добавить строку'});
 				this.$table							= $('<table/>');
-				this.$tr_sum 						= $('<tr/>');
+				this.$tr_sum 						= $('<tr/>', {class: 'glob_print_tabu'});
 
 				/* Events */
 				this.$visible.on('click', this.Visible.bind(this));
@@ -1423,7 +1424,7 @@ namespace Site {
 
 				/* Building DOM */
 				this.$list.append(
-					$('<div/>', {class: 'control glob_tabu'}).append(
+					$('<div/>', {class: 'control glob_print_tabu'}).append(
 						this.$visible,
 						this.$remove
 					),
@@ -1432,25 +1433,19 @@ namespace Site {
 						this.$table.append(
 							$('<thead/>').append(
 								$('<tr/>').append(
-									$('<th/>', {class: 'glob_tabu'}).append($('<span/>').text('+/-')),
+									$('<th/>', {class: 'glob_print_tabu'}).append($('<span/>').text('+/-')),
 									$('<th/>').text('Наименование'),
-									$('<th/>').text('Количество'),
-									$('<th/>').text('Единица измерения'),
-									$('<th/>').text('Цена'),
-									$('<th/>').text('Сумма')
+									$('<th/>').text('Цена')
 								)
 							),
 							$('<tbody/>').append(
 								this.$tr_sum.append(
-									$('<td/>', {class: 'number glob_tabu'}).append(this.$add_line),
-									$('<td/>', {colspan: 5})
-								),
-								$('<tr/>').append(
-									$('<td/>', {class: 'number glob_tabu'}).append(
-										this.$collapse
+									$('<td/>', {class: 'number items_margin_bottom_cut'}).append(
+										$('<div/>').append(this.$add_line),
+										$('<div/>').append(this.$collapse)
 									),
-									$('<td/>', {colspan: 5})
-								)
+									$('<td/>', {colspan: 2})
+								),
 							)
 						)
 					)
@@ -1481,7 +1476,7 @@ namespace Site {
 				this.AutosaveEnable();
 			}
 
-			private AddRecord(id: number, data: TypeRecordData | null = null): void {
+			private AddRecord(id: number, data: TypePriceListRecordData | null = null): void {
 				let _record = new PriceListRecord(id, this.id, data, this.$tr_sum, this.controller, this);
 				let _id = _record.GetId();
 				this.records[_id] = _record;
@@ -1591,11 +1586,7 @@ namespace Site {
 			private datemd							: string;
 
 			private name							: string;
-			private count							: number;
-			private unit							: string;
-			private price							: number;
-
-			private sum								: number;
+			private price							: string;
 
 			private readonly controller				: PriceListController;
 			private readonly table					: PriceListTable;
@@ -1607,17 +1598,12 @@ namespace Site {
 			private readonly $tr					: JQuery;
 			private readonly $remove				: JQuery;
 			private readonly $name					: JQuery;
-			private readonly $count					: JQuery;
-			private readonly $unit					: JQuery;
 			private readonly $price					: JQuery;
-			private readonly $sum					: JQuery;
 
-			constructor(id: number, tid: number, data: TypeRecordData | null, $before: JQuery, controller: PriceListController, table: PriceListTable) {
+			constructor(id: number, tid: number, data: TypePriceListRecordData | null, $before: JQuery, controller: PriceListController, table: PriceListTable) {
 				/* Set variables */
 				this.id								= id;
 				this.tid							= tid;
-
-				this.sum							= 0;
 
 				this.controller						= controller;
 				this.table							= table;
@@ -1629,89 +1615,63 @@ namespace Site {
 				this.$tr							= $('<tr/>', {class: 'line'})
 				this.$remove						= $('<span/>', {class: 'item del negative', title: 'Удалить строку'});
 				this.$name							= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$count							= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$unit							= $('<input/>', {type: 'text', placeholder: '...🖊'});
 				this.$price							= $('<input/>', {type: 'text', placeholder: '...🖊'});
-				this.$sum							= $('<span/>');
 
 				/* Events */
 				this.$remove.on('click', this.QuestionRemove.bind(this));
 
 				/* Building DOM */
 				this.$tr.append(
-					$('<td/>', {class: 'number glob_tabu'}).append(this.$remove),
+					$('<td/>', {class: 'number glob_print_tabu'}).append(this.$remove),
 					$('<td/>').append(this.$name, $('<span/>', {class: 'glob_print'})),
-					$('<td/>', {class: 'number'}).append(this.$count),
-					$('<td/>', {class: 'number'}).append(this.$unit),
 					$('<td/>', {class: 'number'}).append(this.$price),
-					$('<td/>', {class: 'number'}).append(this.$sum)
 				);
 
 				/* Duplicate */
 				DuplicateInit(this.$name);
-				DuplicateInit(this.$count, 'blur');
-				DuplicateInit(this.$unit);
-				DuplicateInit(this.$price, 'blur');
+				DuplicateInit(this.$price);
 
 				this.$before.before(this.$tr);
 
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('record');
-					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', 0, '', 0, true, true);
+					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', '', true, true);
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
-					this.CreateData(data.id, data.name, data.count, data.unit, data.price, data.datecr, data.datemd);
+					this.CreateData(data.id, data.name, data.price, data.datecr, data.datemd);
 				}
 
 				this.Fill();
 				this.AutosaveEnable();
-				this.Sum();
-				this.$sum.text(this.sum);
-				this.$count.on('blur', this.EnterCount.bind(this));
-				this.$price.on('blur', this.EnterPrice.bind(this));
-				this.$count.on('input', this.Input.bind(this));
-				this.$price.on('input', this.Input.bind(this));
-				this.$count.on('focus', EmptyIfZero);
-				this.$price.on('focus', EmptyIfZero);
 			}
 
 			public GetId(): number {
 				return this.id;
 			}
 
-			public GetSum(): number {
-				return this.sum;
-			}
-
 			private Fill(): void {
 				this.$name.val(this.name).trigger('input');
-				this.$count.val(this.count).trigger('blur');
-				this.$unit.val(this.unit).trigger('input');
-				this.$price.val(this.price).trigger('blur');
+				this.$price.val(this.price).trigger('input');
 			}
 
 			private AutosaveEnable(): void {
 				this.$name.on('input', this.Commit.bind(this));
-				this.$count.on('input', this.Commit.bind(this));
-				this.$unit.on('input', this.Commit.bind(this));
 				this.$price.on('input', this.Commit.bind(this));
 			}
 
-			private CreateData(id: number, name: string, count: number, unit: string, price: number, datecr: string | boolean = false, datemd: string | boolean = false): void {
+			private CreateData(id: number, name: string, price: string, datecr: string | boolean = false, datemd: string | boolean = false): void {
 				this.id = id;
 				if (datecr) this.datecr = (datecr === true) ? GetDate() : datecr;
 
-				this.UpdateData(name, count, unit, price, datemd);
+				this.UpdateData(name, price, datemd);
 			}
 
-			private UpdateData(name: string, count: number, unit: string, price: number, datemd: string | boolean = false): void {
+			private UpdateData(name: string, price: string, datemd: string | boolean = false): void {
 				if (datemd) this.datemd = (datemd === true) ? GetDate() : datemd;
 
 				this.name = name;
-				this.count = count;
-				this.unit = unit;
 				this.price = price;
 			}
 
@@ -1722,17 +1682,9 @@ namespace Site {
 			}
 
 			private UpdateDataAndSave(): void {
-				let count = parseFloat(this.$count.val().toString());
-				if (isNaN(count)) count = 0;
-
-				let price = parseFloat(this.$price.val().toString());
-				if (isNaN(price)) price = 0;
-
 				this.UpdateData(
 					this.$name.val().toString(),
-					count,
-					this.$unit.val().toString(),
-					price,
+					this.$price.val().toString(),
 					true
 				);
 				this.Save();
@@ -1747,44 +1699,11 @@ namespace Site {
 						datemd: this.datemd,
 
 						name: this.name,
-						count: this.count,
-						unit: this.unit,
 						price: this.price
 					};
 					Site.Common.DB.Put(db, this.controller.GetTableName('record'), data);
 					this.controller.SaveState(PriceListController.STATE_SAVE, 'record');
 				});
-			}
-
-			private GetCount(): number {
-				let count = parseFloat(this.$count.val().toString());
-				if (isNaN(count)) count = 0;
-
-				return count;
-			}
-
-			private EnterCount(): void {
-				this.$count.val(this.GetCount());
-			}
-
-			private GetPrice(): number {
-				let price = +parseFloat(this.$price.val().toString()).toFixed(2);
-				if (isNaN(price)) price = 0;
-
-				return price;
-			}
-
-			private EnterPrice(): void {
-				this.$price.val(this.GetPrice());
-			}
-
-			private Input(): void {
-				this.Sum();
-				this.$sum.text(this.sum);
-			}
-
-			private Sum(): void {
-				this.sum = +((this.GetPrice() * this.GetCount()).toFixed(2));
 			}
 
 			private QuestionRemove() {

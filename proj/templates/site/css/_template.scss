@@ -34,4 +34,4 @@
 }
 
 @include MixScreen() { @include MixTemplate(); }
-@include MixScreen(null, null, false, true) { @include MixTemplate((bg_img: none, header_display: none, footer_display: none, document_width: 100%, document_bg_color: transparent, document_box_shadow: none)); }
+@include MixPrint() { @include MixTemplate((bg_img: none, header_display: none, footer_display: none, document_width: 100%, document_bg_color: transparent, document_box_shadow: none)); }

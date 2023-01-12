@@ -1,0 +1,129 @@
+@use "../variables" as *;
+@use "../functions" as *;
+
+.view.catalogs.work {
+	@mixin ViewCatalogsWork($params: null) {
+		$default: (
+			container_margin_top			: 2rem,
+			is_bold							: normal,
+			display_input					: revert
+		);
+
+		> .control {
+			display: flex;
+			> .btns {
+				flex: auto; display: flex; padding-bottom: 1rem; border-bottom: 1px solid $color-neutral;
+				> * {
+					&.new { background-image: GetImageUI('doc/new.svg'); }
+					&:not(:last-child) { margin-right: 0.5rem; }
+				}
+			}
+			> .info > span {
+				display: flex; align-items: center; height: 100%; color: $color-neutral;
+				&:before { display: inline-block; width: 2rem; height: 100%; background-size: 15px; background-position: center; background-repeat: no-repeat; }
+				&.edit:before { content: ""; background-image: GetImageUI('edit.svg'); }
+				&.save:before { content: ""; background-image: GetImageUI('save.svg'); }
+			}
+		}
+		> .container {
+			margin-top: GetValue($default, $params, 'container_margin_top');
+			> .wrap {
+				> .btns {
+					display: flex;
+					> * {
+						&.print { background-image: GetImageUI('print.svg'); }
+						&.add_table { background-image: GetImageUI('doc/new.svg'); }
+						&:not(:last-child) { margin-right: 0.5rem; }
+					}
+				}
+				> .header {
+					display: flex; align-items: center;
+					> .caption { flex: auto; font-size: 5rem; font-weight: bold; }
+					> .contacts {
+						width: 30%;
+						> div {
+							text-align: right;
+							> input { width: 100%; text-align: right; }
+							&:first-child {
+								font-weight: bold;
+								> input { font-weight: bold; }
+							}
+							&:not(:last-child) { margin-bottom: 0.4rem }
+						}
+					}
+				}
+				> .lists > .list {
+					margin-top: 2rem;
+					> .control {
+						text-align: right;
+						> span {
+							@include MixBtn; display: inline-block; padding: 0; width: 2rem; height: 2rem; background-size: 1rem; background-repeat: no-repeat; background-position: center;
+							&:not(:last-child) { margin-right: 0.4rem; }
+							&.visible {
+								background-image: GetImageUI('hide.svg');
+								&.show { background-image: GetImageUI('show.svg'); }
+							}
+							&.delete { background-image: GetImageUIWhite('delete.svg'); }
+						}
+					}
+					> .wrap {
+						> .title {
+							font-size: 2rem; text-align: center;
+							> input { width: 100%; font-size: 2rem; text-align: center; }
+						}
+						> table {
+							margin-top: 1rem; width: 100%; border-collapse: collapse;
+							tr {
+								border-bottom: 1px solid $color-neutral-light;
+								> th { padding: 0.2rem 1rem; background-color: $color-secondary; }
+								> td { padding: 0.2rem 1rem; }
+								&.total > td {
+									&:nth-child(3), &:nth-child(4)  { padding: 1rem; font-size: 1.8rem; font-weight: GetValue($default, $params, 'is_bold'); background-color: $color-secondary; }
+								}
+							}
+							input { padding: 0; width: 100%; }
+							.item {
+								@include MixBtn; padding: 0; width: 3rem; height: 2rem; line-height: 2rem; vertical-align: middle; background-size: 0.8rem; background-position: center; background-repeat: no-repeat;
+								&.glob_hide { display: none; }
+								&.add { background-image: GetImageUI('add.svg'); }
+								&.del { background-image: GetImageUI('remove.svg'); }
+								&.collapse { background-size: 1rem; background-image: GetImageUI('toggle.svg'); }
+							}
+						}
+					}
+				}
+				> .footer {
+					display: flex; padding-top: 2rem;
+					> div {
+						&:first-child { padding-top: 10rem; width: 50%; font-size: 1rem; text-align: center; }
+						&:last-child {
+							flex: auto;
+							> div {
+								display: flex; margin-bottom: 1rem; text-align: right; font-weight: bold;
+								> div { width: 50%; }
+								&.date > div:last-child { text-align: center; }
+								&.autograph > div:last-child {
+									position: relative;
+									> div { position: absolute; left: 4rem; right: 4rem; bottom: 0; border-bottom: 1px solid $color-neutral-light; }
+								}
+							}
+						}
+					}
+				}
+			}
+			input {
+				display: GetValue($default, $params, 'display_input');
+				&[type="text"], &[type="date"] { border: none; outline: none; background-color: transparent; }
+			}
+			.number {
+				text-align: center;
+				> input[type="text"] { text-align: center; }
+			}
+		}
+		input { display: GetValue($default, $params, 'display_input'); }
+	}
+
+	@include MixScreen() { @include ViewCatalogsWork(); }
+	@include MixPrint() { @include ViewCatalogsWork((container_margin_top: 0, is_bold: bold, display_input : none)); }
+
+}

@@ -10,24 +10,25 @@ h1 { margin: 0 0 2rem; text-align: center; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
 input[type="button"] { @include MixBtn; outline: none; }
 .hide { display: none; }
+.items_margin_bottom > *:not(:last-child) { margin-bottom: $items_margin; }
+.items_margin_bottom_cut > *:not(:last-child) { margin-bottom: $items_margin_cut; }
 
 @mixin MixMain($params: null) {
-	$display_print: none;
-	$display_tabu: null;
+	$default: (
+		display_print			: none,
+		display_print_tabu		: null
+	);
+	$display_print_tabu: null;
+	@if ($params != null) { $display_print_tabu: map.get($params, 'display_print_tabu'); }
 
-	@if ($params != null) {
-		$temp: map.get($params, 'display_print'); @if ($temp != null) { $display_print: $temp; }
-		$temp: map.get($params, 'display_tabu'); @if ($temp != null) { $display_tabu: $temp; }
-	}
-
-	.glob_print { display: $display_print !important; }
-	@if ($display_tabu != null) { .glob_tabu { display: $display_tabu !important; } }
+	.glob_print { display: GetValue($default, $params, 'display_print') !important; }
+	@if ($display_print_tabu != null) { .glob_print_tabu { display: GetValue($default, $params, 'display_print_tabu') !important; } }
 }
 
 @include MixScreen() { @include MixMain(); }
-@include MixScreen(null, null, false, true) { @include MixMain((display_print: revert, display_tabu: none)); }
+@include MixPrint() { @include MixMain((display_print: revert, display_print_tabu: none)); }
 
 @import "template";
-@import "skins";
-@import "general";
-@import "catalogs";
+@import "skins/skins";
+@import "units/general";
+@import "units/catalogs";

@@ -1,5 +1,6 @@
 <?php
 
+	require 'admin.versions.inc';
 	require 'admin.consts.inc';
 
 	require DIR_BASE . 'base.inc';

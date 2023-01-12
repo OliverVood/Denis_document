@@ -2,8 +2,12 @@
 
 @use "variables" as *;
 
+@function GetImage($file) {
+	@return url('img/' + $file);
+}
+
 @function GetImageUI($file) {
-	@return url('img/ui/' + $file);
+	@return GetImage('ui/' + $file);
 }
 
 @function GetImageUIWhite($file) {
@@ -12,6 +16,10 @@
 
 @function GetImageUIPrimary($file) {
 	@return GetImageUI('primary/' + $file);
+}
+
+@function GetImageUIPrimaryLight($file) {
+	@return GetImageUI('primary_light/' + $file);
 }
 
 @function GetValue($defaults, $params, $name) {
@@ -41,6 +49,10 @@
 	} @else {
 		@content;
 	}
+}
+
+@mixin MixPrint() {
+	@include MixScreen(null, null, false, true) { @content; }
 }
 
 @mixin MixBtn {

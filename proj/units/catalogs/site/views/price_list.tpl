@@ -14,7 +14,7 @@
 
 		public function Render() { ?>
 			<div class = "view catalogs work">
-				<h1 class = "glob_tabu">Работа с прайс-листами</h1>
+				<h1 class = "glob_print_tabu">Работа с прайс-листами</h1>
 				<script>
 					let PriceList = new Site.Catalogs.PriceListController('.view.catalogs.work');
 				</script>

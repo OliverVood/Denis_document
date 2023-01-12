@@ -1,5 +1,6 @@
 <?php
 
+	require 'versions.inc';
 	require 'functions.inc';
 
 	require 'db/db.inc';
@@ -10,6 +11,7 @@
 	require 'stage.inc';
 	require 'controller.inc';
 	require 'action.inc';
+	require 'editor.inc';
 	require 'units.inc';
 
 	require 'template/layout.inc';
