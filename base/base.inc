@@ -11,7 +11,6 @@
 	require 'stage.inc';
 	require 'controller.inc';
 	require 'action.inc';
-	require 'editor.inc';
 	require 'units.inc';
 
 	require 'template/layout.inc';

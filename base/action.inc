@@ -22,7 +22,18 @@
 		 * @return string
 		 */
 		public function GetLink(string $content, array $params = []): string {
-			$href = ' href = "' . $this->href . '"';
+			$path = $this->href;
+			if ($path == 'default') {
+				$path = REQUEST;
+				if ($this->area !== 'null') {
+					$path .= "/{$this->area}";
+				}
+				if ($this->part !== 'null') {
+					$path .= "/{$this->part}";
+				}
+			}
+
+			$href = ' href = "' . $path . '"';
 			$onclick = ' onclick = "' . $this->click . '"';
 			$target = (isset($params['target'])) ? ' target = "' . $params['target'] . '"' : '';
 

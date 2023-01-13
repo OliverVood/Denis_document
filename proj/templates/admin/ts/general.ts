@@ -6,6 +6,10 @@ namespace Admin {
 
 		export class Render {
 
+			public static ToMain(data: Object) {
+				Admin.Common.Layout.main.Fill(data['html']);
+			}
+
 			public static CheckDB(data: TypeTable) {
 				Admin.Common.Layout.main.Fill(
 					$('<h1/>').text('Проверка базы данных'),
