@@ -3,7 +3,7 @@
 	namespace Base\DB;
 
 	abstract class Table {
-		protected $db;
+		protected DB $db;
 		protected string $dbname;
 		protected string $name;
 		protected array $structure;
@@ -39,6 +39,14 @@
 		abstract public function set(string $name, array $set): void;
 		abstract public function string(string $name, int $length): void;
 		abstract public function text(string $name): void;
+
+		public function Select(?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null) {
+			return $this->db->Select($this->name, $fields, $where, $order, $limit, $calc);
+		}
+
+		public function FetchAll($result, ?callable $func = null): ?array {
+			return $this->db->FetchAll($result, $func);
+		}
 
 		public function GetName(): string { return $this->name; }
 

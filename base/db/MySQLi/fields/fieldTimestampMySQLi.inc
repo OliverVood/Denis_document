@@ -18,11 +18,12 @@
 			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
 			$pieces['type'] = $data['COLUMN_TYPE'];
 			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
+			$pieces['default'] = 'DEFAULT CURRENT_TIMESTAMP';
 			if (strripos($data['EXTRA'], 'on update CURRENT_TIMESTAMP') !== false) $pieces['ai'] =  'ON UPDATE CURRENT_TIMESTAMP';
 
 			return implode(' ', $pieces);
 		}
 
-		public function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
+		public function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
 
 	}

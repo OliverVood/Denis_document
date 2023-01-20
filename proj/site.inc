@@ -1,5 +1,7 @@
 <?php
 
+	session_start();
+
 	require 'site.versions.inc';
 	require 'site.consts.inc';
 

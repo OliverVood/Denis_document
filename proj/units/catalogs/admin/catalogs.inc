@@ -43,25 +43,7 @@
 			$table->string('str50', 50);
 			$table->text('text');
 
-			$table1 = new TableMySQLi('test40', $this->db);
-			$table1->id('id');
-			$table1->bool('bool');
-			$table1->int8('int8');
-
-			$table2 = new TableMySQLi('test50', $this->db);
-			$table2->id('id');
-			$table2->bool('asd');
-			$table2->bool('wewe');
-
-			$this->db->PushTables($table, $table1, $table2);
-		}
-
-		public function test() {
-			echo 'Catalogs';
-		}
-
-		public function test1() {
-			echo 'dfdf ';
+			$this->db->PushTables($table);
 		}
 
 	}

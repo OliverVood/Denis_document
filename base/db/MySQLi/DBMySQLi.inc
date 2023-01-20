@@ -5,13 +5,25 @@
 	use mysqli_result;
 
 	class DBMySQLi extends DB {
+		private ?string $host;
+		private ?string $username;
+		private ?string $password;
+		private ?string $port;
+		private ?string $socket;
 
 		private \mysqli $db;
 		private int $errno = 0;
 		private array $history = [];
 
 		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
-			parent::__construct($host, $username, $password, $dbname, $port, $socket);
+			parent::__construct();
+
+			$this->host				= $host;
+			$this->username			= $username;
+			$this->password			= $password;
+			$this->dbname			= $dbname;
+			$this->port				= $port;
+			$this->socket			= $socket;
 
 			@ $this->db = new \mysqli($this->host, $this->username, $this->password, $this->dbname, $this->port, $this->socket);
 

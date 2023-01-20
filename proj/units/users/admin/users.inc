@@ -2,21 +2,18 @@
 
 	namespace Proj\Admin\Units;
 
-	use Base\Units;
+	require 'users.structure.inc';
+
 	use Base\Instance;
-	use Proj\Units\Consts;
+	use Proj\Site\Structure;
 
-	require DIR_UNITS . 'users/consts.inc';
-
-	class Users extends Units implements Consts\Users {
+	class Users extends Structure\Users {
 		use Instance;
 
-		private function __construct() {
-			parent::__construct(self::ID, self::NAME);
-		}
+		private string | null $uid = null;
 
-		public function test() {
-			echo '1234 ';
+		private function __construct() {
+			parent::__construct();
 		}
 
 	}

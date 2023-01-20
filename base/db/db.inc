@@ -3,30 +3,19 @@
 	namespace Base\DB;
 
 	abstract class DB {
-		protected ?string $host;
-		protected ?string $username;
-		protected ?string $password;
-		protected ?string $dbname;
-		protected ?string $port;
-		protected ?string $socket;
-
-		protected array $tables;
+		protected string $dbname;
 		protected ?bool $state;
 
-		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
-			$this->host				= $host;
-			$this->username			= $username;
-			$this->password			= $password;
-			$this->dbname			= $dbname;
-			$this->port				= $port;
-			$this->socket			= $socket;
+		/** @var Table[] */ protected array $tables;
+
+		protected function __construct() {
 			$this->tables			= [];
 		}
 
-		abstract public static function Connect(?string $hostname, ?string $user, ?string $password, ?string $dbname, string|int|null $port, ?string $socket);
+		abstract public static function Connect();
 
-		abstract public function Check();
-		abstract public function Make();
+		abstract public function Check(): array;
+		abstract public function Make(): bool;
 
 		abstract public function Query(string $text);
 		abstract public function GetQueryList(): array;
@@ -48,12 +37,11 @@
 			return $this->dbname;
 		}
 
-		public function PushTables($table, ...$tables) : void {
-			$args = func_get_args();
-			foreach ($args as $arg) $this->tables[$arg->GetName()] = $arg;
+		public function PushTables(Table ...$tables) : void {
+			foreach ($tables as $table) $this->tables[$table->GetName()] = $table;
 		}
 
-		public function GetTable(string $tablename) {
+		public function GetTable(string $tablename): Table {
 			return $this->tables[$tablename];
 		}
 

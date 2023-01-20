@@ -16,7 +16,7 @@
 		public function Render() { ?>
 			<div class = "view general main">
 				<div><?= Catalogs::instance()->action_estimate->GetLink('Сметы') ?></div>
-				<div><?= Catalogs::instance()->action_certificate->GetLink('Акты выполненых работ') ?></div>
+				<div><?= Catalogs::instance()->action_certificate->GetLink('Акты выполненных работ') ?></div>
 				<div><?= Catalogs::instance()->action_price_list->GetLink('Прайс-листы') ?></div>
 			</div>
 		<?php }

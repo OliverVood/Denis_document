@@ -52,7 +52,7 @@
 			}
 
 			/* Get fields DB */
-			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE TABLE_NAME LIKE '{$this->name}' ORDER BY `ORDINAL_POSITION`");
+			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE (TABLE_NAME = '{$this->name}') AND (TABLE_SCHEMA = '{$this->dbname}') ORDER BY `ORDINAL_POSITION`");
 			$fields_db = $this->db->FetchAll($result, function(& $items, $item) use (& $fields) {
 				$items[$item['COLUMN_NAME']] = $item;
 				if (!in_array($item['COLUMN_NAME'], $fields)) $fields[] = $item['COLUMN_NAME'];

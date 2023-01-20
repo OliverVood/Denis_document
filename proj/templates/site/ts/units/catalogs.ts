@@ -24,6 +24,10 @@ namespace Site {
 			if ($th.val() === '0') $th.val('');
 		}
 
+		function Act(obj: string, act: string, params?) {
+			Base.Common.Query.SendData('/statistics/act', {object: obj, action: act, params: params});
+		}
+
 		type TypeStateEdit = 1;
 		type TypeStateSave = 2;
 		type TypeStateAutoSave = TypeStateEdit | TypeStateSave;
@@ -168,6 +172,7 @@ namespace Site {
 						Site.Common.DB.Delete(db, this.tables_names['table'], cursor.value.id);
 					});
 					Site.Common.DB.Delete(db, this.tables_names['document'], id);
+					Act(`${this.GetTextName('document')} DOCUMENT`, 'delete', {id: id});
 				});
 
 				this.$select.children(`option[value="${id}"]`).remove();
@@ -208,6 +213,7 @@ namespace Site {
 					record: 'EstimateRecordIter'
 				};
 				let texts = {
+					document: 'ESTIMATE',
 					name: 'Смета',
 					new: 'Новая',
 					select: 'Выберите смету',
@@ -233,7 +239,8 @@ namespace Site {
 					record: 'CertificateRecordIter'
 				};
 				let texts = {
-					name: 'Акт выполненых работ',
+					document: 'CERTIFICATE',
+					name: 'Акт выполненных работ',
 					new: 'Новый',
 					select: 'Выберите акт',
 					delete: 'Удалить акт?'
@@ -355,6 +362,7 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('document');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, name, '', '', '', '', Site.Common.UIDate.Today(), true, true);
+					Act(`${this.controller.GetTextName('document')} DOCUMENT`, 'create', {name: name});
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
@@ -364,11 +372,12 @@ namespace Site {
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
 						Site.Common.DB.Get(db, this.controller.GetTableName('document'), this.id).then((result) => {
 							this.CreateData(result.id, result.name, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
+							Act(`${this.controller.GetTextName('document')} DOCUMENT`, 'load', {name: result.name});
 							this.Fill();
 							this.AutosaveEnable();
-						});
-						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('table'), 'did', IDBKeyRange.only(this.id), cursor => {
-							this.AddTable(cursor.primaryKey, cursor.value);
+							Site.Common.DB.CursorIndex(db, this.controller.GetTableName('table'), 'did', IDBKeyRange.only(this.id), cursor => {
+								this.AddTable(cursor.primaryKey, cursor.value);
+							});
 						});
 					});
 				}
@@ -460,6 +469,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('document'), data);
 					this.controller.SaveState(ActController.STATE_SAVE, 'document');
 				});
+				Act(`${this.controller.GetTextName('document')} DOCUMENT`, 'auto save', {name: this.name});
 			}
 
 		}
@@ -589,11 +599,13 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('table');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', 0, true, true);
+					Act(`${this.controller.GetTextName('document')} TABLE`, 'create');
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
 					this.CreateData(data.id, data.header, data.discount, data.datecr, data.datemd);
+					Act(`${this.controller.GetTextName('document')} TABLE`, 'load', {header: data.header});
 
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
 						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('record'), 'tid', IDBKeyRange.only(this.id), cursor => {
@@ -695,6 +707,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('table'), data);
 					this.controller.SaveState(ActController.STATE_SAVE, 'table');
 				});
+				Act(`${this.controller.GetTextName('document')} TABLE`, 'auto save', {name: this.header});
 			}
 
 			private GetDiscount(): number {
@@ -735,6 +748,7 @@ namespace Site {
 						Site.Common.DB.Delete(db, this.controller.GetTableName('record'), cursor.value.id);
 					});
 					Site.Common.DB.Delete(db, this.controller.GetTableName('table'), this.id);
+					Act(`${this.controller.GetTextName('document')} TABLE`, 'delete', {header: this.header});
 				});
 
 				this.document.RemoveTable(this.id);
@@ -818,11 +832,13 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('record');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', 0, '', 0, true, true);
+					Act(`${this.controller.GetTextName('document')} RECORD`, 'create');
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
 					this.CreateData(data.id, data.name, data.count, data.unit, data.price, data.datecr, data.datemd);
+					Act(`${this.controller.GetTextName('document')} RECORD`, 'load', {name: data.name});
 				}
 
 				this.Fill();
@@ -914,6 +930,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('record'), data);
 					this.controller.SaveState(ActController.STATE_SAVE, 'record');
 				});
+				Act(`${this.controller.GetTextName('document')} RECORD`, 'auto save', {name: this.name});
 			}
 
 			private GetCount(): number {
@@ -955,6 +972,7 @@ namespace Site {
 			private Remove(): void {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					Site.Common.DB.Delete(db, this.controller.GetTableName('record'), this.id);
+					Act(`${this.controller.GetTextName('document')} RECORD`, 'delete', {name: this.name});
 				});
 
 				this.table.RemoveRecord(this.id);
@@ -1112,6 +1130,7 @@ namespace Site {
 						Site.Common.DB.Delete(db, this.tables_names['table'], cursor.value.id);
 					});
 					Site.Common.DB.Delete(db, this.tables_names['document'], id);
+					Act('PRICE LIST DOCUMENT', 'delete', {id: id});
 				});
 
 				this.$select.children(`option[value="${id}"]`).remove();
@@ -1249,6 +1268,7 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('document');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, name, '', '', '', '', Site.Common.UIDate.Today(), true, true);
+					Act('PRICE LIST DOCUMENT', 'create', {name: name});
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
@@ -1258,11 +1278,12 @@ namespace Site {
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
 						Site.Common.DB.Get(db, this.controller.GetTableName('document'), this.id).then((result) => {
 							this.CreateData(result.id, result.name, result.company, result.address, result.mail, result.phone, result.date, result.datecr, result.datemd);
+							Act('PRICE LIST DOCUMENT', 'load', {name: result.name});
 							this.Fill();
 							this.AutosaveEnable();
-						});
-						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('table'), 'did', IDBKeyRange.only(this.id), cursor => {
-							this.AddTable(cursor.primaryKey, cursor.value);
+							Site.Common.DB.CursorIndex(db, this.controller.GetTableName('table'), 'did', IDBKeyRange.only(this.id), cursor => {
+								this.AddTable(cursor.primaryKey, cursor.value);
+							});
 						});
 					});
 				}
@@ -1354,6 +1375,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('document'), data);
 					this.controller.SaveState(PriceListController.STATE_SAVE, 'document');
 				});
+				Act(`PRICE LIST DOCUMENT`, 'auto save', {name: this.name});
 			}
 
 		}
@@ -1459,12 +1481,13 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('table');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', true, true);
+					Act('PRICE LIST TABLE', 'load');
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
 					this.CreateData(data.id, data.header, data.datecr, data.datemd);
-
+					Act('PRICE LIST TABLE', 'load', {header: data.header});
 					Site.Common.DB.Connect().then((db: IDBDatabase) => {
 						Site.Common.DB.CursorIndex(db, this.controller.GetTableName('record'), 'tid', IDBKeyRange.only(this.id), cursor => {
 							this.AddRecord(cursor.primaryKey, cursor.value);
@@ -1546,6 +1569,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('table'), data);
 					this.controller.SaveState(PriceListController.STATE_SAVE, 'table');
 				});
+				Act(`PRICE LIST TABLE`, 'auto save', {name: this.header});
 			}
 
 			private Visible(): void {
@@ -1570,6 +1594,7 @@ namespace Site {
 						Site.Common.DB.Delete(db, this.controller.GetTableName('record'), cursor.value.id);
 					});
 					Site.Common.DB.Delete(db, this.controller.GetTableName('table'), this.id);
+					Act('PRICE LIST TABLE', 'delete', {name: this.header});
 				});
 
 				this.document.RemoveTable(this.id);
@@ -1636,11 +1661,13 @@ namespace Site {
 				if (!this.id) {
 					let iter_name = this.controller.GetIterName('record');
 					this.CreateData(Number(localStorage.getItem(iter_name)) || 1, '', '', true, true);
+					Act('PRICE LIST RECORD', 'create');
 					localStorage.setItem(iter_name, (this.id + 1).toString());
 
 					this.Save();
 				} else {
 					this.CreateData(data.id, data.name, data.price, data.datecr, data.datemd);
+					Act('PRICE LIST RECORD', 'load', {name: data.name});
 				}
 
 				this.Fill();
@@ -1704,6 +1731,7 @@ namespace Site {
 					Site.Common.DB.Put(db, this.controller.GetTableName('record'), data);
 					this.controller.SaveState(PriceListController.STATE_SAVE, 'record');
 				});
+				Act('PRICE LIST RECORD', 'auto save', {name: this.name});
 			}
 
 			private QuestionRemove() {
@@ -1713,6 +1741,7 @@ namespace Site {
 			private Remove(): void {
 				Site.Common.DB.Connect().then((db: IDBDatabase) => {
 					Site.Common.DB.Delete(db, this.controller.GetTableName('record'), this.id);
+					Act('PRICE LIST RECORD', 'delete', {name: this.name});
 				});
 
 				this.table.RemoveRecord(this.id);

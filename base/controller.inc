@@ -9,6 +9,9 @@
 		public Stage $work;
 		public Stage $view;
 
+		static public string $area = 'null';
+		static public string $part = 'null';
+
 		public function __construct() {
 			$this->void = new Stage();
 			$this->work = new Stage();
@@ -20,12 +23,12 @@
 		 * @return void
 		 */
 		public function Execute(): void {
-			$area = GetParam('__a', 'null');
-			$part = GetParam('__p', 'null');
+			Controller::$area = GetParam('__a', 'null');
+			Controller::$part = GetParam('__p', 'null');
 
-			$this->void->Execute($area, $part);
-			$this->work->Execute($area, $part);
-			$this->view->Execute($area, $part);
+			$this->void->Execute(Controller::$area, Controller::$part);
+			$this->work->Execute(Controller::$area, Controller::$part);
+			$this->view->Execute(Controller::$area, Controller::$part);
 		}
 
 	}
