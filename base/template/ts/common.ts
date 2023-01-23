@@ -66,7 +66,11 @@ namespace Base {
 				Query.SendData(form.attr('action'), new FormData(_form), handler, {contentType: false, processData: false});
 			}
 
-			public static SubmitForm(e, handler ?:Function) {
+			public static SubmitForm(th, handler ?:Function) {
+				Query.SendForm($(th).closest('form'), handler);
+			}
+
+			public static SubmitFormEvent(e, handler ?:Function) {
 				Query.SendForm($(e.currentTarget).closest('form'), handler);
 			}
 

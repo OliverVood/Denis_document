@@ -42,13 +42,19 @@ main {
 	padding: 0.2rem;
 	h1 { padding: 1rem 0; font-size: 1.4rem; text-align: center; }
 	table {
-		> thead > tr {
-			background-color: $color-secondary; color: $color-text-primary;
-			> th { padding: 0.6rem; font-weight: 400; }
+		&.select {
+			> thead > tr {
+				background-color: $color-secondary; color: $color-text-primary;
+				> th { padding: 0.6rem; font-weight: 400; }
+			}
+			> tbody > tr {
+				&:nth-child(even) { background-color: $color-primary-super-light; }
+				&:hover { background-color: $color-tertiary-light; }
+				> td { padding: 0.6rem; }
+			}
 		}
-		> tbody > tr {
-			&:nth-child(even) { background-color: $color-primary-super-light; }
-			&:hover { background-color: $color-tertiary-light; }
+		&.create > tbody > tr {
+			> th { padding: 0.6rem; text-align: left; font-weight: 700; }
 			> td { padding: 0.6rem; }
 		}
 	}

@@ -2,12 +2,12 @@
 
 	namespace Proj\Admin\Structure;
 
-	require DIR_UNITS . 'statistics/consts.inc';
-
 	use Base\Units;
 	use Base\DB\TableMySQLi;
 	use Proj\Units\Consts;
 	use Proj\DB;
+
+	require DIR_UNITS . 'statistics/consts.inc';
 
 	class Statistics extends Units implements Consts\Statistics {
 		private DB $db;

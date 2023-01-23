@@ -31,7 +31,7 @@ namespace Admin {
 				}
 
 				let OnSubmit = (e) => {
-					Base.Common.Query.SubmitForm(e, function (data) {
+					Base.Common.Query.SubmitFormEvent(e, function (data) {
 						Admin.General.Render.CheckDB(data);
 					});
 					return false;

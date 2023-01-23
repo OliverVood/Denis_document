@@ -14,7 +14,7 @@
 
 		public function Render(array $fields, array $items, string $title) { ?>
 			<h1><?= $title; ?></h1>
-			<table>
+			<table class = "select">
 				<thead>
 					<tr>
 						<?php foreach ($fields as $field) { ?>

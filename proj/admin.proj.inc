@@ -4,6 +4,7 @@
 	require 'db.inc';
 	require DIR_BASE . 'editor/editor.inc';
 	require DIR_BASE . 'editor/editorMySQLi.inc';
+	require DIR_BASE . 'html/elements.inc';
 	require 'units/consts.inc';
 	require 'units/admin.units.inc';
 
