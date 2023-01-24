@@ -53,6 +53,23 @@
 						'name' => 'Текст',
 						'value' => ''
 					]
+				],
+				'update' => [
+					'state' => [
+						'skin' => 'select',
+						'name' => 'Состояние',
+						'value' => self::STATES['draft']
+					],
+					'header' => [
+						'skin' => 'text',
+						'name' => 'Заголовок',
+						'value' => ''
+					],
+					'content' => [
+						'skin' => 'textarea',
+						'name' => 'Текст',
+						'value' => ''
+					]
 				]
 			]);
 

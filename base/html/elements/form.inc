@@ -23,9 +23,10 @@
 
 		public function Element(string $skin, string $name, string | int $value, array $params = []): void {
 			switch ($skin) {
-				case 'text': Text::object()->Render($name, $value, $params); break;
-				case 'select': Select::object()->Render($name, $value, $this->data[$name] ?? [], $params); break;
-				case 'textarea': Textarea::object()->Render($name, $value, $params); break;
+				case 'hidden': Text::object()->Render("form[{$name}]", $value, ['type' => 'hidden']); break;
+				case 'text': Text::object()->Render("form[{$name}]", $value, $params); break;
+				case 'select': Select::object()->Render("form[{$name}]", $value, $this->data[$name] ?? [], $params); break;
+				case 'textarea': Textarea::object()->Render("form[{$name}]", $value, $params); break;
 				default: echo 'ELEMENT NOT FOUND'; break;
 			}
 		}

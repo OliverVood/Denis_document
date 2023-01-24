@@ -20,7 +20,7 @@ namespace Admin {
 			private static Form(data) {
 				/* Elements */
 				let $form = $('<form/>', {action: '/db/make'});//TODO Разработать систему экшинов
-				let $table = $('<table/>');
+				let $table = $('<table/>', {class: 'select'});
 				let $tbody = $('<tbody/>');
 				let $checkbox = $('<input/>', {type: 'checkbox'});
 				let $submit = $('<input/>', {type: 'submit', value: 'Исправить'});

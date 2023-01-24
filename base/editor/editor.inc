@@ -21,8 +21,11 @@
 		public Action $select;
 		public Action $create;
 		public Action $update;
+		public Action $delete;
 
 		public Action $do_create;
+		public Action $do_update;
+		public Action $do_delete;
 
 		protected string $titleSelect;
 		protected string $titleCreate;
@@ -41,15 +44,20 @@
 
 			$this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;");
 			$this->create = new Action($this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create', Admin.General.Render.ToMain); return false;");
-			$this->update = new Action($this->name, 'update', 'default');
+			$this->update = new Action($this->name, 'update', 'default', /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update' {id: %id%}, Admin.General.Render.ToMain); return false;");
+			$this->delete = new Action($this->name, 'delete', 'default');
 
 			$this->do_create = new Action($this->name, 'do_create', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
+			$this->do_update = new Action($this->name, 'do_update', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
+			$this->do_delete = new Action($this->name, 'do_delete', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
 
 			Controller::instance()->view->Push($this->select, [$this, 'OnSelect']);
 			Controller::instance()->view->Push($this->create, [$this, 'OnCreate']);
 			Controller::instance()->view->Push($this->update, [$this, 'OnUpdate']);
 
 			Controller::instance()->view->Push($this->do_create, [$this, 'DoCreate']);
+			Controller::instance()->view->Push($this->do_update, [$this, 'DoUpdate']);
+			Controller::instance()->view->Push($this->do_delete, [$this, 'DoDelete']);
 		}
 
 		#[NoReturn] public function OnSelect(): void {
@@ -60,18 +68,42 @@
 				$items[] = $item;
 			});
 
-			SendJSONSuccess(['html' => Select::object()->ToVar($this->params['select'] ?? [], $items, $this->titleSelect)]);
+			SendJSONSuccess(['html' => Select::object()->ToVar($this, $this->params['select'] ?? [], $items, $this->titleSelect)]);
 		}
 
-		#[NoReturn] public function OnCreate() : void {
-			SendJSONSuccess(['html' => Create::object()->ToVar($this->params['create'] ?? [], [], $this->titleCreate)]);
+		#[NoReturn] public function OnCreate(): void {
+			SendJSONSuccess(['html' => Create::object()->ToVar($this, $this->params['create'] ?? [], [], $this->titleCreate)]);
 		}
 
-		public function OnUpdate() : void {
-			Update::object()->ToVar();
+		#[NoReturn] public function OnUpdate(): void {
+//			$id = (int)GetParam('id', 0);
+			$id = 1;
+
+			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->params['update'] ?? [], [], $this->titleUpdate)]);
 		}
 
 		#[NoReturn] public function DoCreate(): void {
+			$data = GetParam('form', []);
+
+			$this->table->Insert($data);
+
+			SendJSONSuccess([]);
+		}
+
+		#[NoReturn] public function DoUpdate(): void {
+			$id = (int)GetParam('id', 0);
+			$data = GetParam('form', []);
+
+			$this->table->Update($data, "`id` = {$id}");
+
+			SendJSONSuccess([]);
+		}
+
+		#[NoReturn] public function DoDelete(): void {
+			$id = (int)GetParam('id', 0);
+
+			$this->table->Update(['state' => 100], "`id` = {$id}");
+
 			SendJSONSuccess([]);
 		}
 

@@ -301,8 +301,8 @@
 			foreach ($tables as $tablename => $table) {
 				$q = match ((int)$table['state']) {
 					TableMySQLi::ERROR_CREATE => $this->tables[$tablename]->Create(),
-					TableMySQLi::ERROR_UPDATE => $this->tables[$tablename]->Update($table),
-					TableMySQLi::ERROR_DELETE => TableMySQLi::Delete($tablename),
+					TableMySQLi::ERROR_UPDATE => $this->tables[$tablename]->Modify($table),
+					TableMySQLi::ERROR_DELETE => TableMySQLi::Remove($tablename),
 					default => ''
 				};
 				if (is_array($q)) foreach ($q as $query) $queries[] = $query;

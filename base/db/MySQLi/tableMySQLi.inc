@@ -103,7 +103,7 @@
 			return "CREATE TABLE `{$this->name}` (" . implode(', ', $fields) . implode('', $primaries) . ") ENGINE = {$this->engine}  DEFAULT CHARSET = {$this->encoding}";
 		}
 
-		public function Update($data): array {
+		public function Modify($data): array {
 			$queries = [];
 			foreach ($data['fields'] as $fieldname => $field) {
 				$queries[] = match ((int)$field['state']) {
@@ -116,7 +116,7 @@
 			return $queries;
 		}
 
-		public static function Delete(string $tablename): string {
+		public static function Remove(string $tablename): string {
 			return "DROP TABLE `{$tablename}`";
 		}
 

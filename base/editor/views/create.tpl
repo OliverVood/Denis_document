@@ -2,25 +2,25 @@
 
 	namespace Base\Templates\Editor;
 
-	use Base\Templates\HTML\Element\Form;
-	use Base\Templates\HTML\Element\Text;
+	use Base\Editor;
 	use Base\Templates\View;
+	use Base\Templates\HTML\Element\Form;
 
 	class Create extends View {
 
-		public function ToVar(array $fields, array $data, string $title): string {
+		public function ToVar(Editor $editor, array $fields, array $data, string $title): string {
 			$this->Start();
-			$this->Render($fields, $data, $title);
+			$this->Render($editor, $fields, $data, $title);
 			return $this->Read();
 		}
 
-		public function Render(array $fields, array $data, string $title) {
+		public function Render(Editor $editor, array $fields, array $data, string $title) {
 			$form = new Form($data);
 		?>
 			<h1><?= $title; ?></h1>
 			<?php
-				$form->Begin('/news/do_create');//TODO
-				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') Text::object()->Render($name, $field['value'], ['type' => 'hidden'])
+				$form->Begin($editor->do_create->GetPath());
+				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $field['value'])
 			?>
 			<table class = "create">
 				<tbody>

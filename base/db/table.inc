@@ -48,6 +48,18 @@
 			return $this->db->FetchAll($result, $func);
 		}
 
+		public function Insert(array $data): int {
+			return $this->db->Insert($this->name, $data);
+		}
+
+		public function Update(array $data, string $where = ''): bool {
+			return $this->db->Update($this->name, $data, $where);
+		}
+
+		public function Delete(string $where = ''): bool {
+			return $this->db->Delete($this->name, $where);
+		}
+
 		public function GetName(): string { return $this->name; }
 
 		protected function PushField(Field $field): void {

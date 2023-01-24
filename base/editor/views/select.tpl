@@ -2,17 +2,18 @@
 
 	namespace Base\Templates\Editor;
 
+	use Base\Editor;
 	use Base\Templates\View;
 
 	class Select extends View {
 
-		public function ToVar(array $fields, array $items, string $title): string {
+		public function ToVar(Editor $editor, array $fields, array $items, string $title): string {
 			$this->Start();
-			$this->Render($fields, $items, $title);
+			$this->Render($editor, $fields, $items, $title);
 			return $this->Read();
 		}
 
-		public function Render(array $fields, array $items, string $title) { ?>
+		public function Render(Editor $editor, array $fields, array $items, string $title) { ?>
 			<h1><?= $title; ?></h1>
 			<table class = "select">
 				<thead>
@@ -20,6 +21,7 @@
 						<?php foreach ($fields as $field) { ?>
 							<th><?= $field; ?></th>
 						<?php } ?>
+						<th colspan = "2">Управление</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -30,6 +32,8 @@
 									<?= $item[$key]; ?>
 								</td>
 							<?php } ?>
+							<td><?= $editor->update->GetLink('Изменить'); ?></td>
+							<td><?= $editor->delete->GetLink('Удалить'); ?></td>
 						</tr>
 					<?php } ?>
 				</tbody>

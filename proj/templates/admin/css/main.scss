@@ -7,7 +7,7 @@ h1 { margin: 0; }
 h3 { margin: 0; text-align: center;}
 ul { margin: 0; padding: 0; }
 li { list-style-type: none; }
-a { text-decoration: none; color: $color-text-primary; }
+a { text-decoration: none; color: $color-link; }
 input {
 	outline: none; font-family: AjarSans, sans-serif; font-size: 1rem;
 	&[type="submit"] { @include MixBtn; cursor: pointer; }
@@ -17,7 +17,10 @@ body {
 	> header { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
 	> div {
 		flex: auto; display: flex;
-		menu { flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary; }
+		menu {
+			flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
+			a { color: $color-text-primary; }
+		}
 		main { flex: auto; }
 	}
 	> footer { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
