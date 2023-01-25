@@ -10,11 +10,17 @@
 			'news'				=> self::NAME
 		];
 
+		const STATE_ERROR		= 0;
+		const STATE_DRAFT		= 1;
+		const STATE_ACTIVE		= 2;
+		const STATE_INACTIVE	= 3;
+		const STATE_DELETE		= 100;
+
 		const STATES = [
-			'error'				=> 0,
-			'draft'				=> 1,
-			'active'			=> 2,
-			'inactive'			=> 3,
-			'delete'			=> 100
+			'error'				=> self::STATE_ERROR,
+			'draft'				=> self::STATE_DRAFT,
+			'active'			=> self::STATE_ACTIVE,
+			'inactive'			=> self::STATE_INACTIVE,
+			'delete'			=> self::STATE_DELETE
 		];
 	}

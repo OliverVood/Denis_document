@@ -3,4 +3,4 @@
 	require 'consts.inc';
 
 	const DEBUG = true;
-	const REQUEST = ADDRESS . '/admin';
+	const REQUEST = '/admin';

@@ -1,6 +1,6 @@
 <?php
 
-	namespace Base;
+	namespace Base\Editor;
 
 	require 'views/select.tpl';
 	require 'views/create.tpl';
@@ -9,6 +9,8 @@
 	use Base\DB\Table;
 	use JetBrains\PhpStorm\NoReturn;
 
+	use Base\Controller;
+	use Base\Action;
 	use Base\Templates\Editor\Select;
 	use Base\Templates\Editor\Create;
 	use Base\Templates\Editor\Update;
@@ -44,11 +46,11 @@
 
 			$this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;");
 			$this->create = new Action($this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create', Admin.General.Render.ToMain); return false;");
-			$this->update = new Action($this->name, 'update', 'default', /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update' {id: %id%}, Admin.General.Render.ToMain); return false;");
+			$this->update = new Action($this->name, 'update', 'default', /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update', {id: %id%}, Admin.General.Render.ToMain); return false;");
 			$this->delete = new Action($this->name, 'delete', 'default');
 
 			$this->do_create = new Action($this->name, 'do_create', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
-			$this->do_update = new Action($this->name, 'do_update', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
+			$this->do_update = new Action($this->name, 'do_update', "/{$this->name}/do_update?id=%id%", /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
 			$this->do_delete = new Action($this->name, 'do_delete', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;");
 
 			Controller::instance()->view->Push($this->select, [$this, 'OnSelect']);
@@ -76,10 +78,13 @@
 		}
 
 		#[NoReturn] public function OnUpdate(): void {
-//			$id = (int)GetParam('id', 0);
-			$id = 1;
+			$id = (int)GetParam('id', 0);
+			$result = $this->table->Select(null, "`id` = {$id}");
+			$item = $this->table->Fetch($result);
+			$data = [];
 
-			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->params['update'] ?? [], [], $this->titleUpdate)]);
+			$this->PrepareOnUpdate($id, $item, $data);
+			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->params['update'] ?? [], $item, $data, $this->titleUpdate)]);
 		}
 
 		#[NoReturn] public function DoCreate(): void {
@@ -106,5 +111,7 @@
 
 			SendJSONSuccess([]);
 		}
+
+		protected function PrepareOnUpdate(int $id, array & $item, array & $data): void { }
 
 	}

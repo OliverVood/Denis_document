@@ -2,7 +2,7 @@
 
 	namespace Base\Templates\Editor;
 
-	use Base\Editor;
+	use Base\Editor\Editor;
 	use Base\Templates\View;
 
 	class Select extends View {
@@ -32,8 +32,8 @@
 									<?= $item[$key]; ?>
 								</td>
 							<?php } ?>
-							<td><?= $editor->update->GetLink('Изменить'); ?></td>
-							<td><?= $editor->delete->GetLink('Удалить'); ?></td>
+							<td><?= $editor->update->GetLink('Изменить', ['id' => $item['id']]); ?></td>
+							<td><?= $editor->delete->GetLink('Удалить', ['id' => $item['id']]); ?></td>
 						</tr>
 					<?php } ?>
 				</tbody>

@@ -14,7 +14,11 @@
 
 		public function Render(string $name, string $value = '', array $data = [], array $params = []) { ?>
 			<label>
-				<select name = "<?= $name; ?>"></select>
+				<select name = "<?= $name; ?>">
+					<?php foreach ($data as $key => $text) { ?>
+							<option value = "<?= $key; ?>"<?= ($key == $value) ? 'selected' : '' ?>><?= $text; ?></option>
+					<?php } ?>
+				</select>
 			</label>
 		<?php }
 

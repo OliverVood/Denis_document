@@ -3,6 +3,7 @@
 	namespace Proj\Admin\Units;
 
 	require 'news.structure.inc';
+	require 'news.editor.inc';
 
 	use Base\Instance;
 	use Base\Controller;
@@ -10,7 +11,7 @@
 	use Proj\Admin\Structure;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
-	use Proj\Admin\Editors\EditorMySQLi;
+	use Base\Editor\EditorMySQLi;
 
 	class News extends Structure\News {
 		use Instance;
@@ -22,56 +23,7 @@
 		private function __construct() {
 			parent::__construct();
 
-			$this->editor_news = new EditorMySQLi(self::NAME, $this->table_news, [
-				'titles' => [
-					'select' => 'Список новостей',
-					'create' => 'Добавить новость'
-				],
-				'order' => [
-					'`datecr` DESC',
-					'`id` ASC'
-				],
-				'select' => [
-					'id' => '#',
-					'state' => 'Состояние',
-					'datecr' => 'Дата создания',
-					'header' => 'Заголовок'
-				],
-				'create' => [
-					'state' => [
-						'skin' => 'hidden',
-						'name' => 'Состояние',
-						'value' => self::STATES['draft']
-					],
-					'header' => [
-						'skin' => 'text',
-						'name' => 'Заголовок',
-						'value' => ''
-					],
-					'content' => [
-						'skin' => 'textarea',
-						'name' => 'Текст',
-						'value' => ''
-					]
-				],
-				'update' => [
-					'state' => [
-						'skin' => 'select',
-						'name' => 'Состояние',
-						'value' => self::STATES['draft']
-					],
-					'header' => [
-						'skin' => 'text',
-						'name' => 'Заголовок',
-						'value' => ''
-					],
-					'content' => [
-						'skin' => 'textarea',
-						'name' => 'Текст',
-						'value' => ''
-					]
-				]
-			]);
+			$this->editor_news = new \Proj\Admin\Editor\News(self::NAME, $this->table_news);
 
 			$this->out_menu = new Action();
 

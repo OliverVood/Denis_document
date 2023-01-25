@@ -7,10 +7,10 @@
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
+	use Base\Editor\EditorMySQLi;
 	use Proj\Admin\Structure;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
-	use Proj\Admin\Editors\EditorMySQLi;
 
 	class Statistics extends Structure\Statistics {
 		use Instance;

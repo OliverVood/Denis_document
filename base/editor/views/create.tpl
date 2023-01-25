@@ -2,7 +2,7 @@
 
 	namespace Base\Templates\Editor;
 
-	use Base\Editor;
+	use Base\Editor\Editor;
 	use Base\Templates\View;
 	use Base\Templates\HTML\Element\Form;
 
@@ -20,14 +20,14 @@
 			<h1><?= $title; ?></h1>
 			<?php
 				$form->Begin($editor->do_create->GetPath());
-				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $field['value'])
+				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $field['default'])
 			?>
 			<table class = "create">
 				<tbody>
 					<?php foreach ($fields as $name => $field) { if ($field['skin'] == 'hidden') continue; ?>
 						<tr>
 							<th><?= $field['name']; ?>:</th>
-							<td><?php $form->Element($field['skin'], $name, $field['value'], $fields['params'] ?? []); ?></td>
+							<td><?php $form->Element($field['skin'], $name, $field['default'], $fields['params'] ?? []); ?></td>
 						</tr>
 					<?php } ?>
 				</tbody>

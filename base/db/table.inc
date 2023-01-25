@@ -48,6 +48,10 @@
 			return $this->db->FetchAll($result, $func);
 		}
 
+		public function Fetch($result): ?array {
+			return $this->db->Fetch($result);
+		}
+
 		public function Insert(array $data): int {
 			return $this->db->Insert($this->name, $data);
 		}

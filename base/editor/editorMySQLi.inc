@@ -1,8 +1,7 @@
 <?php
 
-	namespace Proj\Admin\Editors;
+	namespace Base\Editor;
 
-	use Base\Editor;
 	use Base\DB\TableMySQLi;
 
 	class EditorMySQLi extends Editor {

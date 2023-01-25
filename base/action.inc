@@ -32,8 +32,8 @@
 		 * @return string
 		 */
 		public function GetLink(string $content, array $data = [], array $params = []): string {
-			$href = ' href = "' . $this->path . '"';
-			$onclick = ' onclick = "' . $this->click . '"';
+			$href = ' href = "' . $this->ParseTarget($this->href, $data) . '"';
+			$onclick = ' onclick = "' . $this->ParseTarget($this->click, $data) . '"';
 			$target = (isset($params['target'])) ? ' target = "' . $params['target'] . '"' : '';
 
 			return "<a{$href}{$onclick}{$target}>{$content}</a>";
@@ -55,8 +55,15 @@
 			return $this->href;
 		}
 
-		private function ParseTarget(string $subject, array $replace): string {//TODO
-//			foreach ($replace) ;
+		/**
+		 * Замена параметров в строке
+		 * @param string $subject - Строка
+		 * @param array  $replace - Массив замен
+		 * @return string
+		 */
+		private function ParseTarget(string $subject, array $replace): string {
+			foreach ($replace as $key => $value) $subject = str_replace("%{$key}%", $value, $subject);
+
 			return  $subject;
 		}
 
