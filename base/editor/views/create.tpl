@@ -32,7 +32,7 @@
 					<?php } ?>
 				</tbody>
 			</table>
-			<?php $form->Submit(); $form->End(); ?>
+			<?php $form->Submit('Создать', $editor->do_create->GetClick()); $form->End(); ?>
 		<?php }
 
 	}

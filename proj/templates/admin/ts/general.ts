@@ -7,6 +7,7 @@ namespace Admin {
 		export class Render {
 
 			public static ToMain(data: Object) {
+				if (data['message']) alert(data['message']);
 				Admin.Common.Layout.main.Fill(data['html']);
 			}
 

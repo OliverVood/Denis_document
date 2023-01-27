@@ -13,7 +13,9 @@
 			return $this->Read();
 		}
 
-		public function Render(Editor $editor, array $fields, array $items, string $title) { ?>
+		public function Render(Editor $editor, array $fields, array $items, string $title) {
+			$col = ((int)$editor->controlUpdate) + ((int)$editor->controlDelete);
+		?>
 			<h1><?= $title; ?></h1>
 			<table class = "select">
 				<thead>
@@ -21,7 +23,7 @@
 						<?php foreach ($fields as $field) { ?>
 							<th><?= $field; ?></th>
 						<?php } ?>
-						<th colspan = "2">Управление</th>
+						<?php if ($col) { ?><th colspan = "<?= $col ?>">Управление</th><?php } ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -32,8 +34,8 @@
 									<?= $item[$key]; ?>
 								</td>
 							<?php } ?>
-							<td><?= $editor->update->GetLink('Изменить', ['id' => $item['id']]); ?></td>
-							<td><?= $editor->delete->GetLink('Удалить', ['id' => $item['id']]); ?></td>
+							<?php if ($editor->controlUpdate) { ?><td><?= $editor->update->GetLink('Изменить', ['id' => $item['id']]); ?></td><?php } ?>
+							<?php if ($editor->controlDelete) { ?><td><?= $editor->do_delete->GetLink('Удалить', ['id' => $item['id']]); ?></td><?php } ?>
 						</tr>
 					<?php } ?>
 				</tbody>

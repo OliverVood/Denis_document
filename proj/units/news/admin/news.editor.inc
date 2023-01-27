@@ -10,11 +10,6 @@
 
 		public function __construct(string $name, TableMySQLi $table) {
 			$params = [
-				'titles' => [
-					'select' => 'Список новостей',
-					'create' => 'Добавить новость',
-					'update' => 'Редактирование новости'
-				],
 				'order' => [
 					'`datecr` DESC',
 					'`id` ASC'
@@ -38,6 +33,13 @@
 			];
 
 			parent::__construct($name, $table, $params);
+
+			$this->titleSelect = 'Список новостей';
+			$this->titleCreate = 'Добавить новость';
+			$this->titleUpdate = 'Редактирование новости';
+
+			$this->titleDoCreate = 'Новость добавлена';
+			$this->titleDoUpdate = 'Новость изменена';
 		}
 
 		public function PrepareOnUpdate(int $id, array &$item, array &$data) : void {

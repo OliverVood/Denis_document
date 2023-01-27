@@ -34,7 +34,7 @@
 				<?php } ?>
 				</tbody>
 			</table>
-			<?php $form->Submit(); $form->End(); ?>
+			<?php $form->Submit('Изменить', $editor->do_update->GetClick()); $form->End(); ?>
 		<?php }
 
 	}

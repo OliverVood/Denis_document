@@ -17,8 +17,10 @@
 			</form>
 		<?php }
 
-		public function Submit(string $value = 'Отправить'): void { ?>
-			<input type = "submit" value = "<?= $value; ?>" onclick = "Base.Common.Query.SubmitForm(this, (data) => { console.log(data); }); return false;">
+		public function Submit(string $value = 'Отправить', $click = ''): void {
+			if ($click) $click = ' onclick = "' . $click . '"';
+		?>
+			<input type = "submit" value = "<?= $value; ?>"<?= $click; ?>>
 		<?php }
 
 		public function Element(string $skin, string $name, string | int $value, array $params = []): void {

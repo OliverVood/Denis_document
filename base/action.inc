@@ -14,7 +14,7 @@
 			$this->area 	= $area;
 			$this->part 	= $part;
 
-			$this->href 	= $href;
+			$this->href 	= REQUEST . $href;
 			$this->click 	= $click;
 
 			$this->path		= '';
@@ -32,8 +32,8 @@
 		 * @return string
 		 */
 		public function GetLink(string $content, array $data = [], array $params = []): string {
-			$href = ' href = "' . $this->ParseTarget($this->href, $data) . '"';
-			$onclick = ' onclick = "' . $this->ParseTarget($this->click, $data) . '"';
+			$href = ' href = "' . $this->GetHref($data) . '"';
+			$onclick = ' onclick = "' . $this->GetClick($data) . '"';
 			$target = (isset($params['target'])) ? ' target = "' . $params['target'] . '"' : '';
 
 			return "<a{$href}{$onclick}{$target}>{$content}</a>";
@@ -49,10 +49,20 @@
 
 		/**
 		 * Возвращает href
+		 * @param array $data - Параметры
 		 * @return string
 		 */
-		public function GetHref(): string {
-			return $this->href;
+		public function GetHref(array $data = []): string {
+			return $this->ParseTarget($this->href, $data);
+		}
+
+		/**
+		 * Возвращает click
+		 * @param array $data - Параметры
+		 * @return string
+		 */
+		public function GetClick(array $data = []): string {
+			return $this->ParseTarget($this->click, $data);
 		}
 
 		/**

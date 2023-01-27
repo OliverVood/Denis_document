@@ -3,12 +3,15 @@
 	namespace Proj\Admin\Units;
 
 	require 'statistics.structure.inc';
+	require 'actions.editor.inc';
+	require 'ip.editor.inc';
 
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
 	use Base\Editor\EditorMySQLi;
 	use Proj\Admin\Structure;
+	use Proj\Admin\Editor;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
 
@@ -23,42 +26,8 @@
 		private function __construct() {
 			parent::__construct();
 
-			$this->editor_ip = new EditorMySQLi(self::NAME . 'ip', $this->table_ip, [
-				'titles' => [
-					'select' => 'Статистика запросов к серверу'
-				],
-				'order' => [
-					'datecr DESC',
-					'id DESC'
-				],
-				'select' => [
-					'datecr' => 'Дата',
-					'uid' => 'Пользователь',
-					'ip_part_I' => 'IP часть I',
-					'ip_part_II' => 'IP часть II',
-					'ip_part_III' => 'IP часть III',
-					'ip_part_IV' => 'IP часть IV',
-					'path' => 'Основной путь',
-					'params' => 'Параметры'
-				]
-			]);
-
-			$this->editor_act = new EditorMySQLi(self::NAME . '_act', $this->table_act, [
-				'titles' => [
-					'select' => 'Статистика действий пользователя'
-				],
-				'order' => [
-					'datecr DESC',
-					'id DESC'
-				],
-				'select' => [
-					'datecr' => 'Дата',
-					'uid' => 'Пользователь',
-					'object' => 'Объект',
-					'action' => 'Действие',
-					'params' => 'Параметры'
-				]
-			]);
+			$this->editor_ip = new Editor\Ip(self::NAME . 'ip', $this->table_ip);
+			$this->editor_act = new Editor\Actions(self::NAME . '_act', $this->table_act);
 
 			$this->out_menu = new Action();
 
