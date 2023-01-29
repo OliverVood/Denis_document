@@ -5,19 +5,19 @@
 	use Base\Units;
 	use Base\DB\TableMySQLi;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBObject;
 
 	require DIR_UNITS . 'statistics/consts.inc';
 
 	class Statistics extends Units implements Consts\Statistics {
-		private DB $db;
+		private DBObject $db;
 
 		protected TableMySQLi $table_ip;
 		protected TableMySQLi $table_act;
 
 		protected function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBObject::instance();
 
 			$this->table_ip = new TableMySQLi(self::TABLES['ip'], $this->db);
 			$this->table_ip->id('id');

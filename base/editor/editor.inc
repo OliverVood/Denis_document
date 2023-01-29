@@ -65,7 +65,7 @@
 			Controller::instance()->view->Push($this->do_delete, [$this, 'DoDelete']);
 		}
 
-		private function Select():string {
+		protected function Select():string {
 			$order = isset($this->params['order']) ? implode(', ', $this->params['order']) : null;
 
 			$result = $this->table->Select(null, null, $order);

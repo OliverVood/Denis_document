@@ -14,7 +14,7 @@
 		private string	$encoding 	= 'utf8';
 		private array	$primary	= [];
 
-		/** @var DBMySQLi $db */
+		/** @var DBObjectMySQLi $db */
 
 		public function __construct($name, $db) {
 			parent::__construct($name, $db);

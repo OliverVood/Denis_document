@@ -3,7 +3,7 @@
 	namespace Base\DB;
 
 	abstract class Table {
-		protected DB $db;
+		protected DBObject $db;
 		protected string $dbname;
 		protected string $name;
 		protected array $structure;
@@ -42,6 +42,14 @@
 
 		public function Select(?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null) {
 			return $this->db->Select($this->name, $fields, $where, $order, $limit, $calc);
+		}
+
+		public function SelectOne(?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null) {
+			return $this->db->SelectOne($this->name, $fields, $where, $order, $limit, $calc);
+		}
+
+		public function SelectOneField(string $field, ?string $where = null, ?string $order = null) {
+			return $this->db->SelectOneField($this->name, $field, $where, $order);
 		}
 
 		public function FetchAll($result, ?callable $func = null): ?array {

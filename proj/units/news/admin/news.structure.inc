@@ -7,17 +7,17 @@
 	use Base\Units;
 	use Base\DB\TableMySQLi;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBObject;
 
 
 	class News extends Units implements Consts\News {
-		private DB $db;
+		private DBObject $db;
 
 		protected TableMySQLi $table_news;
 
 		protected function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBObject::instance();
 
 			$this->table_news = new TableMySQLi(self::TABLES['news'], $this->db);
 			$this->table_news->id('id');
@@ -26,7 +26,7 @@
 			$this->table_news->timestamp('datemd', true);
 			$this->table_news->string('header', 255);
 			$this->table_news->text('content');
-//			$this->table_news->string('photo', 10);
+			$this->table_news->string('cover', 30);
 
 			$this->db->PushTables($this->table_news);
 		}

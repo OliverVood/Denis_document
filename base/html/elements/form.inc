@@ -27,6 +27,7 @@
 			switch ($skin) {
 				case 'hidden': Text::object()->Render("form[{$name}]", $value, ['type' => 'hidden']); break;
 				case 'text': Text::object()->Render("form[{$name}]", $value, $params); break;
+				case 'file': File::object()->Render("form[{$name}]", $value, $params); break;
 				case 'select': Select::object()->Render("form[{$name}]", $value, $this->data[$name] ?? [], $params); break;
 				case 'textarea': Textarea::object()->Render("form[{$name}]", $value, $params); break;
 				default: echo 'ELEMENT NOT FOUND'; break;

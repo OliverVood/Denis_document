@@ -2,9 +2,9 @@
 
 	namespace Proj;
 
-	use Base\DB\DBMySQLi;
+	use Base\DB\DBObjectMySQLi;
 
-	class DB extends DBMySQLi {
+	class DBObject extends DBObjectMySQLi {
 		static protected ?self $instance = null;
 
 		public function __construct($hostname, $user, $password, $dbname) {
@@ -20,6 +20,6 @@
 
 	}
 
-	DB::init('localhost', 'admin', '123', 'documents');
+	DBObject::init('localhost', 'admin', '123', 'documents');
 
-	if (!DB::instance()->State()) die('MySQLi database connection error! Code: ' . DB::instance()->GetErrorCode());
+	if (!DBObject::instance()->State()) die('MySQLi database connection error! Code: ' . DBObject::instance()->GetErrorCode());

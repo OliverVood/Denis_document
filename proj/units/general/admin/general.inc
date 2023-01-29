@@ -13,7 +13,7 @@
 	use Base\Controller;
 	use Base\Action;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBObject;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Item;
 	use Proj\Admin\Templates\General\Group;
@@ -21,7 +21,7 @@
 	class General extends Units implements Consts\General {
 		use Instance;
 
-		private DB $db;
+		private DBObject $db;
 
 		private Action $site;
 		private Action $out_head;
@@ -33,7 +33,7 @@
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBObject::instance();
 
 			$this->out_head 	= new Action();
 			$this->out_menu 	= new Action();

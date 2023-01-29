@@ -4,7 +4,8 @@
 
 	use mysqli_result;
 
-	class DBMySQLi extends DB {
+	trait DBMySQLi {
+
 		private ?string $host;
 		private ?string $username;
 		private ?string $password;
@@ -15,10 +16,22 @@
 		private int $errno = 0;
 		private array $history = [];
 
-		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
-			parent::__construct();
+		/**
+		 * Соединение с базой данных
+		 * @param string|null $hostname - Хост
+		 * @param string|null $user - Пользователь
+		 * @param string|null $password - Пороль
+		 * @param string|null $dbname - Имя базы данных
+		 * @param string|int|null $port - Порт
+		 * @param string|null $socket - Сокет
+		 * @return self
+		 */
+		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): self {
+			return new self($hostname, $user, $password, $dbname, $port, $socket);
+		}
 
-			$this->host				= $host;
+		private function Link($hostname, $username, $password, $dbname, $port, $socket): void {
+			$this->host				= $hostname;
 			$this->username			= $username;
 			$this->password			= $password;
 			$this->dbname			= $dbname;
@@ -33,28 +46,6 @@
 				$this->state = false;
 				$this->errno = $this->db->connect_errno;
 			}
-		}
-
-		/**
-		 * Соединение с базой данных
-		 * @param string|null $hostname - Хост
-		 * @param string|null $user - Пользователь
-		 * @param string|null $password - Пороль
-		 * @param string|null $dbname - Имя базы данных
-		 * @param string|int|null $port - Порт
-		 * @param string|null $socket - Сокет
-		 * @return self
-		 */
-		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): self {
-			return new self($hostname, $user, $password, $dbname);
-		}
-
-		/**
-		 * Возвращает состояние соединения
-		 * @return bool
-		 */
-		public function State() :bool {
-			return $this->state;
 		}
 
 		/**
@@ -146,6 +137,33 @@
 		}
 
 		/**
+		 * @param string $tablename
+		 * @param array|null $fields
+		 * @param string|null $where
+		 * @param string|null $order
+		 * @param string|null $limit
+		 * @param array|null $calc
+		 * @return null|array
+		 */
+		public function SelectOne(string $tablename, ?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null): null | array {
+			$result = $this->Select($tablename, $fields, $where, $order, $limit, $calc);
+			return $this->Fetch($result);
+		}
+
+		/**
+		 * @param string $tablename
+		 * @param string $field
+		 * @param string|null $where
+		 * @param string|null $order
+		 * @param string|null $limit
+		 * @return null|string
+		 */
+		public function SelectOneField(string $tablename, string $field, ?string $where = null, ?string $order = null, ?string $limit = '1'): null | string {
+			$row = $this->SelectOne($tablename, [$field], $where, $order, $limit);
+			return $row[$field] ?? null;
+		}
+
+		/**
 		 * Построение запроса вставки записей
 		 * @param string $tablename - Имя таблицы
 		 * @param array $data - Данные
@@ -233,90 +251,6 @@
 			else { while ($fitch = $this->Fetch($result)) $out[] = $fitch; }
 
 			return $out;
-		}
-
-		/**
-		 * Проверка базы данных
-		 * @return array
-		 */
-		public function Check(): array {
-			$out = [];
-			$tables = [];
-
-			/* Get tables structure */
-			$tables_struct = [];
-			foreach ($this->tables as $table) {
-				$name = $table->GetName();
-				$tables_struct[] = $name;
-				$tables[] = $name;
-			}
-
-			/* Get tables DB */
-			$result = $this->Query("SELECT `table_name` AS `name` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
-			$tables_db = $this->FetchAll($result, function(& $items, $item) use (& $tables) {
-				$items[] = $item['name'];
-				if (!in_array($item['name'], $tables)) $tables[] = $item['name'];
-			});
-
-			/* Check tables */
-			foreach ($tables as $table) {
-				$state = TableMySQLi::ERROR_NULL;
-				$error = null;
-				$fields = null;
-				if (!in_array($table, $tables_db)) {
-					$state = TableMySQLi::ERROR_CREATE;
-					$error = 'Создать таблицу';
-				}
-				else if (!in_array($table, $tables_struct)) {
-					$state = TableMySQLi::ERROR_DELETE;
-					$error = 'Удалить таблицу';
-				}
-				else {
-					$res = $this->GetTable($table)->Check();
-					if ($res['state'] < 0) {
-						$state = $res['state'];
-						$error = 'Изменить таблицу';
-						$fields = $res['fields'];
-					}
-				}
-
-				if ($state < 0) {
-					$_out = ['name' => $table, 'state' => $state, 'error' => $error];
-					if ($fields) $_out['fields'] = $fields;
-					$out[] = $_out;
-				}
-			}
-
-			return $out;
-		}
-
-		/**
-		 * Исправление базы данных
-		 * @return bool
-		 */
-		public function Make(): bool {
-			if (!$tables = GetParam('tables')) return false;
-
-			$queries = [];
-			foreach ($tables as $tablename => $table) {
-				$q = match ((int)$table['state']) {
-					TableMySQLi::ERROR_CREATE => $this->tables[$tablename]->Create(),
-					TableMySQLi::ERROR_UPDATE => $this->tables[$tablename]->Modify($table),
-					TableMySQLi::ERROR_DELETE => TableMySQLi::Remove($tablename),
-					default => ''
-				};
-				if (is_array($q)) foreach ($q as $query) $queries[] = $query;
-				else $queries[] = $q;
-			} //Debug($queries);die();
-
-			$this->MultiQuery(implode('; ', $queries));
-
-			//TODO continue from here
-
-//			Debug($tables);
-//			die();
-
-			return true;
 		}
 
 	}

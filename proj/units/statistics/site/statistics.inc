@@ -10,7 +10,7 @@
 	use Base\Action;
 	use JetBrains\PhpStorm\NoReturn;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBQuery;
 
 	class Statistics extends Units implements Consts\Statistics {
 		use Instance;
@@ -18,13 +18,13 @@
 		private Action $collect;
 		private Action $act;
 
-		private DB $db;
+		private DBQuery $db;
 
 		private static string | null $uid = null;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBQuery::instance();
 
 			$this->collect = new Action('always', 'always');
 			$this->act = new Action(self::NAME, 'act', 'default');

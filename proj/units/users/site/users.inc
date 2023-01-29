@@ -7,18 +7,18 @@
 	use Base\Units;
 	use Base\Instance;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBQuery;
 
 	class Users extends Units implements Consts\Users {
 		use Instance;
 
-		private DB $db;
+		private DBQuery $db;
 
 		private static string | null $uid = null;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBQuery::instance();
 
 			$this->Identification();
 		}

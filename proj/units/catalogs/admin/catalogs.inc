@@ -6,18 +6,18 @@
 	use Base\Instance;
 	use Base\DB\TableMySQLi;
 	use Proj\Units\Consts;
-	use Proj\DB;
+	use Proj\DBObject;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
 
 	class Catalogs extends Units implements Consts\Catalogs {
 		use Instance;
 
-		private DB $db;
+		private DBObject $db;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
-			$this->db = DB::instance();
+			$this->db = DBObject::instance();
 
 			$table = new TableMySQLi('test2', $this->db);
 			$table->id('id');

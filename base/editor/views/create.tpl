@@ -27,7 +27,7 @@
 					<?php foreach ($fields as $name => $field) { if ($field['skin'] == 'hidden') continue; ?>
 						<tr>
 							<th><?= $field['name']; ?>:</th>
-							<td><?php $form->Element($field['skin'], $name, $field['default'], $fields['params'] ?? []); ?></td>
+							<td><?php $form->Element($field['skin'], $name, $field['default'] ?? '', $field['params'] ?? []); ?></td>
 						</tr>
 					<?php } ?>
 				</tbody>
