@@ -17,6 +17,7 @@
 		public function Render(Editor $editor, array $fields, array $data, string $title) {
 			$form = new Form($data);
 		?>
+			<div class = "navigate"><?= $editor->select->GetLink("<< {$editor->titleSelect}"); ?></div>
 			<h1><?= $title; ?></h1>
 			<?php
 				$form->Begin($editor->do_create->GetPath());

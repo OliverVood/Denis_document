@@ -32,7 +32,7 @@
 		public bool $controlUpdate = true;
 		public bool $controlDelete = true;
 
-		protected string $titleSelect = 'Выборка';
+		public string $titleSelect = 'Выборка';
 		protected string $titleCreate = 'Создание';
 		protected string $titleUpdate = 'Редактирование';
 		protected string $titleDelete = 'Удалить?';
@@ -66,9 +66,10 @@
 		}
 
 		protected function Select():string {
+			$where = isset($this->params['where']) ? implode(', ', $this->params['where']) : null;
 			$order = isset($this->params['order']) ? implode(', ', $this->params['order']) : null;
 
-			$result = $this->table->Select(null, null, $order);
+			$result = $this->table->Select(null, $where, $order);
 			$items = $this->table->FetchAll($result, function(& $items, $item) {
 				$items[] = $item;
 			});

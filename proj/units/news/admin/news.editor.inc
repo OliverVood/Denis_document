@@ -12,6 +12,9 @@
 
 		public function __construct(string $name, TableMySQLi $table) {
 			$params = [
+				'where' => [
+					'state != 100'
+				],
 				'order' => [
 					'`datecr` DESC',
 					'`id` ASC'
@@ -19,20 +22,22 @@
 				'select' => [
 					'id' => '#',
 					'state' => 'Состояние',
-					'datecr' => 'Дата создания',
+					'datepb' => 'Дата публикации',
 					'header' => 'Заголовок'
 				],
 				'create' => [
 					'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\News::STATES['draft']],
 					'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
 					'content' => ['skin' => 'textarea', 'name' => 'Текст', 'default' => ''],
-					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'default' => 'Выберите обложку', 'params' => ['accept' => '.jpg, .jpeg, .png']]
+					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'default' => 'Выберите обложку', 'params' => ['accept' => '.jpg, .jpeg, .png']],
+					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 				],
 				'update' => [
 					'state' => ['skin' => 'select', 'name' => 'Состояние'],
 					'header' => ['skin' => 'text', 'name' => 'Заголовок'],
 					'content' => ['skin' => 'textarea', 'name' => 'Текст'],
-					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'params' => ['accept' => '.jpg, .jpeg, .png']]
+					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'params' => ['accept' => '.jpg, .jpeg, .png']],
+					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 				]
 			];
 

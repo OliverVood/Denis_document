@@ -38,9 +38,17 @@
 	 * @return mixed
 	 */
 	function GetParam(string $key, mixed $default = null): mixed {
-		if (isset($_POST[$key])) return $_POST[$key];
-		if (isset($_GET[$key])) return $_GET[$key];
-		return $default;
+		return $_POST[$key] ?? $_GET[$key] ?? $default;
+	}
+
+	/**
+	 * Возвращает значение параметра запроса
+	 * @param string $key - Ключ POST/GET параметра
+	 * @param int $default - Значение по умолчанию
+	 * @return int
+	 */
+	function GetInt(string $key, int $default = 0): int {
+		return (int)GetParam($key, $default);
 	}
 
 	/**

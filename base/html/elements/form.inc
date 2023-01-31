@@ -30,6 +30,7 @@
 				case 'file': File::object()->Render("form[{$name}]", $value, $params); break;
 				case 'select': Select::object()->Render("form[{$name}]", $value, $this->data[$name] ?? [], $params); break;
 				case 'textarea': Textarea::object()->Render("form[{$name}]", $value, $params); break;
+				case 'datetime': Text::object()->Render("form[{$name}]", $value, ['type' => 'datetime-local']); break;
 				default: echo 'ELEMENT NOT FOUND'; break;
 			}
 		}

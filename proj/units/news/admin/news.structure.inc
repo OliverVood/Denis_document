@@ -2,13 +2,12 @@
 
 	namespace Proj\Admin\Structure;
 
-	require DIR_UNITS . 'news/const.inc';
+	require DIR_UNITS . 'news/consts.inc';
 
 	use Base\Units;
 	use Base\DB\TableMySQLi;
 	use Proj\Units\Consts;
 	use Proj\DBObject;
-
 
 	class News extends Units implements Consts\News {
 		private DBObject $db;
@@ -24,6 +23,7 @@
 			$this->table_news->uint8('state');
 			$this->table_news->timestamp('datecr');
 			$this->table_news->timestamp('datemd', true);
+			$this->table_news->timestamp('datepb');
 			$this->table_news->string('header', 255);
 			$this->table_news->text('content');
 			$this->table_news->string('cover', 30);

@@ -8,10 +8,10 @@
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
+	use Base\Editor\EditorMySQLi;
 	use Proj\Admin\Structure;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
-	use Base\Editor\EditorMySQLi;
 
 	class News extends Structure\News {
 		use Instance;
@@ -34,7 +34,7 @@
 			Layout::instance()->menu->Push(
 				Group::object()->ToVar('Новости', [
 					$this->editor_news->select->GetLink('Список новостей'),
-					$this->editor_news->create->GetLink('Добавить новость'),
+					$this->editor_news->create->GetLink('Добавить новость')
 				])
 			);
 		}

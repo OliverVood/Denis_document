@@ -3,6 +3,6 @@
 	namespace Proj\Units\Consts;
 
 	interface General {
-		const ID				= ID_GENERAL;
-		const NAME				= 'general';
+		const ID						= ID_GENERAL;
+		const NAME						= 'general';
 	}

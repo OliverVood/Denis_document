@@ -27,6 +27,7 @@
 		 */
 		public function Execute(string $area, string $part): void {
 			foreach ($this->actions['always']['always'] as $handler) $handler();
+			if (isset($this->actions[$area]['always'])) foreach ($this->actions[$area]['always'] as $handler) $handler();
 			if (isset($this->actions[$area][$part])) foreach ($this->actions[$area][$part] as $handler) $handler();
 		}
 

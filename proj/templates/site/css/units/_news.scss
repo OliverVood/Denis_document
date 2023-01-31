@@ -1,0 +1,31 @@
+@use "../variables" as *;
+@use "../functions" as *;
+
+.view.news.last_items {
+	@mixin ViewNewsLastItems($params: null) {
+		$default: (
+
+		);
+
+		> .list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+		> .all { text-align: left; }
+	}
+
+	@include MixScreen() { @include ViewNewsLastItems(); }
+}
+
+.view.news.last_item {
+	@mixin ViewNewsLastItem($params: null) {
+		$default: (
+
+		);
+
+		border: 1px solid $color-secondary;
+		> .cover { height: 140px; background-color: $color-neutral-light; background-size: cover; background-position: center; }
+		> .header { margin: 1rem 1rem 0.5rem; }
+		> .content { margin: 0 1rem; overflow: hidden; -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; text-align: justify; }
+		> .links { margin: 1rem; text-align: right; }
+	}
+
+	@include MixScreen() { @include ViewNewsLastItem(); }
+}

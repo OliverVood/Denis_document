@@ -43,6 +43,7 @@ menu {
 
 main {
 	padding: 0.2rem;
+	.navigate { padding: 1rem; }
 	h1 { padding: 1rem 0; font-size: 1.4rem; text-align: center; }
 	table {
 		&.select {
@@ -56,9 +57,10 @@ main {
 				> td { padding: 0.6rem; }
 			}
 		}
-		&.create > tbody > tr {
-			> th { padding: 0.6rem; text-align: left; font-weight: 700; }
-			> td { padding: 0.6rem; }
+		&.create, &.update {
+			> tbody > tr {
+				> th { padding: 0.6rem; text-align: left; font-weight: 700; }
+			}
 		}
 	}
 }

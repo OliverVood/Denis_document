@@ -7,6 +7,8 @@
 
 a { cursor: pointer; }
 h1 { margin: 0 0 2rem; text-align: center; }
+h2 { margin: 0 0 1rem; }
+h3 { margin: 0 0 0.5rem; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
 input[type="button"] { @include MixBtn; outline: none; }
 .hide { display: none; }
@@ -32,3 +34,4 @@ input[type="button"] { @include MixBtn; outline: none; }
 @import "skins/skins";
 @import "units/general";
 @import "units/catalogs";
+@import "units/news";
