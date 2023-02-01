@@ -24,6 +24,6 @@
 			'delete'					=> self::STATE_DELETE
 		];
 
-		const PATH_COVER				= DIR_RESOURCE_IMAGE . "news/";
+		const PATH_COVER				= DIR_RESOURCE_IMAGE . 'news/';
 		const PATH_COVER_RELATIVE		= '/proj/resource/image/news/';
 	}

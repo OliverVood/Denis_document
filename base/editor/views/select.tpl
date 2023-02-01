@@ -14,7 +14,7 @@
 		}
 
 		public function Render(Editor $editor, array $fields, array $items, string $title) {
-			$col = ((int)$editor->controlUpdate) + ((int)$editor->controlDelete);
+			$col = count($editor->manage);
 		?>
 			<h1><?= $title; ?></h1>
 			<table class = "select">
@@ -34,8 +34,9 @@
 									<?= $item[$key]; ?>
 								</td>
 							<?php } ?>
-							<?php if ($editor->controlUpdate) { ?><td><?= $editor->update->GetLink('Изменить', ['id' => $item['id']]); ?></td><?php } ?>
-							<?php if ($editor->controlDelete) { ?><td><?= $editor->do_delete->GetLink('Удалить', ['id' => $item['id']]); ?></td><?php } ?>
+							<?php foreach ($editor->manage as $manage) { ?>
+								<td><?= $manage($item); ?></td>
+							<?php } ?>
 						</tr>
 					<?php } ?>
 				</tbody>

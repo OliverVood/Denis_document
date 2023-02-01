@@ -27,9 +27,6 @@
 
 			parent::__construct($name, $table, $params);
 
-			$this->controlUpdate = false;
-			$this->controlDelete = false;
-
 			$this->titleSelect = 'Статистика запросов к серверу';
 
 		}

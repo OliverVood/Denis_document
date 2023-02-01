@@ -2,13 +2,13 @@
 
 	namespace Proj\Units\Consts;
 
-	interface Opportunities {
-		const ID						= ID_OPPORTUNITIES;
-		const NAME						= 'opportunities';
+	interface Changes {
+		const ID						= ID_CHANGES;
+		const NAME						= 'changes';
 
 		const TABLES = [
-			'opportunities' 			=> self::NAME,
-			'opportunity'				=> 'opportunity'
+			'changes' 				=> self::NAME,
+			'change'				=> 'change'
 		];
 
 		const STATE_ERROR				= 0;
@@ -25,6 +25,6 @@
 			'delete'					=> self::STATE_DELETE
 		];
 
-		const PATH_COVER				= DIR_RESOURCE_IMAGE . "opportunities/";
-		const PATH_COVER_RELATIVE		= '/proj/resource/image/opportunities/';
+		const PATH_COVER				= DIR_RESOURCE_IMAGE . 'changes/';
+		const PATH_COVER_RELATIVE		= '/proj/resource/image/changes/';
 	}

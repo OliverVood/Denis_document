@@ -29,8 +29,7 @@
 		public Action $do_update;
 		public Action $do_delete;
 
-		public bool $controlUpdate = true;
-		public bool $controlDelete = true;
+		public array $manage;
 
 		public string $titleSelect = 'Выборка';
 		protected string $titleCreate = 'Создание';
@@ -46,6 +45,7 @@
 			$this->name = $name;
 			$this->params = $params;
 			$this->table = $table;
+			$this->manage = $params['manage'] ?? [];
 
 			$this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;");
 			$this->create = new Action($this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create', Admin.General.Render.ToMain); return false;");
@@ -121,5 +121,6 @@
 		}
 
 		protected function PrepareOnUpdate(int $id, array & $item, array & $data): void { }
+		protected function PrepareOnSelect(int $id, array & $item, array & $data): void { }
 
 	}

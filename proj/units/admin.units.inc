@@ -5,4 +5,4 @@
 	require 'statistics/admin/statistics.inc';
 	require 'catalogs/admin/catalogs.inc';
 	require 'news/admin/news.inc';
-	require 'opportunities/admin/opportunities.inc';
+	require 'changes/admin/changes.inc';

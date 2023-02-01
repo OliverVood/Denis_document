@@ -38,6 +38,10 @@
 					'content' => ['skin' => 'textarea', 'name' => 'Текст'],
 					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'params' => ['accept' => '.jpg, .jpeg, .png']],
 					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
+				],
+				'manage' => [
+					function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+					function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); }
 				]
 			];
 
@@ -51,7 +55,7 @@
 			$this->titleDoUpdate = 'Новость изменена';
 		}
 
-		public function PrepareOnUpdate(int $id, array &$item, array &$data) : void {
+		public function PrepareOnUpdate(int $id, array & $item, array &$data): void {
 			$data['state'] = [
 				Consts\News::STATE_DRAFT	=> 'Черновик',
 				Consts\News::STATE_ACTIVE	=> 'Активная',
