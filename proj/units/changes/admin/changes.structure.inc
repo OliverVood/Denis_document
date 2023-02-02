@@ -29,6 +29,7 @@
 
 			$this->table_change = new TableMySQLi(self::TABLES['change'], $this->db);
 			$this->table_change->id('id');
+			$this->table_change->uint32('cid');
 			$this->table_change->uint8('state');
 			$this->table_change->timestamp('datecr');
 			$this->table_change->timestamp('datemd', true);

@@ -29,24 +29,52 @@
 		public Action $do_update;
 		public Action $do_delete;
 
-		public array $manage;
+		public array $navigateSelect = [];
+		public array $navigateCreate = [];
+		public array $navigateUpdate = [];
 
-		public string $titleSelect = 'Выборка';
-		protected string $titleCreate = 'Создание';
-		protected string $titleUpdate = 'Редактирование';
-		protected string $titleDelete = 'Удалить?';
-//		protected string $titleView = 'Просмотр';
+		public array $manage = [];
 
-		protected string $titleDoCreate = 'Создано';
-		protected string $titleDoUpdate = 'Изменено';
-		protected string $titleDoDelete = 'Удалено';
+		protected array $where = [];
+		protected array $order = [];
+
+		protected array $fieldsSelect = [];
+		protected array $fieldsCreate = [];
+		protected array $fieldsUpdate = [];
+
+		protected string $titleSelect;
+		protected string $titleCreate;
+		protected string $titleUpdate;
+		protected string $titleDelete;
+		protected string $titleView;
+
+		protected string $titleDoCreate;
+		protected string $titleDoUpdate;
+		protected string $titleDoDelete;
 
 		protected function __construct(string $name, Table $table, array $params = []) {
 			$this->name = $name;
 			$this->params = $params;
 			$this->table = $table;
-			$this->manage = $params['manage'] ?? [];
 
+			self::RegTitles();
+			$this->RegTitles();
+			$this->RegActions();
+		}
+
+		protected function RegTitles(): void {
+			$this->titleSelect = 'Выборка';
+			$this->titleCreate = 'Создание';
+			$this->titleUpdate = 'Редактирование';
+			$this->titleDelete = 'Удалить?';
+			$this->titleView = 'Просмотр';
+
+			$this->titleDoCreate = 'Создано';
+			$this->titleDoUpdate = 'Изменено';
+			$this->titleDoDelete = 'Удалено';
+		}
+
+		protected function RegActions(): void {
 			$this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;");
 			$this->create = new Action($this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create', Admin.General.Render.ToMain); return false;");
 			$this->update = new Action($this->name, 'update', 'default', /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update', {id: %id%}, Admin.General.Render.ToMain); return false;");
@@ -66,15 +94,15 @@
 		}
 
 		protected function Select():string {
-			$where = isset($this->params['where']) ? implode(', ', $this->params['where']) : null;
-			$order = isset($this->params['order']) ? implode(', ', $this->params['order']) : null;
+			$where = ($this->where) ? implode(', ', $this->where) : null;
+			$order = ($this->order) ? implode(', ', $this->order) : null;
 
 			$result = $this->table->Select(null, $where, $order);
 			$items = $this->table->FetchAll($result, function(& $items, $item) {
 				$items[] = $item;
 			});
 
-			return Select::object()->ToVar($this, $this->params['select'] ?? [], $items, $this->titleSelect);
+			return Select::object()->ToVar($this, $this->fieldsSelect, $items, $this->titleSelect);
 		}
 
 		#[NoReturn] public function OnSelect(): void {
@@ -82,7 +110,7 @@
 		}
 
 		#[NoReturn] public function OnCreate(): void {
-			SendJSONSuccess(['html' => Create::object()->ToVar($this, $this->params['create'] ?? [], [], $this->titleCreate)]);
+			SendJSONSuccess(['html' => Create::object()->ToVar($this, $this->fieldsCreate, [], $this->titleCreate)]);
 		}
 
 		#[NoReturn] public function OnUpdate(): void {
@@ -92,7 +120,7 @@
 			$data = [];
 
 			$this->PrepareOnUpdate($id, $item, $data);
-			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->params['update'] ?? [], $item, $data, $this->titleUpdate)]);
+			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->fieldsUpdate, $item, $data, $this->titleUpdate)]);
 		}
 
 		#[NoReturn] public function DoCreate(): void {

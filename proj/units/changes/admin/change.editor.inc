@@ -11,48 +11,53 @@
 	class Change extends EditorMySQLi {
 
 		public function __construct(string $name, TableMySQLi $table) {
-			$params = [
-				'where' => [
-					'state != 100'
-				],
-				'order' => [
-					'`datecr` DESC',
-					'`id` ASC'
-				],
-//				'select' => [
-//					'id' => '#',
-//					'state' => 'Состояние',
-//					'datepb' => 'Дата публикации',
-//					'header' => 'Заголовок'
-//				],
-//				'create' => [
+			parent::__construct($name, $table);
+
+			$this->where = [
+				'state != 100'
+			];
+			$this->order = [
+				'`datecr` DESC',
+				'`id` ASC'
+			];
+
+			$this->fieldsSelect = [
+				'id' => '#',
+				'state' => 'Состояние',
+				'header' => 'Заголовок'
+			];
+			$this->fieldsCreate = [
 //					'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\News::STATES['draft']],
 //					'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
 //					'content' => ['skin' => 'textarea', 'name' => 'Текст', 'default' => ''],
 //					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'default' => 'Выберите обложку', 'params' => ['accept' => '.jpg, .jpeg, .png']],
 //					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-//				],
-//				'update' => [
+			];
+			$this->fieldsUpdate = [
 //					'state' => ['skin' => 'select', 'name' => 'Состояние'],
 //					'header' => ['skin' => 'text', 'name' => 'Заголовок'],
 //					'content' => ['skin' => 'textarea', 'name' => 'Текст'],
 //					'cover' => ['skin' => 'file', 'name' => 'Обложка', 'params' => ['accept' => '.jpg, .jpeg, .png']],
 //					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-//				],
-//				'manage' => [
-//					function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
-//					function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); }
-//				]
 			];
 
-			parent::__construct($name, $table, $params);
+//			'navigate' => [
+//				function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); }
+//			],
+//				'manage' => [
+//				function($item) { return $this->create->GetLink('Добавить', []); },
+//				function($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+//				function($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); }
+//			]
+		}
 
-//			$this->titleSelect = 'Список новостей';
-//			$this->titleCreate = 'Добавить новость';
-//			$this->titleUpdate = 'Редактирование новости';
-//
-//			$this->titleDoCreate = 'Новость добавлена';
-//			$this->titleDoUpdate = 'Новость изменена';
+		protected function RegTitles(): void {
+			$this->titleSelect = 'Список актуального';
+			$this->titleCreate = 'Добавить актуальное';
+			$this->titleUpdate = 'Редактировать актуальное';
+
+			$this->titleDoCreate = 'Актуальное добавлено';
+			$this->titleDoUpdate = 'Актуальное изменено';
 		}
 
 //		public function PrepareOnUpdate(int $id, array & $item, array &$data): void {

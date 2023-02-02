@@ -18,7 +18,11 @@
 		public function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title) {
 			$form = new Form($data);
 		?>
-			<div class = "navigate"><?= $editor->select->GetLink("<< {$editor->titleSelect}"); ?></div>
+			<div class = "navigate">
+				<?php foreach ($editor->navigateUpdate as $navigate) { ?>
+					<?= $navigate($data); ?>
+				<?php } ?>
+			</div>
 			<h1><?= $title; ?></h1>
 		<?php
 			$form->Begin($editor->do_update->GetPath());

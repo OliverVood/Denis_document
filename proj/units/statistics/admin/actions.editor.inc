@@ -8,22 +8,23 @@
 	class Actions extends EditorMySQLi {
 
 		public function __construct(string $name, TableMySQLi $table) {
-			$params = [
-				'order' => [
-					'datecr DESC',
-					'id DESC'
-				],
-				'select' => [
-					'datecr' => 'Дата',
-					'uid' => 'Пользователь',
-					'object' => 'Объект',
-					'action' => 'Действие',
-					'params' => 'Параметры'
-				]
+			parent::__construct($name, $table);
+
+			$this->order = [
+				'datecr DESC',
+				'id DESC'
 			];
 
-			parent::__construct($name, $table, $params);
+			$this->fieldsSelect = [
+				'datecr' => 'Дата',
+				'uid' => 'Пользователь',
+				'object' => 'Объект',
+				'action' => 'Действие',
+				'params' => 'Параметры'
+			];
+		}
 
+		protected function RegTitles(): void {
 			$this->titleSelect = 'Статистика действий пользователя';
 		}
 

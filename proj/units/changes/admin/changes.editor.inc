@@ -9,46 +9,52 @@
 	class Changes extends EditorMySQLi {
 
 		public function __construct(string $name, TableMySQLi $table) {
-			$params = [
-				'where' => [
-					'state != 100'
-				],
-				'order' => [
-					'`datecr` DESC',
-					'`id` ASC'
-				],
-				'select' => [
-					'id' => '#',
-					'state' => 'Состояние',
-					'datecr' => 'Дата создания',
-					'header' => 'Заголовок',
-					'datepb' => 'Дата публикации'
-				],
-				'create' => [
-					'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
-					'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
-					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-				],
-				'update' => [
-					'state' => ['skin' => 'select', 'name' => 'Состояние'],
-					'header' => ['skin' => 'text', 'name' => 'Заголовок'],
-					'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-				],
-				'manage' => [
-					function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
-					function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
-					function ($item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
-				]
+			parent::__construct($name, $table);
+
+			$this->where = [
+				'state != ' . Consts\Changes::STATES['delete']
+			];
+			$this->order = [
+				'`datecr` DESC',
+				'`id` ASC'
 			];
 
-			parent::__construct($name, $table, $params);
+			$this->fieldsSelect = [
+				'id' => '#',
+				'state' => 'Состояние',
+				'datepb' => 'Дата публикации',
+				'header' => 'Заголовок',
+			];
+			$this->fieldsCreate = [
+				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
+				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
+				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
+			];
+			$this->fieldsUpdate = [
+				'state' => ['skin' => 'select', 'name' => 'Состояние'],
+				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
+				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
+			];
 
-			$this->titleSelect = 'Списки изменений';
-			$this->titleCreate = 'Добавить новый список';
-			$this->titleUpdate = 'Редактировать список';
+			$this->navigateCreate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
+			$this->navigateUpdate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
 
-			$this->titleDoCreate = 'Список изменений добавлен';
-			$this->titleDoUpdate = 'Список изменений изменён';
+			$this->manage = [
+				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
+				function ($item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
+			];
+		}
+
+		protected function RegTitles(): void {
+			$this->titleSelect = 'Списки актуального';
+			$this->titleCreate = 'Добавить список актуального';
+			$this->titleUpdate = 'Редактировать список актуального';
+			$this->titleDelete = 'Удалить список актуального?';
+
+			$this->titleDoCreate = 'Список актуального добавлен';
+			$this->titleDoUpdate = 'Список актуального изменён';
+			$this->titleDoDelete = 'Список актуального удалён';
 		}
 
 		public function PrepareOnUpdate(int $id, array & $item, array &$data): void {
