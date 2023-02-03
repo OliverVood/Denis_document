@@ -9,13 +9,17 @@
 
 		public function __construct(string $name, TableMySQLi $table) {
 			parent::__construct($name, $table);
+		}
 
-			$this->order = [
-				'datecr DESC',
-				'id DESC'
+		protected function Order(): array {
+			return [
+				'`datecr` DESC',
+				'`id` DESC'
 			];
+		}
 
-			$this->fieldsSelect = [
+		protected function FieldsSelect(): array {
+			return [
 				'datecr' => 'Дата',
 				'uid' => 'Пользователь',
 				'object' => 'Объект',
@@ -27,5 +31,7 @@
 		protected function RegTitles(): void {
 			$this->titleSelect = 'Статистика действий пользователя';
 		}
+
+		protected function Manage(): array { return  []; }
 
 	}

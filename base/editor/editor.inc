@@ -17,7 +17,6 @@
 
 	abstract class Editor {
 		protected string $name;
-		protected array $params;
 		protected Table $table;
 
 		public Action $select;
@@ -35,6 +34,7 @@
 
 		public array $manage = [];
 
+		protected array $params = [];
 		protected array $where = [];
 		protected array $order = [];
 
@@ -42,36 +42,71 @@
 		protected array $fieldsCreate = [];
 		protected array $fieldsUpdate = [];
 
-		protected string $titleSelect;
-		protected string $titleCreate;
-		protected string $titleUpdate;
-		protected string $titleDelete;
-		protected string $titleView;
+		protected string $titleSelect = 'Выборка';
+		protected string $titleCreate = 'Создание';
+		protected string $titleUpdate = 'Редактирование';
+		protected string $titleDelete = 'Удалить?';
+		protected string $titleView = 'Просмотр';
 
-		protected string $titleDoCreate;
-		protected string $titleDoUpdate;
-		protected string $titleDoDelete;
+		protected string $titleDoCreate = 'Создано';
+		protected string $titleDoUpdate = 'Изменено';
+		protected string $titleDoDelete = 'Удалено';
 
-		protected function __construct(string $name, Table $table, array $params = []) {
+		protected function __construct(string $name, Table $table) {
 			$this->name = $name;
-			$this->params = $params;
 			$this->table = $table;
 
-			self::RegTitles();
+			$this->SetParams();
 			$this->RegTitles();
+			$this->SetWhere();
+			$this->SetOrder();
+			$this->SetFields();
 			$this->RegActions();
+			$this->SetHandlers();
+			$this->SetNavigates();
+			$this->SetManage();
 		}
 
-		protected function RegTitles(): void {
-			$this->titleSelect = 'Выборка';
-			$this->titleCreate = 'Создание';
-			$this->titleUpdate = 'Редактирование';
-			$this->titleDelete = 'Удалить?';
-			$this->titleView = 'Просмотр';
+		protected function SetParams(): void { $this->params = $this->Params(); }
+		protected function Params(): array { return []; }
 
-			$this->titleDoCreate = 'Создано';
-			$this->titleDoUpdate = 'Изменено';
-			$this->titleDoDelete = 'Удалено';
+		protected function SetWhere(): void { $this->where = $this->Where(); }
+		protected function SetOrder(): void { $this->order = $this->Order(); }
+
+		protected function Where(): array { return []; }
+		protected function Order(): array { return []; }
+
+		protected function SetFields(): void {
+			$this->fieldsSelect = $this->FieldsSelect();
+			$this->fieldsCreate = $this->FieldsCreate();
+			$this->fieldsUpdate = $this->FieldsUpdate();
+		}
+
+		protected function FieldsSelect(): array { return []; }
+		protected function FieldsCreate(): array { return []; }
+		protected function FieldsUpdate(): array { return []; }
+
+		protected function RegTitles(): void {  }
+
+		protected function SetNavigates(): void {
+			$this->navigateSelect = $this->NavigateSelect();
+			$this->navigateCreate = $this->NavigateCreate();
+			$this->navigateUpdate = $this->NavigateUpdate();
+		}
+
+		protected function NavigateSelect(): array { return []; }
+		protected function NavigateCreate(): array { return [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ]; }
+		protected function NavigateUpdate(): array { return [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ]; }
+
+		protected function SetManage(): void {
+			$this->manage = $this->Manage();
+		}
+
+		protected function Manage(): array {
+			return [
+				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); }
+			];
 		}
 
 		protected function RegActions(): void {
@@ -83,7 +118,9 @@
 			$this->do_create = new Action($this->name, 'do_create', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, Admin.General.Render.ToMain); return false;");
 			$this->do_update = new Action($this->name, 'do_update', "/{$this->name}/do_update?id=%id%", /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, Admin.General.Render.ToMain); return false;");
 			$this->do_delete = new Action($this->name, 'do_delete', "/{$this->name}/do_delete?id=%id%", /* @lang JavaScript */ "if (confirm('{$this->titleDelete}')) Base.Common.Query.SendData('/{$this->name}/do_delete', {id: %id%}, Admin.General.Render.ToMain); return false;");
+		}
 
+		protected function SetHandlers(): void {
 			Controller::instance()->view->Push($this->select, [$this, 'OnSelect']);
 			Controller::instance()->view->Push($this->create, [$this, 'OnCreate']);
 			Controller::instance()->view->Push($this->update, [$this, 'OnUpdate']);
@@ -91,6 +128,10 @@
 			Controller::instance()->view->Push($this->do_create, [$this, 'DoCreate']);
 			Controller::instance()->view->Push($this->do_update, [$this, 'DoUpdate']);
 			Controller::instance()->view->Push($this->do_delete, [$this, 'DoDelete']);
+		}
+
+		protected function ExtractParams(): string {//TODO
+			return '';
 		}
 
 		protected function Select():string {

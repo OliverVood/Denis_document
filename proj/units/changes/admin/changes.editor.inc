@@ -10,39 +10,43 @@
 
 		public function __construct(string $name, TableMySQLi $table) {
 			parent::__construct($name, $table);
+		}
 
-			$this->where = [
-				'state != ' . Consts\Changes::STATES['delete']
+		protected function Where(): array {
+			return [
+				'`state` != ' . Consts\Changes::STATES['delete']
 			];
-			$this->order = [
+		}
+
+		protected function Order(): array {
+			return [
 				'`datecr` DESC',
 				'`id` ASC'
 			];
+		}
 
-			$this->fieldsSelect = [
+		protected function FieldsSelect(): array {
+			return [
 				'id' => '#',
 				'state' => 'Состояние',
 				'datepb' => 'Дата публикации',
 				'header' => 'Заголовок',
 			];
-			$this->fieldsCreate = [
+		}
+
+		protected function FieldsCreate(): array {
+			return [
 				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
-			$this->fieldsUpdate = [
+		}
+
+		protected function FieldsUpdate(): array {
+			return [
 				'state' => ['skin' => 'select', 'name' => 'Состояние'],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-			];
-
-			$this->navigateCreate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
-			$this->navigateUpdate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
-
-			$this->manage = [
-				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
-				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
-				function ($item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
 			];
 		}
 
@@ -55,6 +59,14 @@
 			$this->titleDoCreate = 'Список актуального добавлен';
 			$this->titleDoUpdate = 'Список актуального изменён';
 			$this->titleDoDelete = 'Список актуального удалён';
+		}
+
+		protected function Manage(): array {
+			return [
+				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
+				function ($item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
+			];
 		}
 
 		public function PrepareOnUpdate(int $id, array & $item, array &$data): void {

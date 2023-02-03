@@ -12,42 +12,47 @@
 
 		public function __construct(string $name, TableMySQLi $table) {
 			parent::__construct($name, $table);
+		}
 
-			$this->where = [
-				'state != ' . Consts\News::STATES['delete']
+		protected function Where(): array {
+			return [
+				'`state` != ' . Consts\News::STATES['delete']
 			];
-			$this->order = [
+		}
+
+		protected function Order(): array {
+			return [
 				'`datecr` DESC',
 				'`id` ASC'
 			];
+		}
 
-			$this->fieldsSelect = [
+		protected function FieldsSelect(): array {
+			return [
 				'id' => '#',
 				'state' => 'Состояние',
 				'datepb' => 'Дата публикации',
 				'header' => 'Заголовок'
 			];
-			$this->fieldsCreate = [
+		}
+
+		protected function FieldsCreate(): array {
+			return [
 				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\News::STATES['draft']],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
 				'content' => ['skin' => 'textarea', 'name' => 'Текст', 'default' => ''],
 				'cover' => ['skin' => 'file', 'name' => 'Обложка', 'default' => 'Выберите обложку', 'params' => ['accept' => '.jpg, .jpeg, .png']],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
-			$this->fieldsUpdate = [
+		}
+
+		protected function FieldsUpdate(): array {
+			return [
 				'state' => ['skin' => 'select', 'name' => 'Состояние'],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
 				'content' => ['skin' => 'textarea', 'name' => 'Текст'],
 				'cover' => ['skin' => 'file', 'name' => 'Обложка', 'params' => ['accept' => '.jpg, .jpeg, .png']],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-			];
-
-			$this->navigateCreate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
-			$this->navigateUpdate = [ function ($items) { return $this->select->GetLink("<< {$this->titleSelect}"); } ];
-
-			$this->manage = [
-				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
-				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); }
 			];
 		}
 
