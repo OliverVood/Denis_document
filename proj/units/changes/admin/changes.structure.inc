@@ -25,6 +25,7 @@
 			$this->table_changes->timestamp('datecr');
 			$this->table_changes->timestamp('datemd', true);
 			$this->table_changes->timestamp('datepb');
+			$this->table_changes->string('work_header', 255);
 			$this->table_changes->string('header', 255);
 
 			$this->table_change = new TableMySQLi(self::TABLES['change'], $this->db);

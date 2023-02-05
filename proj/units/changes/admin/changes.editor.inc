@@ -49,6 +49,7 @@
 				'id' => '#',
 				'state' => 'Состояние',
 				'datepb' => 'Дата публикации',
+				'work_header' => 'Рабочий заголовок',
 				'header' => 'Заголовок',
 			];
 		}
@@ -56,6 +57,7 @@
 		protected function FieldsCreate(array $params): array {
 			return [
 				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
+				'work_header' => ['skin' => 'text', 'name' => 'Рабочий заголовок', 'default' => ''],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
@@ -64,6 +66,7 @@
 		protected function FieldsUpdate(array $params): array {
 			return [
 				'state' => ['skin' => 'select', 'name' => 'Состояние'],
+				'work_header' => ['skin' => 'text', 'name' => 'Рабочий заголовок'],
 				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
 				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
