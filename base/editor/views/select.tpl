@@ -16,6 +16,9 @@
 		public function Render(Editor $editor, array $fields, array $items, string $title) {
 			$col = count($editor->manage);
 		?>
+			<div class = "navigate">
+				<?php foreach ($editor->navigateSelect as $navigate) echo $navigate($editor->params); ?>
+			</div>
 			<h1><?= $title; ?></h1>
 			<table class = "select">
 				<thead>
@@ -35,7 +38,7 @@
 								</td>
 							<?php } ?>
 							<?php foreach ($editor->manage as $manage) { ?>
-								<td><?= $manage($item); ?></td>
+								<td><?= $manage($editor->params, $item); ?></td>
 							<?php } ?>
 						</tr>
 					<?php } ?>

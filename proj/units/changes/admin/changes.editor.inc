@@ -12,7 +12,7 @@
 			parent::__construct($name, $table);
 		}
 
-		protected function Where(): array {
+		protected function Where(array $params): array {
 			return [
 				'`state` != ' . Consts\Changes::STATES['delete']
 			];
@@ -22,31 +22,6 @@
 			return [
 				'`datecr` DESC',
 				'`id` ASC'
-			];
-		}
-
-		protected function FieldsSelect(): array {
-			return [
-				'id' => '#',
-				'state' => 'Состояние',
-				'datepb' => 'Дата публикации',
-				'header' => 'Заголовок',
-			];
-		}
-
-		protected function FieldsCreate(): array {
-			return [
-				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
-				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
-				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
-			];
-		}
-
-		protected function FieldsUpdate(): array {
-			return [
-				'state' => ['skin' => 'select', 'name' => 'Состояние'],
-				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
-				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
 		}
 
@@ -63,9 +38,34 @@
 
 		protected function Manage(): array {
 			return [
-				function ($item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
-				function ($item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
-				function ($item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
+				function (array $params, array $item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
+				function (array $params, array $item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
+				function (array $params, array $item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
+			];
+		}
+
+		protected function FieldsSelect(array $params): array {
+			return [
+				'id' => '#',
+				'state' => 'Состояние',
+				'datepb' => 'Дата публикации',
+				'header' => 'Заголовок',
+			];
+		}
+
+		protected function FieldsCreate(array $params): array {
+			return [
+				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\Changes::STATES['draft']],
+				'header' => ['skin' => 'text', 'name' => 'Заголовок', 'default' => ''],
+				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
+			];
+		}
+
+		protected function FieldsUpdate(array $params): array {
+			return [
+				'state' => ['skin' => 'select', 'name' => 'Состояние'],
+				'header' => ['skin' => 'text', 'name' => 'Заголовок'],
+				'datepb' => ['skin' => 'datetime', 'name' => 'Дата публикации']
 			];
 		}
 

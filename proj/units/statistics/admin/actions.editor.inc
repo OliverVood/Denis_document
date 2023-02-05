@@ -18,7 +18,13 @@
 			];
 		}
 
-		protected function FieldsSelect(): array {
+		protected function RegTitles(): void {
+			$this->titleSelect = 'Статистика действий пользователя';
+		}
+
+		protected function Manage(): array { return  []; }
+
+		protected function FieldsSelect(array $params): array {
 			return [
 				'datecr' => 'Дата',
 				'uid' => 'Пользователь',
@@ -27,11 +33,5 @@
 				'params' => 'Параметры'
 			];
 		}
-
-		protected function RegTitles(): void {
-			$this->titleSelect = 'Статистика действий пользователя';
-		}
-
-		protected function Manage(): array { return  []; }
 
 	}

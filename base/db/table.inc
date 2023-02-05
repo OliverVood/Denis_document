@@ -52,6 +52,10 @@
 			return $this->db->SelectOneField($this->name, $field, $where, $order);
 		}
 
+		public function SelectOneFieldCalc(string $field_calc, string $field_name, ?string $where = null, ?string $order = null) {
+			return $this->db->SelectOneFieldCalc($this->name, $field_calc, $field_name, $where, $order);
+		}
+
 		public function FetchAll($result, ?callable $func = null): ?array {
 			return $this->db->FetchAll($result, $func);
 		}

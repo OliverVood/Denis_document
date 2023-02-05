@@ -18,6 +18,7 @@
 		abstract public function Select(string $tablename, ?array $fields, ?string $where, ?string $order, ?string $limit, ?array $calc);
 		abstract public function SelectOne(string $tablename, ?array $fields, ?string $where, ?string $order, ?string $limit, ?array $calc);
 		abstract public function SelectOneField(string $tablename, string $field, ?string $where, ?string $order);
+		abstract public function SelectOneFieldCalc(string $tablename, string $field_calc, string $field_name, ?string $where, ?string $order);
 
 		abstract public function Fetch($result): ?array;
 		abstract public function FetchAll($result, ?callable $func = null): ?array;

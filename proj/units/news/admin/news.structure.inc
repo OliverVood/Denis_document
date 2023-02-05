@@ -26,7 +26,8 @@
 			$this->table_news->timestamp('datepb');
 			$this->table_news->string('header', 255);
 			$this->table_news->text('content');
-			$this->table_news->string('cover', 30);
+			$this->table_news->string('hash', 32);
+			$this->table_news->string('ext', 6);
 
 			$this->db->PushTables($this->table_news);
 		}

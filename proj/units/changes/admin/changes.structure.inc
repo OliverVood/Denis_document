@@ -35,7 +35,8 @@
 			$this->table_change->timestamp('datemd', true);
 			$this->table_change->string('header', 255);
 			$this->table_change->text('content');
-			$this->table_change->string('cover', 30);
+			$this->table_change->string('hash', 32);
+			$this->table_change->string('ext', 6);
 
 			$this->db->PushTables($this->table_changes, $this->table_change);
 		}

@@ -164,6 +164,20 @@
 		}
 
 		/**
+		 * @param string $tablename
+		 * @param string $field_calc
+		 * @param string $field_name
+		 * @param string|null $where
+		 * @param string|null $order
+		 * @param string|null $limit
+		 * @return null|string
+		 */
+		public function SelectOneFieldCalc(string $tablename, string $field_calc, string $field_name, ?string $where = null, ?string $order = null, ?string $limit = '1'): null | string {
+			$row = $this->SelectOne($tablename, null, $where, $order, $limit, [$field_calc]);
+			return $row[$field_name] ?? null;
+		}
+
+		/**
 		 * Построение запроса вставки записей
 		 * @param string $tablename - Имя таблицы
 		 * @param array $data - Данные

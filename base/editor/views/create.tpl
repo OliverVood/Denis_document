@@ -5,6 +5,7 @@
 	use Base\Editor\Editor;
 	use Base\Templates\View;
 	use Base\Templates\HTML\Element\Form;
+	use Base\Templates\HTML\Element\Text;
 
 	class Create extends View {
 
@@ -18,13 +19,12 @@
 			$form = new Form($data);
 		?>
 			<div class = "navigate">
-				<?php foreach ($editor->navigateCreate as $navigate) { ?>
-					<?= $navigate($data); ?>
-				<?php } ?>
+				<?php foreach ($editor->navigateCreate as $navigate) echo $navigate($editor->params); ?>
 			</div>
 			<h1><?= $title; ?></h1>
 			<?php
 				$form->Begin($editor->do_create->GetPath());
+				foreach ($editor->params as $name => $params) Text::object()->Render($name, $params, ['type' => 'hidden']);
 				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $field['default'])
 			?>
 			<table class = "create">
