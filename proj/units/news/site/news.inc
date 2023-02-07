@@ -3,8 +3,9 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'news/consts.inc';
-	require DIR_UNITS . 'news/site/views/Last.inc';
-	require DIR_UNITS . 'news/site/views/Show.inc';
+	require DIR_UNITS . 'news/site/views/Last.tpl';
+	require DIR_UNITS . 'news/site/views/Show.tpl';
+	require DIR_UNITS . 'news/site/views/All.tpl';
 
 	use Base\Units;
 	use Base\Instance;
@@ -15,6 +16,7 @@
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\News\Last;
 	use Proj\Site\Templates\News\Show;
+	use Proj\Site\Templates\News\All;
 
 	class News extends Units implements Consts\News {
 		use Instance;
@@ -22,7 +24,7 @@
 		private DBQuery $db;
 
 		public Action $last;
-		public Action $list;
+		public Action $all;
 		public Action $show;
 
 		private function __construct() {
@@ -30,11 +32,11 @@
 			$this->db = DBQuery::instance();
 
 			$this->last = new Action('null', 'null');
-			$this->list = new Action(self::NAME, 'null', 'default');
+			$this->all = new Action(self::NAME, 'null', 'default');
 			$this->show = new Action(self::NAME, 'show', "/news/show?id=%id%");
 
 			Controller::instance()->view->Push($this->last, [$this, 'OnViewLast']);
-			Controller::instance()->view->Push($this->list, [$this, 'OnViewList']);
+			Controller::instance()->view->Push($this->all, [$this, 'OnViewAll']);
 			Controller::instance()->view->Push($this->show, [$this, 'OnViewShow']);
 		}
 
@@ -48,10 +50,10 @@
 			Layout::instance()->main->Push($this->ViewLast($limit, 'Последние новости'));
 		}
 
-		public function OnViewList() {
+		public function OnViewAll() {
 			$limit = null;
 
-			Layout::instance()->main->Push($this->ViewLast($limit, 'Все новости'));
+			Layout::instance()->main->Push($this->ViewAll($limit, 'Все новости'));
 		}
 
 		private function ViewLast(?int $limit, $title): string {
@@ -63,8 +65,19 @@
 			return Last::object()->ToVar($items, $title);
 		}
 
+		private function ViewAll(?int $limit, $title): string {
+			$state = self::STATES['active'];
+
+			$result = $this->db->Select(self::TABLES['news'], ['id', 'datecr', 'header', 'content'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
+			$items = $this->db->FetchAll($result);
+
+			return All::object()->ToVar($items, $title);
+		}
+
 		private function ViewShow(int $id): string {
-			$data = $this->db->SelectOne(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'datepb'], "`id` = {$id}", null, null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
+			$state = self::STATES['active'];
+
+			$data = $this->db->SelectOne(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'datepb'], "(`state` = {$state}) AND (`datepb` < NOW()) AND (`id` = {$id})", null, null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 
 			return Show::object()->ToVar($data);
 		}

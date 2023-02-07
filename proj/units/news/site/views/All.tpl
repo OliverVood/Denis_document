@@ -6,7 +6,7 @@
 	use Proj\Units\Consts\News;
 	use Proj\Site\Units;
 
-	class Last extends View {
+	class All extends View {
 
 		public function ToVar(array $items, $title): string {
 			$this->Start();
@@ -16,11 +16,10 @@
 
 		public function Render(array $items, $title) { ?>
 			<div class = "view news last_items">
-				<h2><?= $title; ?></h2>
+				<h1><?= $title; ?></h1>
 				<div class = "list">
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
-				<div class = "all"><?= Units\News::instance()->list->GetLink('Все новости'); ?></div>
 			</div>
 		<?php }
 
