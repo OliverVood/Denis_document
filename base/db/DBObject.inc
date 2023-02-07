@@ -2,7 +2,7 @@
 
 	namespace Base\DB;
 
-	require 'DBQuery.inc';
+	require DIR_BASE . 'db/DBQuery.inc';
 
 	abstract class DBObject extends DBQuery {
 

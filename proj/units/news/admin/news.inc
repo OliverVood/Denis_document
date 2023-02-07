@@ -2,8 +2,8 @@
 
 	namespace Proj\Admin\Units;
 
-	require 'news.structure.inc';
-	require 'news.editor.inc';
+	require DIR_UNITS . 'news/admin/news.structure.inc';
+	require DIR_UNITS . 'news/admin/news.editor.inc';
 
 	use Base\Instance;
 	use Base\Controller;

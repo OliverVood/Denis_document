@@ -10,10 +10,14 @@ h1 { margin: 0 0 2rem; text-align: center; }
 h2 { margin: 0 0 1rem; }
 h3 { margin: 0 0 0.5rem; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
-input[type="button"] { @include MixBtn; outline: none; }
+input[type="button"], .button { @include MixBtn; outline: none; text-decoration: none; }
 .hide { display: none; }
 .items_margin_bottom > *:not(:last-child) { margin-bottom: $items_margin; }
 .items_margin_bottom_cut > *:not(:last-child) { margin-bottom: $items_margin_cut; }
+.document {
+	font-family: Monitorica, sans-serif;
+	input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
+}
 
 @mixin MixMain($params: null) {
 	$default: (

@@ -2,9 +2,9 @@
 
 	namespace Proj\Admin\Units;
 
-	require 'statistics.structure.inc';
-	require 'actions.editor.inc';
-	require 'ip.editor.inc';
+	require DIR_UNITS . 'statistics/admin/statistics.structure.inc';
+	require DIR_UNITS . 'statistics/admin/actions.editor.inc';
+	require DIR_UNITS . 'statistics/admin/ip.editor.inc';
 
 	use Base\Instance;
 	use Base\Controller;

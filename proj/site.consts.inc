@@ -1,6 +1,6 @@
 <?php
 
-	require 'consts.inc';
+	require DIR_ROOT . 'proj/consts.inc';
 
 	const DEBUG = true;
 	const REQUEST = ADDRESS;

@@ -2,7 +2,7 @@
 
 	namespace Proj\Admin\Units;
 
-	require 'users.structure.inc';
+	require DIR_UNITS . 'users/admin/users.structure.inc';
 
 	use Base\Instance;
 	use Proj\Site\Structure;

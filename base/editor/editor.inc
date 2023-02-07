@@ -2,9 +2,9 @@
 
 	namespace Base\Editor;
 
-	require 'views/select.tpl';
-	require 'views/create.tpl';
-	require 'views/update.tpl';
+	require DIR_BASE . 'editor/views/select.tpl';
+	require DIR_BASE . 'editor/views/create.tpl';
+	require DIR_BASE . 'editor/views/update.tpl';
 
 	use JetBrains\PhpStorm\NoReturn;
 

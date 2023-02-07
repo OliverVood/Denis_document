@@ -1,6 +1,10 @@
 @use "../variables" as *;
 @use "../functions" as *;
 
+.view.catalogs.buttons {
+
+}
+
 .view.catalogs.work {
 	@mixin ViewCatalogsWork($params: null) {
 		$default: (

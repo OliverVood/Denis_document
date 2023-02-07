@@ -2,9 +2,9 @@
 
 	namespace Proj\Admin\Units;
 
-	require 'changes.structure.inc';
-	require 'changes.editor.inc';
-	require 'change.editor.inc';
+	require DIR_UNITS . 'changes/admin/changes.structure.inc';
+	require DIR_UNITS . 'changes/admin/changes.editor.inc';
+	require DIR_UNITS . 'changes/admin/change.editor.inc';
 
 	use Base\Instance;
 	use Base\Controller;

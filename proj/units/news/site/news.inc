@@ -3,8 +3,8 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'news/consts.inc';
-	require 'views/Last.inc';
-	require 'views/Show.inc';
+	require DIR_UNITS . 'news/site/views/Last.inc';
+	require DIR_UNITS . 'news/site/views/Show.inc';
 
 	use Base\Units;
 	use Base\Instance;
@@ -21,16 +21,17 @@
 
 		private DBQuery $db;
 
-		private Action $last;
-		private Action $show;
+		public Action $last;
+		public Action $list;
+		public Action $show;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 			$this->db = DBQuery::instance();
 
 			$this->last = new Action('null', 'null');
-			$this->list = new Action(self::NAME, 'null');
-			$this->show = new Action(self::NAME, 'show');
+			$this->list = new Action(self::NAME, 'null', 'default');
+			$this->show = new Action(self::NAME, 'show', "/news/show?id=%id%");
 
 			Controller::instance()->view->Push($this->last, [$this, 'OnViewLast']);
 			Controller::instance()->view->Push($this->list, [$this, 'OnViewList']);
@@ -56,14 +57,14 @@
 		private function ViewLast(?int $limit, $title): string {
 			$state = self::STATES['active'];
 
-			$result = $this->db->Select(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'cover'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit);
+			$result = $this->db->Select(self::TABLES['news'], ['id', 'datecr', 'header', 'content'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 			$items = $this->db->FetchAll($result);
 
 			return Last::object()->ToVar($items, $title);
 		}
 
 		private function ViewShow(int $id): string {
-			$data = $this->db->SelectOne(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'cover', 'datepb'], "`id` = {$id}");
+			$data = $this->db->SelectOne(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'datepb'], "`id` = {$id}", null, null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 
 			return Show::object()->ToVar($data);
 		}

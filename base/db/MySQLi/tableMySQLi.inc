@@ -2,8 +2,6 @@
 
 	namespace Base\DB;
 
-	use http\Encoding\Stream\Debrotli;
-
 	class TableMySQLi extends Table {
 		const ERROR_NULL	=  1;
 		const ERROR_CREATE 	= -1;

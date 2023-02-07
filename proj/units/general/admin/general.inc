@@ -3,7 +3,7 @@
 	namespace Proj\Admin\Units;
 
 	require DIR_UNITS . 'general/consts.inc';
-	require 'views/group.tpl';
+	require DIR_UNITS . 'general/admin/views/group.tpl';
 
 
 	use JetBrains\PhpStorm\NoReturn;

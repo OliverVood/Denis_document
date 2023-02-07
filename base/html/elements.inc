@@ -1,7 +1,7 @@
 <?php
 
-	require 'elements/text.inc';
-	require 'elements/file.inc';
-	require 'elements/textarea.inc';
-	require 'elements/select.inc';
-	require 'elements/form.inc';
+	require DIR_BASE . 'html/elements/text.inc';
+	require DIR_BASE . 'html/elements/file.inc';
+	require DIR_BASE . 'html/elements/textarea.inc';
+	require DIR_BASE . 'html/elements/select.inc';
+	require DIR_BASE . 'html/elements/form.inc';

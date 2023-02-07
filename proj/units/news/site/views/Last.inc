@@ -4,6 +4,7 @@
 
 	use Base\Templates\View;
 	use Proj\Units\Consts\News;
+	use Proj\Site\Units;
 
 	class Last extends View {
 
@@ -19,7 +20,7 @@
 				<div class = "list">
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
-				<div class = "all"><a>Все новости</a></div>
+				<div class = "all"><?= Units\News::instance()->list->GetLink('Все новости'); ?></div>
 			</div>
 		<?php }
 
@@ -30,7 +31,7 @@
 				<div class = "cover"<?= $background; ?>></div>
 				<h3 class = "header"><?= $item['header']; ?></h3>
 				<div class = "content"><?= $item['content']; ?></div>
-				<div class = "links"><a>Читать</a></div>
+				<div class = "links"><?= Units\News::instance()->show->GetLink('Читать', ['id' => $item['id']]); ?></div>
 			</div>
 		<?php }
 

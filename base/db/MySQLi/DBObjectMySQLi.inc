@@ -2,7 +2,7 @@
 
 	namespace Base\DB;
 
-	class DBObjectMySQLi extends DBObject {
+	abstract class DBObjectMySQLi extends DBObject {
 		use DBMySQLi;
 
 		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {

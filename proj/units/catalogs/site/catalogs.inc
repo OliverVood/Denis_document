@@ -3,14 +3,16 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'catalogs/consts.inc';
-	require 'views/estimate.tpl';
-	require 'views/certificate.tpl';
-	require 'views/price_list.tpl';
+	require DIR_UNITS . 'catalogs/site/views/buttons.tpl';
+	require DIR_UNITS . 'catalogs/site/views/estimate.tpl';
+	require DIR_UNITS . 'catalogs/site/views/certificate.tpl';
+	require DIR_UNITS . 'catalogs/site/views/priceList.tpl';
 
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
+	use Proj\Site\Templates\General\Buttons;
 	use Proj\Units\Consts;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\Catalogs\Estimate;
@@ -20,6 +22,7 @@
 	class Catalogs extends Units implements Consts\Catalogs {
 		use Instance;
 
+		public Action $out_buttons;
 		public Action $action_estimate;
 		public Action $action_certificate;
 		public Action $action_price_list;
@@ -27,13 +30,19 @@
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 
+			$this->out_buttons = new Action('null', 'null');
 			$this->action_estimate = new Action('estimate', 'null', '/estimate');
 			$this->action_certificate = new Action('certificate', 'null', '/certificate');
 			$this->action_price_list = new Action('price_list', 'null', '/price_list');
 
+			Controller::instance()->view->Push($this->out_buttons, [$this, 'OutButtons']);
 			Controller::instance()->view->Push($this->action_estimate, [$this, 'OutEstimate']);
 			Controller::instance()->view->Push($this->action_certificate, [$this, 'OutCertificate']);
 			Controller::instance()->view->Push($this->action_price_list, [$this, 'OutPriceList']);
+		}
+
+		public function OutButtons() {
+			Layout::instance()->main->Push(Buttons::object()->ToVar());
 		}
 
 		public function OutEstimate() {

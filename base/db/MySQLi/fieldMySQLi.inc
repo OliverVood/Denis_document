@@ -89,22 +89,22 @@
 
 	}
 
-	require 'fields/fieldIDMySQLi.inc';
-	require 'fields/fieldBoolMySQLi.inc';
-	require 'fields/fieldInt8MySQLi.inc';
-	require 'fields/fieldInt16MySQLi.inc';
-	require 'fields/fieldInt24MySQLi.inc';
-	require 'fields/fieldInt32MySQLi.inc';
-	require 'fields/fieldInt64MySQLi.inc';
-	require 'fields/fieldUInt8MySQLi.inc';
-	require 'fields/fieldUInt16MySQLi.inc';
-	require 'fields/fieldUInt24MySQLi.inc';
-	require 'fields/fieldUInt32MySQLi.inc';
-	require 'fields/fieldUInt64MySQLi.inc';
-	require 'fields/fieldFloatMySQLi.inc';
-	require 'fields/fieldDoubleMySQLi.inc';
-	require 'fields/fieldTimestampMySQLi.inc';
-	require 'fields/fieldEnumMySQLi.inc';
-	require 'fields/fieldSetMySQLi.inc';
-	require 'fields/fieldStringMySQLi.inc';
-	require 'fields/fieldTextMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldIDMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldBoolMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldInt8MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldInt16MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldInt24MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldInt32MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldInt64MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldUInt8MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldUInt16MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldUInt24MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldUInt32MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldUInt64MySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldFloatMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldDoubleMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldTimestampMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldEnumMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldSetMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldStringMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/fields/fieldTextMySQLi.inc';

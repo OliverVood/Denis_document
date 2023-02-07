@@ -10,10 +10,10 @@
 		bg_img					: url("img/wall.jpg"),
 		header_display			: revert,
 		footer_display			: revert,
-		document_width			: 1200px,
+		main_width			: 1200px,
 		document_min_width		: auto,
-		document_bg_color		: $color-neutral-extra-light,
-		document_box_shadow		: 0 0 0.2rem $color-neutral
+		main_bg_color		: $color-neutral-extra-light,
+		main_box_shadow		: 0 0 0.2rem $color-neutral
 	);
 
 	html {
@@ -22,11 +22,10 @@
 			display: flex; flex-direction: column; margin: 0; height: 100%; font-size: 1.2rem;
 			> header { display: GetValue($default, $params, 'header_display'); }
 			> main {
-				flex: auto;
-				> div {
-					margin: 0 auto; padding: 1rem; width: GetValue($default, $params, 'document_width'); min-height: 100%; background-color: GetValue($default, $params, 'document_bg_color'); box-shadow: GetValue($default, $params, 'document_box_shadow'); font-family: Monitorica, sans-serif;
-					input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
-				}
+				flex: auto; margin: 0 auto; padding: 2rem;
+				width: GetValue($default, $params, 'main_width');
+				background-color: GetValue($default, $params, 'main_bg_color');
+				box-shadow: GetValue($default, $params, 'main_box_shadow');
 			}
 			> footer { display: GetValue($default, $params, 'footer_display'); padding-top: 4rem; }
 		}
@@ -34,4 +33,4 @@
 }
 
 @include MixScreen() { @include MixTemplate(); }
-@include MixPrint() { @include MixTemplate((bg_img: none, header_display: none, footer_display: none, document_width: 100%, document_bg_color: transparent, document_box_shadow: none)); }
+@include MixPrint() { @include MixTemplate((bg_img: none, header_display: none, footer_display: none, main_width: 100%, main_bg_color: transparent, main_box_shadow: none)); }

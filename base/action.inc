@@ -34,9 +34,10 @@
 		public function GetLink(string $content, array $data = [], array $params = []): string {
 			$href = ' href = "' . $this->GetHref($data) . '"';
 			$onclick = ' onclick = "' . $this->GetClick($data) . '"';
+			$class = (isset($params['class'])) ? ' class = "' . $params['class'] . '"' : '';
 			$target = (isset($params['target'])) ? ' target = "' . $params['target'] . '"' : '';
 
-			return "<a{$href}{$onclick}{$target}>{$content}</a>";
+			return "<a{$href}{$onclick}{$target}{$class}>{$content}</a>";
 		}
 
 		/**
