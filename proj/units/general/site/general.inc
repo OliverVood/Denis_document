@@ -11,7 +11,7 @@
 	use Base\Action;
 	use Proj\Units\Consts;
 	use Proj\Site\Templates\Layout;
-	use Proj\Site\Templates\General\Menu;
+	use Proj\Site\Templates\General\Header;
 	use Proj\Site\Templates\General\Main;
 
 	class General extends Units implements Consts\General {
@@ -28,7 +28,7 @@
 		}
 
 		public function OutMenu() {
-			Layout::instance()->header->Push(Menu::object()->ToVar());
+			Layout::instance()->header->Push(Header::object()->ToVar());
 		}
 
 	}

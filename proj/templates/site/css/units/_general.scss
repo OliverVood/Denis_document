@@ -3,30 +3,50 @@
 @use "../variables" as *;
 @use "../functions" as *;
 
-.view.general.menu {
-	display: flex; margin: 0 auto; padding: 3rem 0; max-width: 1200px;
-	> .logo > a { display: inline-block; width: 6rem; height: 6rem; background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
-	> .list {
-		flex: auto; display: flex; margin-left: 2rem; font-size: 2.2rem;
-		> a {
-			margin: auto 0; padding: 10px 20px;
-			&:not(:last-child) { margin-right: 20px; }
+.view.general.header {
+	box-shadow: $shadow_small;
+	> .agency {
+		display: flex; align-items: center; margin: 0 auto; padding: 3rem 0; max-width: 1200px;
+		> .logo > a { display: inline-block; width: 6rem; height: 6rem; background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+		> .info {
+			margin-left: 2rem;
+			> .name { font-size: 3rem; }
+			> .slogan { margin-left: 3px; }
 		}
 	}
-	> .more { display: none;
-		flex: none; margin: auto;
+	> .menu {
+		box-shadow: 0 0 0.2rem #a5a5a5;
 		> div {
-			position: relative; width: 40px; height: 40px; overflow: hidden; cursor: pointer;
-			> div {
-				position: absolute; left: 0; width: 40px; height: 4px; background-color: $color-neutral;
-				&:nth-child(1) { top: 6px; }
-				&:nth-child(2) { top: 18px; }
-				&:nth-child(3) { top: 30px; }
-			}
-			&:hover > div { background-color: $color-neutral-black; }
+			display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 0 auto; max-width: 1200px;
+			> div > a { display: inline-block; padding: 1rem; }
 		}
 	}
 }
+
+//.view.general.menu {
+//	display: flex; margin: 0 auto; padding: 3rem 0; max-width: 1200px;
+//	> .logo > a { display: inline-block; width: 6rem; height: 6rem; background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+//	> .list {
+//		flex: auto; display: flex; margin-left: 2rem; font-size: 2.2rem;
+//		> a {
+//			margin: auto 0; padding: 10px 20px;
+//			&:not(:last-child) { margin-right: 20px; }
+//		}
+//	}
+//	> .more { display: none;
+//		flex: none; margin: auto;
+//		> div {
+//			position: relative; width: 40px; height: 40px; overflow: hidden; cursor: pointer;
+//			> div {
+//				position: absolute; left: 0; width: 40px; height: 4px; background-color: $color-neutral;
+//				&:nth-child(1) { top: 6px; }
+//				&:nth-child(2) { top: 18px; }
+//				&:nth-child(3) { top: 30px; }
+//			}
+//			&:hover > div { background-color: $color-neutral-black; }
+//		}
+//	}
+//}
 
 .view.general.windows {
 	> .instance {
