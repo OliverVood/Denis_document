@@ -3,7 +3,7 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'general/consts.inc';
-	require DIR_UNITS . 'general/site/views/menu.tpl';
+	require DIR_UNITS . 'general/site/views/Header.tpl';
 
 	use Base\Units;
 	use Base\Instance;
@@ -12,7 +12,6 @@
 	use Proj\Units\Consts;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\General\Header;
-	use Proj\Site\Templates\General\Main;
 
 	class General extends Units implements Consts\General {
 		use Instance;

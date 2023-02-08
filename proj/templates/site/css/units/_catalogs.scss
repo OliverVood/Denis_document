@@ -2,7 +2,10 @@
 @use "../functions" as *;
 
 .view.catalogs.buttons {
-
+	> .btns {
+		display: flex; gap: 2rem;
+		> a { flex: auto; padding: 2rem 2px; text-align: center; font-size: 1.4rem; }
+	}
 }
 
 .view.catalogs.work {

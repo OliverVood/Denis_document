@@ -15,9 +15,12 @@
 
 		public function Render() { ?>
 			<div class = "view catalogs buttons">
-				<?= Catalogs::instance()->action_estimate->GetLink('Сметы', [], ['class' => 'button img']); ?>
-				<?= Catalogs::instance()->action_certificate->GetLink('Акты выполненных работ', [], ['class' => 'button img']); ?>
-				<?= Catalogs::instance()->action_price_list->GetLink('Прайс-листы', [], ['class' => 'button img']); ?>
+				<h1>Начните работу прямо сейчас</h1>
+				<div class = "btns">
+					<?= Catalogs::instance()->action_estimate->GetLink('Сметы »', [], ['class' => 'button img']); ?>
+					<?= Catalogs::instance()->action_certificate->GetLink('Акты выполненных работ »', [], ['class' => 'button img']); ?>
+					<?= Catalogs::instance()->action_price_list->GetLink('Прайс-листы »', [], ['class' => 'button img']); ?>
+				</div>
 			</div>
 		<?php }
 

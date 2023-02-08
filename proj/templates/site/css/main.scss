@@ -6,7 +6,7 @@
 @import "fonts";
 
 a { cursor: pointer; }
-h1 { margin: 0 0 2rem; text-align: center; }
+h1 { margin: 0 0 3rem; font-size: 2.2rem; font-weight: normal; text-align: center; }
 h2 { margin: 0 0 1rem; }
 h3 { margin: 0 0 0.5rem; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
@@ -17,6 +17,9 @@ input[type="button"], .button { @include MixBtn; outline: none; text-decoration:
 .document {
 	font-family: Monitorica, sans-serif;
 	input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
+}
+.link {
+	&:hover {  }
 }
 
 @mixin MixMain($params: null) {

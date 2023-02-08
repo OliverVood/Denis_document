@@ -31,6 +31,15 @@
 	@return map.get($defaults, $name);
 }
 
+@function GetParam($params, $name, $default) {
+	@if ($params != null) {
+		$temp: map.get($params, $name);
+		@if ($temp != null) { @return $temp; }
+	}
+
+	@return $default;
+}
+
 @mixin MixScreen($min: null, $max: null, $screen: false, $print: false) {
 	@if ($min != null or $max != null or $screen or $print) {
 
