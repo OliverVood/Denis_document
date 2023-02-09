@@ -43,12 +43,39 @@
 		}
 	}
 
-	@include MixScreen($size5XL) { @include ViewGeneralHeader(); }
-	@include MixScreen($size2XL, $size5XL) { @include ViewGeneralHeader((lateral_spacing: 2rem)); }
-	@include MixScreen($sizeX, $size2XL) { @include ViewGeneralHeader((lateral_spacing: 2rem, name_size: 2.5rem, slogan_size: 1rem, agency_padding: 2rem)); }
+	html[data-page="main"] & {
+		@include MixScreen($size5XL) { @include ViewGeneralHeader(); }
+		@include MixScreen($size2XL, $size5XL) { @include ViewGeneralHeader((lateral_spacing: 2rem)); }
+		@include MixScreen($sizeX, $size2XL) { @include ViewGeneralHeader((lateral_spacing: 2rem, name_size: 2.5rem, slogan_size: 1rem, agency_padding: 2rem)); }
+	}
+	html:not([data-page="main"]) & {
+		@include MixScreen($sizeX) { @include ViewGeneralHeader((lateral_spacing: 1.5rem, name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
+	}
 	@include MixScreen($sizeM, $sizeX) { @include ViewGeneralHeader((lateral_spacing: 1.5rem, name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
 	@include MixScreen($sizeS, $sizeM) { @include ViewGeneralHeader((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem, info_margin: 1rem)); }
 	@include MixScreen(null, $sizeS) { @include ViewGeneralHeader((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem, info_margin: 1rem, menu_gap: 0, menu_padding: 0.5rem)); }
+}
+
+.view.general.footer {
+	$params: ();
+	$lateral_spacing : auto;
+	box-shadow: $shadow_small;
+	> .agency {
+		display: flex; align-items: center; margin: 0 GetParam($params, lateral_spacing, $lateral_spacing); padding: GetParam($params, agency_padding, 3rem) 0; max-width: 1200px;
+		> .logo > a { display: inline-block; width: GetParam($params, logo_size, 6rem); height: GetParam($params, logo_size, 6rem); background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+		> .info {
+			margin-left: GetParam($params, info_margin, 2rem);
+			> .name { font-size: GetParam($params, name_size, 3rem); }
+			> .slogan { margin-left: 3px; font-size: GetParam($params, slogan_size, 1.2rem); }
+		}
+		> .menu {
+			flex: auto; display: flex; flex-direction: column;
+			> div {
+				text-align: center;
+				a:hover { text-decoration: underline; }
+			}
+		}
+	}
 }
 
 .view.general.windows {

@@ -6,5 +6,5 @@
 		const CATALOGS_JS						= '1.0.0022';		// "/proj/templates/site/js/catalogs.js":3493341004
 		const SKIN_SELECT_JS					= '1.0.0002';		// "/proj/templates/site/js/skins/select.js":1584323857
 
-		const MAIN_CSS							= '1.0.0032';		// "/proj/templates/site/css/main.css":3344804044
+		const MAIN_CSS							= '1.0.0047';		// "/proj/templates/site/css/main.css":3631371764
 	}
