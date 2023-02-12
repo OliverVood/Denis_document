@@ -4,7 +4,7 @@
 		"target": "esnext",
 		"lib" : ["ESNext", "DOM"],
 		"rootDirs": ["./"],
-		"outDir": "../js",
+		"outFile": "../js/common.js",
 		"declaration": true,
 		"sourceMap": true,
 		"alwaysStrict": true

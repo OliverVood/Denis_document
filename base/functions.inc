@@ -32,6 +32,43 @@
 	}
 
 	/**
+	 * Отправка сообщения
+	 * @param string $type - Тип сообщения
+	 * @param string $notice - Текст сообщения
+	 * @return void
+	 */
+	#[NoReturn] function SendNotice(string $type, string $notice): void {
+		SendJSONData(['state' => 'notice', 'type' => $type, 'notice' => $notice]);
+	}
+
+	/**
+	 * Отправка сообщения об успехе
+	 * @param string $notice - Текст сообщения
+	 * @return void
+	 */
+	#[NoReturn] function SendNoticeOk(string $notice): void {
+		SendNotice('ok', $notice);
+	}
+
+	/**
+	 * Отправка информационного сообщения
+	 * @param string $notice - Текст сообщения
+	 * @return void
+	 */
+	#[NoReturn] function SendNoticeInfo(string $notice): void {
+		SendNotice('info', $notice);
+	}
+
+	/**
+	 * Отправка сообщения об ошибке
+	 * @param string $notice - Текст сообщения
+	 * @return void
+	 */
+	#[NoReturn] function SendNoticeError(string $notice): void {
+		SendNotice('error', $notice);
+	}
+
+	/**
 	 * Возвращает значение параметра запроса
 	 * @param string $key - Ключ POST/GET параметра
 	 * @param mixed $default - Значение по умолчанию

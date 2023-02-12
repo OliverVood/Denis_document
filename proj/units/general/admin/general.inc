@@ -23,13 +23,13 @@
 
 		private DBObject $db;
 
-		private Action $site;
-		private Action $out_head;
-		private Action $out_menu;
-		private Action $out_footer;
-		private Action $db_struct;
-		private Action $db_check;
-		private Action $db_make;
+		public Action $site;
+		public Action $out_head;
+		public Action $out_menu;
+		public Action $out_footer;
+		public Action $db_struct;
+		public Action $db_check;
+		public Action $db_make;
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);

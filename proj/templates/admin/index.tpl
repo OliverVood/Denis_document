@@ -24,7 +24,7 @@
 					?>
 				</head>
 				<body<?php Layout::BrowseData(); ?>>
-					<? $this->RenderSections(); ?>
+					<?php $this->RenderSections(); ?>
 					<script>
 						$(function() {
 							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');

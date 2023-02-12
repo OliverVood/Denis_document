@@ -9,7 +9,6 @@
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
-	use Base\Editor\EditorMySQLi;
 	use Proj\Admin\Structure;
 	use Proj\Admin\Editor;
 	use Proj\Admin\Templates\Layout;
@@ -18,10 +17,10 @@
 	class Statistics extends Structure\Statistics {
 		use Instance;
 
-		private EditorMySQLi $editor_ip;
-		private EditorMySQLi $editor_act;
+		public Editor\Ip $editor_ip;
+		public Editor\Actions $editor_act;
 
-		private Action $out_menu;
+		public Action $out_menu;
 
 		private function __construct() {
 			parent::__construct();

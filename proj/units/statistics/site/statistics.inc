@@ -15,8 +15,8 @@
 	class Statistics extends Units implements Consts\Statistics {
 		use Instance;
 
-		private Action $collect;
-		private Action $act;
+		public Action $collect;
+		public Action $act;
 
 		private DBQuery $db;
 

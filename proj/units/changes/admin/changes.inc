@@ -11,17 +11,17 @@
 	use Base\Action;
 	use Base\Editor\EditorMySQLi;
 	use Proj\Admin\Structure;
+	use Proj\Admin\Editor;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
-	use Proj\Admin\Editor;
 
 	class Changes extends Structure\Changes {
 		use Instance;
 
-		private EditorMySQLi $editor_changes;
-		public EditorMySQLi $editor_change;
+		public Editor\Changes $editor_changes;
+		public Editor\Change $editor_change;
 
-		private Action $out_menu;
+		public Action $out_menu;
 
 		private function __construct() {
 			parent::__construct();

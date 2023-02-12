@@ -3,6 +3,8 @@
 	namespace Proj\Site\Templates\General;
 
 	use Base\Templates\View;
+	use Proj\Site\Units\Feedback;
+	use Proj\Site\Units\General;
 
 	class Footer extends View {
 
@@ -14,17 +16,19 @@
 
 		public function Render() { ?>
 			<div class = "view general footer">
-				<div class = "agency">
-					<div class = "logo"><a href = "/"></a></div>
-					<div class = "info">
-						<div class = "name">MyDocuments</div>
-						<div class = "slogan">управляй своими документами</div>
+				<div>
+					<div class = "agency">
+						<div class = "logo"><a href = "/"></a></div>
+						<div class = "info">
+							<div class = "name">MyDocuments</div>
+							<div class = "slogan">управляй своими документами</div>
+						</div>
 					</div>
 					<div class = "menu">
-						<div><a>Обратная связь</a></div>
-						<div><a>Поддержать проект</a></div>
-						<div><a>Правила сайта</a></div>
-						<div><a>Политика конфиденциальности</a></div>
+						<div><?= Feedback::instance()->feedback->GetLink('Обратная связь'); ?></div>
+						<div><?= General::instance()->donations->GetLink('Поддержать проект'); ?></div>
+						<div><?= General::instance()->rules->GetLink('Правила сайта'); ?></div>
+						<div><?= General::instance()->privacy_policy->GetLink('Политика конфиденциальности'); ?></div>
 					</div>
 				</div>
 			</div>

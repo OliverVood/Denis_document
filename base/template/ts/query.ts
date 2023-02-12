@@ -1,19 +1,6 @@
 namespace Base {
 	export namespace Common {
 
-		export class GlobalParams {
-			private static param = {};
-
-			public static Set(name :string, value :any) {
-				GlobalParams.param[name] = value;
-			}
-
-			public static Get(name) :any {
-				return GlobalParams.param[name];
-			}
-
-		}
-
 		type TypeRequestParams = {
 			method			?: 'get' | 'post',
 			request			?: string,
@@ -22,7 +9,7 @@ namespace Base {
 		}
 
 		type TypeResponse = {
-			state			: 'ok' | 'message',
+			state			: 'ok' | 'notice',
 			data			: any
 		}
 
@@ -77,38 +64,9 @@ namespace Base {
 			private static Response(response :TypeResponse, handler :Function) {
 				switch (response['state']) {
 					case 'ok': if (handler) handler(response['data']); break;
+					case 'notice': Base.Common.Notice.Create(response['type'], response['notice']); break;
 				}
 			}
-
-		}
-
-		export class Section {
-			private $_elem			: JQuery
-
-			public constructor($_elem: JQuery) {
-				this.$_elem = $_elem;
-			}
-
-			public Fill(...contents) {
-				this.$_elem.empty();
-				for (let i in contents) {
-					if (Array.isArray(contents[i])) for (let j in contents[i]) this.$_elem.append(contents[i][j]);
-					else this.$_elem.append(contents[i]);
-				}
-			}
-
-			public Push(...contents) {
-				for (let i in arguments) {
-					if (Array.isArray(arguments[i])) for (let j in arguments[i]) this.$_elem.append(arguments[i][j]);
-					else this.$_elem.append(arguments[i])
-				}
-			}
-
-		}
-
-		export class Layout {
-
-			public static Initialization() {  }
 
 		}
 

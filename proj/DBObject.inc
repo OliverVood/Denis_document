@@ -20,6 +20,6 @@
 
 	}
 
-	DBObject::init('localhost', 'admin', '123', 'documents');
+	DBObject::init(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	if (!DBObject::instance()->State()) die('MySQLi database connection error! Code: ' . DBObject::instance()->GetErrorCode());

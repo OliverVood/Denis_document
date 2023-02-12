@@ -1,7 +1,7 @@
 /* Sizes */
 //$size3XS    : 240;
 //$size2XS    : 360;
-//$sizeXS     : 420;
+$sizeXS     : 420;
 $sizeS      : 480;
 $sizeM      : 560;
 //$sizeL      : 680;
@@ -17,7 +17,9 @@ $size5XL    : 1280;
 $color-light							: #FFFFFF;
 $color-primary							: #428192;
 $color-primary-light					: #4C97AB;
-$color-primary-text						: $color-light;
+
+$color-text								: #000000;
+$color-text-primary						: $color-light;
 
 $color-secondary						: #CBDCE1;
 
@@ -30,7 +32,7 @@ $color-neutral-light					: #C5C5C5;
 $color-neutral-extra-light				: #EAEAEA;
 
 /* Color elements */
-$color-btn-text 						: $color-primary-text;
+$color-btn-text 						: $color-text-primary;
 
 $items_margin							: 0.5rem;
 $items_margin_cut						: 0.2rem;

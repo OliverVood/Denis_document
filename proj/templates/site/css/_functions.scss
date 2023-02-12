@@ -65,11 +65,11 @@
 }
 
 @mixin MixBtn {
-	display: inline-block; padding: 0.6rem 1.6rem; border: 0.2rem solid $color-btn-border; background-color: $color-btn-bg; color: $color-primary-text; cursor: pointer;
+	display: inline-block; padding: 0.6rem 1.6rem; border: 0.2rem solid $color-btn-border; background-color: $color-btn-bg; color: $color-text-primary; cursor: pointer;
 	&.img { padding-left: 2.8rem; background-size: 1.4rem; background-position: 0.7rem center; background-repeat: no-repeat; }
 	&:hover { border-color: $color-btn-border-hover; background-color: $color-btn-bg-hover; }
 	&:active, &:focus-visible { border-color: $color-btn-border-active; background-color: $color-btn-bg-active; }
-	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-primary-text; }
+	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-text-primary; }
 	&.negative {
 		border-color: $color-negative-btn-bg; background-color: $color-negative-btn-bg;
 		&:hover { border-color: $color-negative-btn-border-hover; background-color: $color-negative-btn-bg-hover; }
@@ -81,5 +81,9 @@
 	padding: 0.6rem 1.6rem; border: 0.2rem solid $color-text-border; outline: none;
 	&:hover { border-color: $color-text-border-hover; }
 	&:active, &:focus-visible { border-color: $color-text-border-active; }
-	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-primary-text; }
+	&:disabled { border-color: $color-neutral; background-color: $color-neutral; color: $color-text-primary; }
+}
+
+@mixin MixTextarea {
+	@include MixText; resize: none;
 }

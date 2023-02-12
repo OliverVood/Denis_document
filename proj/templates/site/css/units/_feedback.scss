@@ -1,0 +1,22 @@
+@use "sass:map";
+
+@use "../variables" as *;
+@use "../functions" as *;
+
+.view.feedback.form {
+
+	@mixin ViewFeedbackForm($params: null) {
+		width: GetParam($params, width, 500px);
+		> form {
+			display: flex; flex-direction: column; gap: 1rem;
+			> div {
+				display: flex; flex-direction: column;
+				> label { margin-bottom: 0.5rem; font-size: 0.8rem; }
+			}
+		}
+	}
+
+	@include MixScreen($sizeX) { @include ViewFeedbackForm() }
+	@include MixScreen($sizeXS, $sizeX) { @include ViewFeedbackForm((width: 300px)) }
+	@include MixScreen(null, $sizeXS) { @include ViewFeedbackForm((width: 250px)) }
+}

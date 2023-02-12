@@ -20,6 +20,6 @@
 
 	}
 
-	DBQuery::init('localhost', 'admin', '123', 'documents');
+	DBQuery::init(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	if (!DBQuery::instance()->State()) die('MySQLi database connection error! Code: ' . DBQuery::instance()->GetErrorCode());

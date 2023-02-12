@@ -24,7 +24,7 @@
 					?>
 				</head>
 				<body>
-					<? $this->RenderSections(); ?>
+					<?php $this->RenderSections(); ?>
 					<script>
 						let $ui_menu;
 						$(function() {

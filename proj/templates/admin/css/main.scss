@@ -57,7 +57,7 @@ main {
 				> td { padding: 0.6rem; }
 			}
 		}
-		&.create, &.update {
+		&.create, &.update, &.browse {
 			> tbody > tr {
 				> th { padding: 0.6rem; text-align: left; font-weight: 700; }
 			}

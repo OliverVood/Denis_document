@@ -49,7 +49,8 @@
 		@include MixScreen($sizeX, $size2XL) { @include ViewGeneralHeader((lateral_spacing: 2rem, name_size: 2.5rem, slogan_size: 1rem, agency_padding: 2rem)); }
 	}
 	html:not([data-page="main"]) & {
-		@include MixScreen($sizeX) { @include ViewGeneralHeader((lateral_spacing: 1.5rem, name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
+		@include MixScreen($size5XL) { @include ViewGeneralHeader((name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
+		@include MixScreen($sizeX, $size5XL) { @include ViewGeneralHeader((lateral_spacing: 1.5rem, name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
 	}
 	@include MixScreen($sizeM, $sizeX) { @include ViewGeneralHeader((lateral_spacing: 1.5rem, name_size: 2.3rem, slogan_size: 1rem, agency_padding: 1.5rem, logo_size: 5rem, info_margin: 1.5rem)); }
 	@include MixScreen($sizeS, $sizeM) { @include ViewGeneralHeader((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem, info_margin: 1rem)); }
@@ -57,22 +58,55 @@
 }
 
 .view.general.footer {
-	$params: ();
-	$lateral_spacing : auto;
-	box-shadow: $shadow_small;
-	> .agency {
-		display: flex; align-items: center; margin: 0 GetParam($params, lateral_spacing, $lateral_spacing); padding: GetParam($params, agency_padding, 3rem) 0; max-width: 1200px;
-		> .logo > a { display: inline-block; width: GetParam($params, logo_size, 6rem); height: GetParam($params, logo_size, 6rem); background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
-		> .info {
-			margin-left: GetParam($params, info_margin, 2rem);
-			> .name { font-size: GetParam($params, name_size, 3rem); }
-			> .slogan { margin-left: 3px; font-size: GetParam($params, slogan_size, 1.2rem); }
+
+	@mixin ViewGeneralFooter($params: null) {
+		$lateral_spacing: auto;
+		> div {
+			display: flex; flex-direction: GetParam($params, wrap_gap, column); gap: 1.5rem; margin: 0 GetParam($params, lateral_spacing, $lateral_spacing); padding: GetParam($params, agency_padding, 1.5rem) 0; max-width: 1200px; border-top: 1px solid $color-neutral; align-items: center;
+			> .agency {
+				display: flex; flex: auto; flex-direction: GetParam($params, agency_gap, column); justify-content: center; align-items: center;
+				> .logo > a { display: inline-block; width: GetParam($params, logo_size, 5rem); height: GetParam($params, logo_size, 5rem); background-image: GetImage('logo/logo.svg'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+				> .info {
+					> .name { font-size: GetParam($params, name_size, 2.3rem); }
+					> .slogan { margin-left: 3px; font-size: GetParam($params, slogan_size, 1rem); }
+				}
+			}
+			> .menu {
+				flex: auto; display: flex; flex-direction: column; gap: 0.5rem;
+				> div {
+					text-align: center;
+					a:hover { text-decoration: underline; }
+				}
+			}
 		}
-		> .menu {
-			flex: auto; display: flex; flex-direction: column;
-			> div {
-				text-align: center;
-				a:hover { text-decoration: underline; }
+	}
+
+	@include MixScreen($size5XL) { @include ViewGeneralFooter((agency_gap: row, wrap_gap: row)); }
+	@include MixScreen($sizeX, $size5XL) { @include ViewGeneralFooter((lateral_spacing: 1.5rem, agency_gap: row, wrap_gap: row)); }
+	@include MixScreen($sizeM, $sizeX) { @include ViewGeneralFooter((lateral_spacing: 1.5rem, wrap_gap: row)); }
+	@include MixScreen($sizeS, $sizeM) { @include ViewGeneralFooter((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem)); }
+	@include MixScreen(null, $sizeS) { @include ViewGeneralFooter((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem)); }
+}
+
+.view.general.donations {
+	width: min-content;
+	> div {
+		> .description {
+			text-align: justify;
+			> div:not(:first-child) { margin-top: 0.5rem; }
+		}
+		> .card {
+			display: flex; gap: 2px; margin-top: 2rem;
+			> span {
+				padding: 0.5rem;
+				&.number { background-color: $color-neutral-extra-light; }
+			}
+		}
+		> .name {
+			display: flex; gap: 1px; margin-top: 0.5rem; font-size: 1rem;
+			> span {
+				padding: 0.2rem;
+				&.symbol { background-color: $color-neutral-extra-light; }
 			}
 		}
 	}
@@ -91,7 +125,7 @@
 			> .footer {  }
 			&.fill_title {
 				> .header {
-					color: $color-primary-text; background-color: $color-primary;
+					color: $color-text-primary; background-color: $color-primary;
 					> .close { background-image: GetImageUIWhite('close.svg'); }
 				}
 				> .main { padding: 2rem; }
@@ -114,6 +148,29 @@
 		> *:not(:last-child) { margin-right: 0.5rem; }
 	}
 	> .contain > .message { text-align: center; }
+}
+
+.view.general.notices {
+	position: fixed; top: 1rem; right: 1rem; z-index: 300; display: grid; gap: 1rem;
+	> .instance {
+		display: flex; border-width: 1px; border-style: solid; border-color: $color-light; background-color: $color-light;
+		&.ok {
+			border-color: $color-primary;
+			> .type { background-image: GetImageUI('notice/ok.svg'); }
+		}
+		&.info { border-color: $color-neutral;
+			> .type { background-image: GetImageUI('notice/info.svg'); }
+		}
+		&.error { border-color: $color-negative;
+			> .type { background-image: GetImageUI('notice/error.svg'); }
+		}
+		> .type { width: 3rem; background-size: 1.5rem; background-position: 1rem 1rem; background-repeat: no-repeat; }
+		> .notice { flex: auto; padding: 1rem; }
+		> .close > div {
+			width: 2rem; height: 2rem; background-image: GetImageUIPrimary('close.svg'); background-size: 1rem; background-position: center; background-repeat: no-repeat; cursor: pointer;
+			&:hover { background-image: GetImageUIPrimaryLight('close.svg'); }
+		}
+	}
 }
 
 //.view.site.full_menu {

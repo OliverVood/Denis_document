@@ -8,3 +8,4 @@
 	const ID_CATALOGS				= 4;
 	const ID_NEWS					= 5;
 	const ID_CHANGES				= 6;
+	const ID_FEEDBACK				= 7;
