@@ -9,6 +9,7 @@ a { cursor: pointer; color: $color-text; text-decoration: none; }
 h1 { margin: 0 0 3rem; font-size: 2.2rem; font-weight: normal; text-align: center; }
 h2 { margin: 0 0 1rem; }
 h3 { margin: 0 0 0.5rem; }
+p, ol { margin: 0; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
 input[type="button"], input[type="submit"], .button { @include MixBtn; outline: none; text-decoration: none; }
 textarea { @include MixTextarea; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
@@ -40,8 +41,10 @@ label .required:after { content: "*"; margin-left: 4px; color: $color_negative; 
 @include MixPrint() { @include MixMain((display_print: revert, display_print_tabu: none)); }
 
 @import "template";
+@import "grid";
 @import "skins/skins";
 @import "units/general";
 @import "units/catalogs";
 @import "units/news";
 @import "units/feedback";
+@import "units/documents";

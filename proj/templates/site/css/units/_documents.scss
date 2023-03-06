@@ -1,0 +1,21 @@
+@use "../variables" as *;
+@use "../functions" as *;
+
+.view.documents {
+
+	@mixin ViewDocuments() {
+		text-align: justify;
+		a {
+			color: $color-primary-light;
+			&:hover { color: $color-primary; }
+		}
+		ol { counter-reset: item; }
+		ol > li {
+			display: block;
+			&:before { content: counters(item, ".") ". "; counter-increment: item; }
+		}
+		ul { list-style-type: disc; }
+	}
+
+	@include MixScreen() { @include ViewDocuments(); }
+}

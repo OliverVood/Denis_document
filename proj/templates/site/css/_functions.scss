@@ -31,7 +31,7 @@
 	@return map.get($defaults, $name);
 }
 
-@function GetParam($params, $name, $default) {
+@function GetParam($params, $name, $default: null) {
 	@if ($params != null) {
 		$temp: map.get($params, $name);
 		@if ($temp != null) { @return $temp; }

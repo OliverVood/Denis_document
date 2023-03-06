@@ -27,8 +27,8 @@
 					<div class = "menu">
 						<div><?= Feedback::instance()->feedback->GetLink('Обратная связь'); ?></div>
 						<div><?= General::instance()->donations->GetLink('Поддержать проект'); ?></div>
-						<div><?= General::instance()->terms_use->GetLink('Пользовательское соглашение'); ?></div>
 						<div><?= General::instance()->privacy_policy->GetLink('Политика конфиденциальности'); ?></div>
+						<div><?= General::instance()->terms_use->GetLink('Пользовательское соглашение'); ?></div>
 					</div>
 				</div>
 			</div>

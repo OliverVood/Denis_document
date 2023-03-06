@@ -4,7 +4,7 @@
 $sizeXS     : 420;
 $sizeS      : 480;
 $sizeM      : 560;
-//$sizeL      : 680;
+$sizeL      : 680;
 $sizeX      : 760;
 //$sizeXL     : 860;
 $size2XL    : 980;
@@ -12,6 +12,11 @@ $size2XL    : 980;
 //$size4XL    : 1200;
 $size5XL    : 1280;
 //$size6XL    : 1920;
+
+$base: 1rem;
+$base2: $base * 2;
+$base3: $base * 3;
+$base4: $base * 4;
 
 /* Palette */
 $color-light							: #FFFFFF;

@@ -6,31 +6,25 @@
 * { box-sizing: border-box; }
 
 @mixin MixTemplate($params: null) {
-	$default: (
-		bg_img					: url("img/wall.jpg"),
-		header_display			: revert,
-		footer_display			: revert,
-		main_width				: 1200px,
-		document_min_width		: auto,
-		main_bg_color			: $color-neutral-extra-light,
-		main_box_shadow			: $shadow_small
-	);
 
 	html {
-		min-width: 360px; height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: GetValue($default, $params, 'bg_img');
+		min-width: 360px; height: 100%; font-family: PetersburgC, sans-serif; font-size: 14px; flex: auto; background-image: GetParam($params, -bg-img, url("img/wall.jpg"));
 		body {
-			display: flex; flex-direction: column; margin: 0; height: 100%; font-size: 1.2rem;
-			> header { display: GetValue($default, $params, 'header_display'); }
+			display: flex; flex-direction: column; margin: 0; height: 100%; font-size: $base * 1.2;
+			> header { display: GetParam($params, -header-display, revert); }
 			> main {
-				flex: auto; margin: 3rem auto; padding: 4rem 2rem;
-				width: GetValue($default, $params, 'main_width');
-				background-color: GetValue($default, $params, 'main_bg_color');
-				box-shadow: GetValue($default, $params, 'main_box_shadow');
+				flex: auto; margin: $base3 auto; padding: GetParam($params, -main-padding, $base4);
+				width: GetParam($params, -main-width, 1200px);
+				background-color: GetParam($params, -main-bg-color, $color-neutral-extra-light);
+				box-shadow: GetParam($params, -main-box-shadow, $shadow_small);
 			}
-			> footer { display: GetValue($default, $params, 'footer_display'); }
+			> footer { display: GetParam($params, -footer-display, revert); }
 		}
 	}
 }
 
-@include MixScreen() { @include MixTemplate(); }
-@include MixPrint() { @include MixTemplate((bg_img: none, header_display: none, footer_display: none, main_width: 100%, main_bg_color: transparent, main_box_shadow: none)); }
+@include MixScreen($size5XL) { @include MixTemplate(); }
+@include MixScreen($sizeL, $size5XL) { @include MixTemplate((-main-width: 90%)); }
+@include MixScreen($sizeS, $sizeL) { @include MixTemplate((-main-width: 100%, -main-padding: $base2)); }
+@include MixScreen(null, $sizeS) { @include MixTemplate((-main-width: 100%, -main-padding: $base)); }
+@include MixPrint() { @include MixTemplate((-bg-img: none, -header-display: none, -footer-display: none, -main-width: 100%, -main-bg-color: transparent, -main-box-shadow: none)); }

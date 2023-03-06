@@ -1,0 +1,89 @@
+@use "sass:map";
+@use "sass:list";
+
+@use "variables" as *;
+@use "functions" as *;
+
+.grid {
+	display: grid;
+
+	@function GetProperty($properties, $name, $columns, $size) { @return nth(nth(GetParam($properties, $name), $columns), $size); }
+
+	@mixin Styles($grids, $columns, $size) {
+		$properties: (
+			-h1-margin-bottom: (
+				($base * 2.2, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.8, $base * 1.6, $base * 1.8, $base * 1.6),
+				($base * 1.6, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.4, $base * 1.6, $base * 1.8, $base * 1.6)
+			),
+			-h1-size: (
+				($base * 2.2, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.8, $base * 1.6, $base * 1.8, $base * 1.6),
+				($base * 1.6, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.4, $base * 1.6, $base * 1.8, $base * 1.6)
+			),
+			-between-p-p: (
+				($base * 1.4, $base * 1.2, $base, $base * 0.8),
+				($base, $base * 0.8, $base, $base * 0.8),
+				($base * 0.8, $base * 1.2, $base, $base * 0.8),
+				($base * 0.8, $base * 0.8, $base, $base * 0.8)
+			),
+			-between-p-ol: (
+				($base * 2.2, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.8, $base * 1.6, $base * 1.8, $base * 1.6),
+				($base * 1.6, $base2, $base * 1.8, $base * 1.6),
+				($base * 1.4, $base * 1.6, $base * 1.8, $base * 1.6)
+			),
+			-in-li-p: (
+				($base * 1.4, $base * 1.2, $base, $base * 0.8),
+				($base, $base * 0.8, $base, $base * 0.8),
+				($base * 0.8, $base * 1.2, $base, $base * 0.8),
+				($base * 0.8, $base * 0.8, $base, $base * 0.8)
+			),
+			-between-li-li: (
+				($base * 1.4, $base * 1.2, $base, $base * 0.8),
+				($base, $base * 0.8, $base, $base * 0.8),
+				($base * 0.8, $base * 1.2, $base, $base * 0.8),
+				($base * 0.8, $base * 0.8, $base, $base * 0.8)
+			),
+			-in-li-ul: (
+				($base * 1.4, $base * 1.2, $base, $base * 0.8),
+				($base, $base * 0.8, $base, $base * 0.8),
+				($base * 0.8, $base * 1.2, $base, $base * 0.8),
+				($base * 0.8, $base * 0.8, $base, $base * 0.8)
+			)
+		);
+
+		grid-template-columns: repeat(nth(nth($grids, $columns), $size), 1fr);
+		h1 { margin-bottom: GetProperty($properties, -h1-margin-bottom, $columns, $size); font-size: GetProperty($properties, -h1-size, $columns, $size); }
+		p + p { margin-top: GetProperty($properties, -between-p-p, $columns, $size); }
+		p + ul, p + ol { margin-top: GetProperty($properties, -between-p-ol, $columns, $size); }
+		li > p { margin-top: GetProperty($properties, -in-li-p, $columns, $size); }
+		li + li { margin-top: GetProperty($properties, -between-li-li, $columns, $size); }
+		li > ul, li > ol { margin-top: GetProperty($properties, -in-li-ul, $columns, $size); }
+	}
+
+	@mixin Sizes($grids, $columns) {
+		@include MixScreen($size2XL) 			{ @include Styles($grids, $columns, 1); }
+		@include MixScreen($sizeL, $size2XL) 	{ @include Styles($grids, $columns, 2); }
+		@include MixScreen($sizeS, $sizeL) 		{ @include Styles($grids, $columns, 3); }
+		@include MixScreen(null, $sizeS) 		{ @include Styles($grids, $columns, 4); }
+	}
+
+	@mixin Grids() {
+		$grids: (
+			(1, 1, 1, 1),
+			(2, 2, 1, 1),
+			(3, 1, 1, 1),
+			(4, 2, 1, 1)
+		);
+
+		&.col_1 { @include Sizes($grids, 1); }
+		&.col_2 { @include Sizes($grids, 2); }
+		&.col_3 { @include Sizes($grids, 3); }
+		&.col_4 { @include Sizes($grids, 4); }
+	}
+
+	@include Grids();
+}
