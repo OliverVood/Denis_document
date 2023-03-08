@@ -12,7 +12,7 @@
 			return $this->Read();
 		}
 
-		public function Render() { ?>
+		public function Render(): void { ?>
 			<div class = "view general donations">
 				<div>
 					<div class = "description">
@@ -41,7 +41,6 @@
 						<span class = "number">7</span>
 					</div>
 					<div class = "name">
-
 						<span class = "symbol">Д</span>
 						<span class = "symbol">е</span>
 						<span class = "symbol">н</span>

@@ -14,24 +14,26 @@
 			return $this->Read();
 		}
 
-		public function Render(array $items, $title) { ?>
+		public function Render(array $items, $title): void {
+			if (!$items) return;
+		?>
 			<div class = "view changes last_items">
-				<h2><?= $title; ?></h2>
+				<div class = "grid col_1">
+					<div>
+						<h2><?= $title; ?></h2>
+					</div>
+				</div>
 				<div class = "list">
+					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
 				<div class = "all"><?= Units\Changes::instance()->list->GetLink('Все изменения'); ?></div>
 			</div>
 		<?php }
 
-		public function RenderItem(array $item) {
-//			$background = $item['cover'] ? 'style = "background-image: url(' . Changes::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
-			?>
+		public function RenderItem(array $item): void { ?>
 			<div class = "view changes last_item">
-<?php // <!--				<div class = "cover"--><?= $background; ?<!--></div>--> ?>
-				<h3 class = "header"><?= $item['header']; ?></h3>
-<!--				<div class = "content">--><?//= $item['content']; ?><!--</div>-->
-				<div class = "links"><?= Units\Changes::instance()->show->GetLink('Читать', ['id' => $item['id']]); ?></div>
+				<?= Units\Changes::instance()->show->GetLink($item['header'], ['id' => $item['id']]); ?>
 			</div>
 		<?php }
 

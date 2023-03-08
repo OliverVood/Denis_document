@@ -14,11 +14,11 @@
 			return $this->Read();
 		}
 
-		public function Render() { ?>
+		public function Render(): void { ?>
 			<div class = "view general footer">
 				<div>
 					<div class = "agency">
-						<div class = "logo"><a href = "/"></a></div>
+						<div class = "logo"><?= General::instance()->home->GetLink(''); ?></div>
 						<div class = "info">
 							<div class = "name">MyDocuments</div>
 							<div class = "slogan">управляй своими документами</div>

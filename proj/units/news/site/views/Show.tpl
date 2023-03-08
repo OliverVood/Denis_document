@@ -13,12 +13,18 @@
 			return $this->Read();
 		}
 
-		public function Render(array $data) {
+		public function Render(array $data): void {
 			$background = $data['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $data['cover'] . ');"' : '';
 		?>
 			<div class = "view news show">
-				<h1><?= $data['header']; ?></h1>
-				<div class = "cover"<?= $background; ?>></div>
+				<div class = "cover"<?= $background; ?>>
+					<div></div>
+					<div class = "grid col_1">
+						<div>
+							<h1><?= $data['header']; ?></h1>
+						</div>
+					</div>
+				</div>
 				<div class = "content"><?= $data['content']; ?></div>
 				<div class = "data publish"><?= $data['datepb']; ?></div>
 			</div>

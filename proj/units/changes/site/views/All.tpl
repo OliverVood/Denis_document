@@ -14,7 +14,7 @@
 			return $this->Read();
 		}
 
-		public function Render(array $items, $title) { ?>
+		public function Render(array $items, $title): void { ?>
 			<div class = "view changes last_items">
 				<h1><?= $title; ?></h1>
 				<div class = "list">
@@ -23,7 +23,7 @@
 			</div>
 		<?php }
 
-		public function RenderItem(array $item) {
+		public function RenderItem(array $item): void {
 //			$background = $item['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view changes last_item">

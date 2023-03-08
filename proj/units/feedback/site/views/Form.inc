@@ -13,7 +13,7 @@
 			return $this->Read();
 		}
 
-		public function Render() { ?>
+		public function Render(): void { ?>
 			<div class = "view feedback form">
 				<form action = "/feedback/do">
 					<div>

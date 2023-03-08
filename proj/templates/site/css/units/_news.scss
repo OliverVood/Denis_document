@@ -2,13 +2,9 @@
 @use "../functions" as *;
 
 .view.news.last_items {
-	@mixin ViewNewsLastItems($params: null) {
-		$default: (
 
-		);
-
+	@mixin ViewNewsLastItems() {
 		margin-top: 4rem;
-		> .list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 		> .all { margin-top: 1rem; text-align: left; }
 	}
 
@@ -16,11 +12,8 @@
 }
 
 .view.news.last_item {
-	@mixin ViewNewsLastItem($params: null) {
-		$default: (
 
-		);
-
+	@mixin ViewNewsLastItem() {
 		border: 1px solid $color-secondary;
 		> .cover { height: 140px; background-color: $color-neutral-light; background-size: cover; background-position: center; }
 		> .header { margin: 1rem 1rem 0.5rem; }
@@ -29,4 +22,21 @@
 	}
 
 	@include MixScreen() { @include ViewNewsLastItem(); }
+}
+
+.view.news.show {
+
+	@mixin ViewNewsShow() {
+		> .cover {
+			position: relative; background-position: center; background-size: cover;
+			> div {
+				&:first-child { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(transparent, #eaeaea 80%); }
+				h1 { padding-top: 10rem; position: relative; /*padding-bottom: 2rem; margin: 0;*/ }
+			}
+		}
+		> .content { text-align: justify; }
+		> .data { margin-top: 1rem; text-align: right; font-size: 1rem; color: $color_running_title; }
+	}
+
+	@include MixScreen() { @include ViewNewsShow(); }
 }

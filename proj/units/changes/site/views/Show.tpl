@@ -13,7 +13,7 @@
 			return $this->Read();
 		}
 
-		public function Render(array $data, array $list) { ?>
+		public function Render(array $data, array $list): void { ?>
 			<div class = "view changes show">
 				<h1><?= $data['header']; ?></h1>
 				<div class = "list">
@@ -23,7 +23,7 @@
 			</div>
 		<?php }
 
-		private function RenderChange($item) {
+		private function RenderChange($item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . Changes::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view change item">

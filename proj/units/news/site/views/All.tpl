@@ -14,16 +14,20 @@
 			return $this->Read();
 		}
 
-		public function Render(array $items, $title) { ?>
-			<div class = "view news last_items">
-				<h1><?= $title; ?></h1>
-				<div class = "list">
+		public function Render(array $items, $title): void { ?>
+			<div class = "view news all">
+				<div class = "grid col_1">
+					<div>
+						<h1><?= $title; ?></h1>
+					</div>
+				</div>
+				<div class = "list grid col_3">
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
 			</div>
 		<?php }
 
-		public function RenderItem(array $item) {
+		public function RenderItem(array $item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view news last_item">

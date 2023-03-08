@@ -23,6 +23,18 @@
 				($base * 1.6, $base2, $base * 1.8, $base * 1.6),
 				($base * 1.4, $base * 1.6, $base * 1.8, $base * 1.6)
 			),
+			-h2-margin-bottom: (
+				($base * 1.8, $base * 1.6, $base * 1.4, $base * 1.2),
+				($base * 1.4, $base * 1.2, $base * 1.6, $base * 1.2),
+				($base * 1.2, $base * 1.6, $base * 1.4, $base * 1.2),
+				($base * 1.0, $base * 1.2, $base * 1.4, $base * 1.2)
+			),
+			-h2-size: (
+				($base2, $base * 1.8, $base * 1.6, $base * 1.4),
+				($base * 1.6, $base * 1.4, $base * 1.6, $base * 1.4),
+				($base * 1.4, $base * 1.8, $base * 1.6, $base * 1.4),
+				($base * 1.2, $base * 1.4, $base * 1.6, $base * 1.4)
+			),
 			-between-p-p: (
 				($base * 1.4, $base * 1.2, $base, $base * 0.8),
 				($base, $base * 0.8, $base, $base * 0.8),
@@ -55,8 +67,9 @@
 			)
 		);
 
-		grid-template-columns: repeat(nth(nth($grids, $columns), $size), 1fr);
+		grid-template-columns: repeat(nth(nth($grids, $columns), $size), 1fr); gap: 1rem;
 		h1 { margin-bottom: GetProperty($properties, -h1-margin-bottom, $columns, $size); font-size: GetProperty($properties, -h1-size, $columns, $size); }
+		h2 { margin-bottom: GetProperty($properties, -h2-margin-bottom, $columns, $size); font-size: GetProperty($properties, -h2-size, $columns, $size); }
 		p + p { margin-top: GetProperty($properties, -between-p-p, $columns, $size); }
 		p + ul, p + ol { margin-top: GetProperty($properties, -between-p-ol, $columns, $size); }
 		li > p { margin-top: GetProperty($properties, -in-li-p, $columns, $size); }

@@ -5,13 +5,23 @@
 
 @import "fonts";
 
-a { cursor: pointer; color: $color-text; text-decoration: none; }
+a {
+	cursor: pointer; color: $color-text; text-decoration: none;
+	&:hover { text-decoration: underline; }
+	&.link {
+		color: $color-primary-light;
+		&:hover { color: $color-primary; }
+	}
+}
 h1 { margin: 0 0 3rem; font-size: 2.2rem; font-weight: normal; text-align: center; }
-h2 { margin: 0 0 1rem; }
+h2 { margin: 0 0 1rem; font-weight: normal; }
 h3 { margin: 0 0 0.5rem; }
 p, ol { margin: 0; }
 input { @include MixText; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
-input[type="button"], input[type="submit"], .button { @include MixBtn; outline: none; text-decoration: none; }
+input[type="button"], input[type="submit"], a.button {
+	@include MixBtn; outline: none; text-decoration: none;
+	&.hover { text-decoration: none; }
+}
 textarea { @include MixTextarea; font-family: PetersburgC, sans-serif; font-size: 1.2rem; }
 .hide { display: none; }
 .items_margin_bottom > *:not(:last-child) { margin-bottom: $items_margin; }
@@ -20,9 +30,6 @@ label .required:after { content: "*"; margin-left: 4px; color: $color_negative; 
 .document {
 	font-family: Monitorica, sans-serif;
 	input { font-family: Monitorica, sans-serif; font-size: 1.2rem; }
-}
-.link {
-	&:hover {  }
 }
 
 @mixin MixMain($params: null) {
@@ -48,3 +55,4 @@ label .required:after { content: "*"; margin-left: 4px; color: $color_negative; 
 @import "units/news";
 @import "units/feedback";
 @import "units/documents";
+@import "units/changes";

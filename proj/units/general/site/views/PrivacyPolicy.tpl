@@ -13,7 +13,7 @@
 			return $this->Read();
 		}
 
-		public function Render() {
+		public function Render(): void {
 			$site_url = $_SERVER['SERVER_NAME'];
 			$site_support = 'support@_____.com';
 		?>

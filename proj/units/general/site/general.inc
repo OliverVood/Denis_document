@@ -25,41 +25,53 @@
 	class General extends Units implements Consts\General {
 		use Instance;
 
-		public Action $header;
-		public Action $footer;
+		public Action $set_data_page;
+
+		public Action $home;
+		public Action $about;
+		public Action $contacts;
 		public Action $privacy_policy;
 		public Action $terms_use;
+
+		public Action $header;
+		public Action $footer;
+
 		public Action $donations;
-		public Action $set_data_page;
+
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
 
 			$this->set_data_page			= new Action('always', 'always');
 
-			$this->header					= new Action('always', 'always');
-			$this->footer					= new Action('always', 'always');
+			$this->home						= new Action('null', 'null', 'default');
+			$this->about					= new Action('about', 'null', 'default');
+			$this->contacts					= new Action('contacts', 'null', 'default');
 			$this->privacy_policy			= new Action('documents', 'privacy_policy', 'default');
 			$this->terms_use				= new Action('documents', 'terms_use', 'default');
+
+			$this->header					= new Action('always', 'always');
+			$this->footer					= new Action('always', 'always');
 
 			$this->donations				= new Action('donations', 'null', 'default', /* @lang JavaScript */ "Site.General.On(); return false;");
 
 			Controller::instance()->view->Push($this->set_data_page, [$this, 'SetDataPage']);
 
-			Controller::instance()->view->Push($this->header, [$this, 'OutHeader']);
-			Controller::instance()->view->Push($this->header, [$this, 'OutFooter']);
 			Controller::instance()->view->Push($this->privacy_policy, [$this, 'OutPrivacyPolicy']);
 			Controller::instance()->view->Push($this->terms_use, [$this, 'OutTermsUse']);
+
+			Controller::instance()->view->Push($this->header, [$this, 'OutHeader']);
+			Controller::instance()->view->Push($this->header, [$this, 'OutFooter']);
 
 			Controller::instance()->view->Push($this->donations, [$this, 'OnDonations']);
 		}
 
-		public function OutHeader() {
-			Layout::instance()->header->Push(Header::object()->ToVar());
-		}
-
-		public function OutFooter() {
-			Layout::instance()->footer->Push(Footer::object()->ToVar());
+		public function SetDataPage() {
+			$path = [];
+			if (Controller::$area != 'null') $path[] = Controller::$area;
+			if (Controller::$part != 'null') $path[] = Controller::$part;
+			$value = $path ? implode('_', $path) : 'main';
+			Layout::SetDataPage($value);
 		}
 
 		public function OutPrivacyPolicy() {
@@ -70,16 +82,16 @@
 			Layout::instance()->main->Push(TermsUse::object()->ToVar());
 		}
 
-		#[NoReturn] public function OnDonations() {
-			SendJSONSuccess(['html' => Donations::object()->ToVar()]);
+		public function OutHeader() {
+			Layout::instance()->header->Push(Header::object()->ToVar());
 		}
 
-		public function SetDataPage() {
-			$path = [];
-			if (Controller::$area != 'null') $path[] = Controller::$area;
-			if (Controller::$part != 'null') $path[] = Controller::$part;
-			$value = $path ? implode('_', $path) : 'main';
-			Layout::SetDataPage($value);
+		public function OutFooter() {
+			Layout::instance()->footer->Push(Footer::object()->ToVar());
+		}
+
+		#[NoReturn] public function OnDonations() {
+			SendJSONSuccess(['html' => Donations::object()->ToVar()]);
 		}
 
 	}

@@ -12,7 +12,7 @@
 			return $this->Read();
 		}
 
-		public function Render() { ?>
+		public function Render(): void { ?>
 			<div class = "view catalogs work">
 				<h1 class = "glob_print_tabu">Работа со сметами</h1>
 				<script>

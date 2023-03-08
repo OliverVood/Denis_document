@@ -14,17 +14,23 @@
 			return $this->Read();
 		}
 
-		public function Render(array $items, $title) { ?>
+		public function Render(array $items, $title): void {
+			if (!$items) return;
+		?>
 			<div class = "view news last_items">
-				<h2><?= $title; ?></h2>
-				<div class = "list">
+				<div class = "grid col_1">
+					<div>
+						<h2><?= $title; ?></h2>
+					</div>
+				</div>
+				<div class = "list grid col_3">
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
 				<div class = "all"><?= Units\News::instance()->all->GetLink('Все новости'); ?></div>
 			</div>
 		<?php }
 
-		public function RenderItem(array $item) {
+		public function RenderItem(array $item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view news last_item">
