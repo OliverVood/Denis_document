@@ -3,7 +3,6 @@
 	namespace Proj\Site\Templates\Changes;
 
 	use Base\Templates\View;
-//	use Proj\Units\Consts\Changes;
 	use Proj\Site\Units;
 
 	class Last extends View {
@@ -25,14 +24,13 @@
 				</div>
 				<div class = "list">
 					<?php foreach ($items as $item) $this->RenderItem($item); ?>
-					<?php foreach ($items as $item) $this->RenderItem($item); ?>
 				</div>
 				<div class = "all"><?= Units\Changes::instance()->list->GetLink('Все изменения'); ?></div>
 			</div>
 		<?php }
 
 		public function RenderItem(array $item): void { ?>
-			<div class = "view changes last_item">
+			<div class = "view changes item">
 				<?= Units\Changes::instance()->show->GetLink($item['header'], ['id' => $item['id']]); ?>
 			</div>
 		<?php }

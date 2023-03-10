@@ -88,7 +88,7 @@
 	@include MixScreen(null, $sizeS) { @include ViewGeneralFooter((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem)); }
 }
 
-.view.general.donations {
+.view.general.donations {//TODO
 	width: min-content;
 	> div {
 		> .description {

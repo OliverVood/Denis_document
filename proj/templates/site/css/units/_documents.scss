@@ -3,7 +3,7 @@
 
 .view.documents {
 
-	@mixin ViewDocuments() {
+	@mixin ViewDocuments($params: null) {
 		text-align: justify;
 		a {
 			color: $color-primary-light;

@@ -15,7 +15,11 @@
 
 		public function Render(array $data, array $list): void { ?>
 			<div class = "view changes show">
-				<h1><?= $data['header']; ?></h1>
+				<div class = "grid col_1">
+					<div>
+						<h1><?= $data['header']; ?></h1>
+					</div>
+				</div>
 				<div class = "list">
 					<?php foreach ($list as $item) $this->RenderChange($item); ?>
 				</div>

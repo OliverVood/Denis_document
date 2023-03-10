@@ -33,7 +33,7 @@
 		public function RenderItem(array $item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
-			<div class = "view news last_item">
+			<div class = "view news item">
 				<div class = "cover"<?= $background; ?>></div>
 				<h3 class = "header"><?= $item['header']; ?></h3>
 				<div class = "content"><?= $item['content']; ?></div>

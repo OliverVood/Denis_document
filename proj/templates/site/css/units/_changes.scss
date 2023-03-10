@@ -1,6 +1,15 @@
 @use "../variables" as *;
 @use "../functions" as *;
 
+.view.changes.all {
+
+	@mixin ViewNewsLastItems($params: null) {
+		> .all { margin-top: 1rem; text-align: left; }
+	}
+
+	@include MixScreen() { @include ViewNewsLastItems(); }
+}
+
 .view.changes.last_items {
 
 	@mixin ViewNewsLastItems($params: null) {
@@ -11,7 +20,7 @@
 	@include MixScreen() { @include ViewNewsLastItems(); }
 }
 
-.view.changes.last_item {
+.view.changes.item {
 
 	@mixin ViewNewsLastItem($params: null) {
 		&:not(:last-child) { margin-bottom: 4px; }
@@ -19,20 +28,30 @@
 
 	@include MixScreen() { @include ViewNewsLastItem(); }
 }
-//
-//.view.news.show {
-//
-//	@mixin ViewNewsShow($params: null) {
-//		> .cover {
-//			position: relative; background-position: center; background-size: cover;
-//			> div {
-//				&:first-child { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(transparent, #eaeaea 80%); }
-//				h1 { padding-top: 10rem; position: relative; /*padding-bottom: 2rem; margin: 0;*/ }
-//			}
-//		}
-//		> .content { text-align: justify; }
-//		> .data { margin-top: 1rem; text-align: right; font-size: 1rem; color: $color_running_title; }
-//	}
-//
-//	@include MixScreen() { @include ViewNewsShow(); }
-//}
+
+.view.changes.show {
+
+	@mixin ViewChangesShow($params: null) {
+		> .data { margin-top: 1rem; text-align: right; font-size: 1rem; color: $color_running_title; }
+	}
+
+	@include MixScreen() { @include ViewChangesShow(); }
+}
+
+.view.change.item {
+
+	@mixin ViewChangeItem($params: null) {
+		display: grid; grid-template-columns: repeat(3, 1fr); gap: $base2;
+		> .cover { grid-area: a; height: 180px; }
+		> .wrap {
+			grid-area: b; padding-right: $base2;
+			> .header { font-weight: 700; font-size: 1.4rem; }
+			> .content { margin-top: 1rem; text-align: justify; }
+		}
+		&:nth-child(odd) { grid-template-areas: 'a b b'; }
+		&:nth-child(even) { grid-template-areas: 'b b a'; }
+		&:not(:first-child) { margin-top: $base2; }
+	}
+
+	@include MixScreen() { @include ViewChangeItem(); }
+}

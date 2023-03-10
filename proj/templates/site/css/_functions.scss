@@ -22,15 +22,6 @@
 	@return GetImageUI('primary_light/' + $file);
 }
 
-@function GetValue($defaults, $params, $name) {
-	@if ($params != null) {
-		$temp: map.get($params, $name);
-		@if ($temp != null) { @return $temp; }
-	}
-
-	@return map.get($defaults, $name);
-}
-
 @function GetParam($params, $name, $default: null) {
 	@if ($params != null) {
 		$temp: map.get($params, $name);
@@ -60,7 +51,7 @@
 	}
 }
 
-@mixin MixPrint() {
+@mixin MixPrint {
 	@include MixScreen(null, null, false, true) { @content; }
 }
 

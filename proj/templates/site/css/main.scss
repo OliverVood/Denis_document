@@ -33,19 +33,12 @@ label .required:after { content: "*"; margin-left: 4px; color: $color_negative; 
 }
 
 @mixin MixMain($params: null) {
-	$default: (
-		display_print			: none,
-		display_print_tabu		: null
-	);
-	$display_print_tabu: null;
-	@if ($params != null) { $display_print_tabu: map.get($params, 'display_print_tabu'); }
-
-	.glob_print { display: GetValue($default, $params, 'display_print') !important; }
-	@if ($display_print_tabu != null) { .glob_print_tabu { display: GetValue($default, $params, 'display_print_tabu') !important; } }
+	.glob_print { display: GetParam($params, -display-print, none); }
+	.glob_print_tabu { display: GetParam($params, -display-print-tabu, null); }
 }
 
 @include MixScreen() { @include MixMain(); }
-@include MixPrint() { @include MixMain((display_print: revert, display_print_tabu: none)); }
+@include MixPrint() { @include MixMain((-display-print: revert !important, -display-print-tabu: none !important)); }
 
 @import "template";
 @import "grid";

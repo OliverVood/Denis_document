@@ -84,7 +84,7 @@
 		@include MixScreen(null, $sizeS) 		{ @include Styles($grids, $columns, 4); }
 	}
 
-	@mixin Grids() {
+	@mixin Grids {
 		$grids: (
 			(1, 1, 1, 1),
 			(2, 2, 1, 1),

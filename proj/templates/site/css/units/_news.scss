@@ -3,7 +3,7 @@
 
 .view.news.last_items {
 
-	@mixin ViewNewsLastItems() {
+	@mixin ViewNewsLastItems($params: null) {
 		margin-top: 4rem;
 		> .all { margin-top: 1rem; text-align: left; }
 	}
@@ -11,9 +11,9 @@
 	@include MixScreen() { @include ViewNewsLastItems(); }
 }
 
-.view.news.last_item {
+.view.news.item {
 
-	@mixin ViewNewsLastItem() {
+	@mixin ViewNewsLastItem($params: null) {
 		border: 1px solid $color-secondary;
 		> .cover { height: 140px; background-color: $color-neutral-light; background-size: cover; background-position: center; }
 		> .header { margin: 1rem 1rem 0.5rem; }
@@ -26,7 +26,7 @@
 
 .view.news.show {
 
-	@mixin ViewNewsShow() {
+	@mixin ViewNewsShow($params: null) {
 		> .cover {
 			position: relative; background-position: center; background-size: cover;
 			> div {

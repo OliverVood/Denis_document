@@ -9,13 +9,8 @@
 }
 
 .view.catalogs.work {
-	@mixin ViewCatalogsWork($params: null) {
-		$default: (
-			container_margin_top			: 2rem,
-			is_bold							: normal,
-			display_input					: revert
-		);
 
+	@mixin ViewCatalogsWork($params: null) {
 		> .control {
 			display: flex;
 			> .btns {
@@ -33,7 +28,7 @@
 			}
 		}
 		> .container {
-			margin-top: GetValue($default, $params, 'container_margin_top'); font-family: Monitorica, sans-serif;
+			margin-top: GetParam($params, -container-margin-top, $base2); font-family: Monitorica, sans-serif;
 			input[type="text"] { font-family: Monitorica, sans-serif; }
 			> .wrap {
 				> .btns {
@@ -86,7 +81,7 @@
 								> th { padding: 0.2rem 1rem; background-color: $color-secondary; }
 								> td { padding: 0.2rem 1rem; }
 								&.total > td {
-									&:nth-child(3), &:nth-child(4)  { padding: 1rem; font-size: 1.8rem; font-weight: GetValue($default, $params, 'is_bold'); background-color: $color-secondary; }
+									&:nth-child(3), &:nth-child(4)  { padding: 1rem; font-size: 1.8rem; font-weight: GetParam($params, -is-bold, normal); background-color: $color-secondary; }
 								}
 							}
 							input { padding: 0; width: 100%; }
@@ -120,7 +115,7 @@
 				}
 			}
 			input {
-				display: GetValue($default, $params, 'display_input');
+				display: GetParam($params, -display-input, revert);
 				&[type="text"], &[type="date"] { border: none; outline: none; background-color: transparent; }
 			}
 			.number {
@@ -128,10 +123,10 @@
 				> input[type="text"] { text-align: center; }
 			}
 		}
-		input { display: GetValue($default, $params, 'display_input'); }
+		input { display: GetParam($params, -display-input, revert); }
 	}
 
 	@include MixScreen() { @include ViewCatalogsWork(); }
-	@include MixPrint() { @include ViewCatalogsWork((container_margin_top: 0, is_bold: bold, display_input : none)); }
+	@include MixPrint() { @include ViewCatalogsWork((-container-margin-top: 0, -is-bold: bold, -display-input: none)); }
 
 }

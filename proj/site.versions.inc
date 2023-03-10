@@ -8,5 +8,5 @@
 		const FEEDBACK_JS						= '1.0.0001';		// "/proj/templates/site/js/feedback.js":2399090493
 		const SKIN_SELECT_JS					= '1.0.0002';		// "/proj/templates/site/js/skins/select.js":1584323857
 
-		const MAIN_CSS							= '1.0.0093';		// "/proj/templates/site/css/main.css":1844757470
+		const MAIN_CSS							= '1.0.0132';		// "/proj/templates/site/css/main.css":178971887
 	}
