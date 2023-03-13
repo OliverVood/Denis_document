@@ -88,28 +88,53 @@
 	@include MixScreen(null, $sizeS) { @include ViewGeneralFooter((lateral_spacing: 1rem, name_size: 2rem, slogan_size: 0.9rem, agency_padding: 1rem, logo_size: 4rem)); }
 }
 
-.view.general.donations {//TODO
-	width: min-content;
-	> div {
-		> .description {
-			text-align: justify;
-			> div:not(:first-child) { margin-top: 0.5rem; }
-		}
-		> .card {
-			display: flex; gap: 2px; margin-top: 2rem;
-			> span {
-				padding: 0.5rem;
-				&.number { background-color: $color-neutral-extra-light; }
+.view.general.contacts {
+
+	@mixin ViewGeneralContacts($params: null) {
+		p:not(:first-child) { padding-top: 1rem; }
+	}
+
+	@include MixScreen() { @include ViewGeneralContacts(); }
+}
+
+.view.general.about {
+
+	@mixin ViewGeneralAbout($params: null) {
+		p:not(:first-child) { padding-top: 1rem; }
+	}
+
+	@include MixScreen() { @include ViewGeneralAbout(); }
+}
+
+.view.general.donations {
+
+	@mixin ViewGeneralDonations($params: null) {
+		width: min-content;
+		> div {
+			> .description {
+				text-align: justify;
+				> div:not(:first-child) { margin-top: 0.5rem; }
 			}
-		}
-		> .name {
-			display: flex; gap: 1px; margin-top: 0.5rem; font-size: 1rem;
-			> span {
-				padding: 0.2rem;
-				&.symbol { background-color: $color-neutral-extra-light; }
+			> .card {
+				display: flex; gap: GetParam($params, -card-number-gap, 2px); margin-top: 2rem;
+				> span {
+					padding: GetParam($params, -card-number-padding, 0.5rem);
+					&.number { background-color: $color-neutral-extra-light; }
+				}
+			}
+			> .name {
+				display: flex; gap: 1px; margin-top: 0.5rem; font-size: 1rem;
+				> span {
+					padding: 0.2rem;
+					&.symbol { background-color: $color-neutral-extra-light; }
+				}
 			}
 		}
 	}
+
+	@include MixScreen($sizeM) { @include ViewGeneralDonations(); }
+	@include MixScreen($sizeS, $sizeM) { @include ViewGeneralDonations((-card-number-padding: 0.2rem)); }
+	@include MixScreen(null, $sizeS) { @include ViewGeneralDonations((-card-number-gap: 0, -card-number-padding: 0.2rem)); }
 }
 
 .view.general.windows {

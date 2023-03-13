@@ -1,5 +1,6 @@
 <?php
 
+	require DIR_BASE . 'versionsControl.inc';
 	require DIR_BASE . 'versions.inc';
 	require DIR_BASE . 'functions.inc';
 

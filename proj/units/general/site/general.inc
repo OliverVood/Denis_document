@@ -3,24 +3,28 @@
 	namespace Proj\Site\Units;
 
 	require DIR_UNITS . 'general/consts.inc';
+	require DIR_UNITS . 'general/site/views/About.tpl';
+	require DIR_UNITS . 'general/site/views/Contacts.tpl';
+	require DIR_UNITS . 'general/site/views/PrivacyPolicy.tpl';
+	require DIR_UNITS . 'general/site/views/TermsUse.tpl';
 	require DIR_UNITS . 'general/site/views/Header.tpl';
 	require DIR_UNITS . 'general/site/views/Footer.tpl';
 	require DIR_UNITS . 'general/site/views/Donations.tpl';
-	require DIR_UNITS . 'general/site/views/PrivacyPolicy.tpl';
-	require DIR_UNITS . 'general/site/views/TermsUse.tpl';
 
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
 	use JetBrains\PhpStorm\NoReturn;
-	use Proj\Site\Templates\General\Donations;
 	use Proj\Units\Consts;
 	use Proj\Site\Templates\Layout;
-	use Proj\Site\Templates\General\Header;
-	use Proj\Site\Templates\General\Footer;
+	use Proj\Site\Templates\General\About;
+	use Proj\Site\Templates\General\Contacts;
 	use Proj\Site\Templates\General\PrivacyPolicy;
 	use Proj\Site\Templates\General\TermsUse;
+	use Proj\Site\Templates\General\Header;
+	use Proj\Site\Templates\General\Footer;
+	use Proj\Site\Templates\General\Donations;
 
 	class General extends Units implements Consts\General {
 		use Instance;
@@ -37,7 +41,6 @@
 		public Action $footer;
 
 		public Action $donations;
-
 
 		private function __construct() {
 			parent::__construct(self::ID, self::NAME);
@@ -57,6 +60,8 @@
 
 			Controller::instance()->view->Push($this->set_data_page, [$this, 'SetDataPage']);
 
+			Controller::instance()->view->Push($this->about, [$this, 'About']);
+			Controller::instance()->view->Push($this->contacts, [$this, 'Contacts']);
 			Controller::instance()->view->Push($this->privacy_policy, [$this, 'OutPrivacyPolicy']);
 			Controller::instance()->view->Push($this->terms_use, [$this, 'OutTermsUse']);
 
@@ -72,6 +77,14 @@
 			if (Controller::$part != 'null') $path[] = Controller::$part;
 			$value = $path ? implode('_', $path) : 'main';
 			Layout::SetDataPage($value);
+		}
+
+		public function About() {
+			Layout::instance()->main->Push(About::object()->ToVar());
+		}
+
+		public function Contacts() {
+			Layout::instance()->main->Push(Contacts::object()->ToVar());
 		}
 
 		public function OutPrivacyPolicy() {
