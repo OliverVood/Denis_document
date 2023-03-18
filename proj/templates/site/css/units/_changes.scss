@@ -42,7 +42,7 @@
 
 	@mixin ViewChangeItem($params: null) {
 		display: grid; grid-template-columns: repeat(3, 1fr); gap: $base2;
-		> .cover { grid-area: a; height: 180px; }
+		> .cover { grid-area: a; height: 180px; background-size: cover; background-position: center; }
 		> .wrap {
 			grid-area: b; padding-right: $base2;
 			> .header { font-weight: 700; font-size: 1.4rem; }

@@ -78,6 +78,7 @@
 			$state = self::STATES['active'];
 
 			$data = $this->db->SelectOne(self::TABLES['changes'], ['id', 'header', 'datepb'], "(`state` = {$state}) AND (`datepb` < NOW()) AND (`id` = {$id})");
+			if (!$data) return '';
 			$result = $this->db->Select(self::TABLES['change'], ['header', 'content'], "(`state` = {$state}) AND (`cid` = {$id})", '`id`', null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 			$list_change = $this->db->FetchAll($result);
 			return Show::object()->ToVar($data, $list_change);

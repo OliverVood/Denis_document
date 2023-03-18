@@ -27,7 +27,7 @@
 			];
 		}
 
-		protected function RegTitles(): void {//TODO d Editor добавить изменеие состояния, тут в done
+		protected function RegTitles(): void {//TODO d Editor добавить изменение состояния, тут в done
 			$this->titleSelect = 'Список обратной связи';
 			$this->titleBrowse = 'Обратная связь';
 

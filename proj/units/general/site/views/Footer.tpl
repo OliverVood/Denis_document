@@ -5,6 +5,7 @@
 	use Base\Templates\View;
 	use Proj\Site\Units\Feedback;
 	use Proj\Site\Units\General;
+	use Proj\Site\Params;
 
 	class Footer extends View {
 
@@ -20,7 +21,7 @@
 					<div class = "agency">
 						<div class = "logo"><?= General::instance()->home->GetLink(''); ?></div>
 						<div class = "info">
-							<div class = "name">MyDocuments</div>
+							<div class = "name"><?= Params::$site_name; ?></div>
 							<div class = "slogan">управляй своими документами</div>
 						</div>
 					</div>

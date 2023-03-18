@@ -39,6 +39,7 @@
 			$this->socket			= $socket;
 
 			@ $this->db = new \mysqli($this->host, $this->username, $this->password, $this->dbname, $this->port, $this->socket);
+			mysqli_set_charset($this->db, 'utf8mb4');
 
 			if (!$this->db->connect_errno) {
 				$this->state = true;
