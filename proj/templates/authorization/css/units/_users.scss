@@ -1,0 +1,10 @@
+@use "../functions" as *;
+
+.view.users.form_authorization {
+
+	@mixin ViewNewsFormAuthorization($params: null) {
+		> form { display: flex; flex-direction: column; gap: 0.5rem; }
+	}
+
+	@include MixScreen() { @include ViewNewsFormAuthorization(); }
+}

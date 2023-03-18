@@ -21,12 +21,11 @@
 			$this->main = new Section();
 			$this->footer = new Section();
 
-//			self::AddScript('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
-//			self::AddVersionScript('base_common', '/base/template/js/common', BaseVersions\COMMON_JS);
-//			self::AddVersionScript('admin_common', '/proj/templates/admin/js/common', AdminVersions\COMMON_JS);
-//			self::AddVersionScript('admin_general', '/proj/templates/admin/js/general', AdminVersions\GENERAL_JS);
+			self::AddScript('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
+			self::AddVersionScript('base_common', '/base/template/js/common', BaseVersions\COMMON_JS);
+			self::AddVersionScript('admin_users', '/proj/templates/admin/js/users', AdminVersions\USERS_JS);
 
-//			self::AddVersionStylesheet('main', DIR_REL_TPL . 'admin/css/main', AdminVersions\MAIN_CSS);
+			self::AddVersionStylesheet('main', DIR_REL_TPL . 'authorization/css/main', AdminVersions\MAIN_CSS);
 		}
 
 	}

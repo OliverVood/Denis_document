@@ -1,6 +1,6 @@
 <?php
 
-	namespace Proj\Site\Structure;
+	namespace Proj\Admin\Structure;
 
 	require DIR_UNITS . 'users/consts.inc';
 

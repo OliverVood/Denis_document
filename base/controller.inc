@@ -18,6 +18,9 @@
 			$this->void = new Stage();
 			$this->work = new Stage();
 			$this->view = new Stage();
+
+			self::$area = GetParam('__a', 'null');
+			self::$part = GetParam('__p', 'null');
 		}
 
 		/**
@@ -25,13 +28,10 @@
 		 * @return void
 		 */
 		public function Execute(): void {
-			Controller::$area = GetParam('__a', 'null');
-			Controller::$part = GetParam('__p', 'null');
-
-			$this->init->Execute(Controller::$area, Controller::$part);
-			$this->void->Execute(Controller::$area, Controller::$part);
-			$this->work->Execute(Controller::$area, Controller::$part);
-			$this->view->Execute(Controller::$area, Controller::$part);
+			$this->init->Execute(self::$area, self::$part);
+			$this->void->Execute(self::$area, self::$part);
+			$this->work->Execute(self::$area, self::$part);
+			$this->view->Execute(self::$area, self::$part);
 		}
 
 	}

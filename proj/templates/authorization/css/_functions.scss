@@ -1,0 +1,19 @@
+@mixin MixScreen($min: null, $max: null, $screen: false, $print: false) {
+	@if ($min != null or $max != null or $screen or $print) {
+
+		$media: '';
+		$fill: false;
+
+		@if ($screen) { $media: 'screen'; $fill: true; }
+		@if ($print) { @if ($fill) { $media: $media + ' AND '; } $media: $media + 'print'; $fill: true; }
+		@if ($min) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(min-width: ' + ($min + 1) + 'px)'; $fill: true; }
+		@if ($max) { @if ($fill) { $media: $media + ' AND '; } $media: $media + '(max-width: ' + $max + 'px)'; }
+
+		@media #{$media} {
+			@content;
+		}
+
+	} @else {
+		@content;
+	}
+}

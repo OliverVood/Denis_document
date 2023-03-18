@@ -20,5 +20,7 @@
 
 	require DIR_UNITS . 'admin.units.inc';
 
+	\Proj\Admin\Units\Users::instance()->IsPossible();
+
 	require DIR_PROJ . 'templates/admin/layout.inc';
 	require DIR_PROJ . 'templates/admin/index.tpl';
