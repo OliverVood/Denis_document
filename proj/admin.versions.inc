@@ -9,4 +9,5 @@
 		define("Proj\Templates\Admin\Versions\USERS_JS", VersionsControl::instance()->Get('admin', 'USERS_JS'));
 
 		define("Proj\Templates\Admin\Versions\MAIN_CSS", VersionsControl::instance()->Get('admin', 'MAIN_CSS'));
+		define("Proj\Templates\Admin\Versions\AUTHORIZATION_CSS", VersionsControl::instance()->Get('admin', 'AUTHORIZATION_CSS'));
 	}

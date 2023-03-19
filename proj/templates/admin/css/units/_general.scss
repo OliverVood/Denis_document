@@ -1,0 +1,27 @@
+@use "sass:map";
+
+@use "../variables" as *;
+@use "../functions" as *;
+
+.view.general.notices {
+	position: fixed; top: 1rem; right: 1rem; z-index: 300; display: grid; gap: 1rem;
+	> .instance {
+		display: flex; border-width: 1px; border-style: solid; border-color: $color-light; background-color: $color-light;
+		&.ok {
+			border-color: $color-primary;
+			> .type { background-image: GetImageUI('notice/ok.svg'); }
+		}
+		&.info { border-color: $color-neutral;
+			> .type { background-image: GetImageUI('notice/info.svg'); }
+		}
+		&.error { border-color: $color-negative;
+			> .type { background-image: GetImageUI('notice/error.svg'); }
+		}
+		> .type { width: 3rem; background-size: 1.5rem; background-position: 1rem 1rem; background-repeat: no-repeat; }
+		> .notice { flex: auto; padding: 1.2rem; }
+		> .close > div {
+			width: 2rem; height: 2rem; background-image: GetImageUIPrimary('close.svg'); background-size: 1rem; background-position: center; background-repeat: no-repeat; cursor: pointer;
+			&:hover { background-image: GetImageUIPrimaryLight('close.svg'); }
+		}
+	}
+}

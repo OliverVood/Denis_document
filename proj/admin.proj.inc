@@ -23,4 +23,4 @@
 	\Proj\Admin\Units\Users::instance()->IsPossible();
 
 	require DIR_PROJ . 'templates/admin/layout.inc';
-	require DIR_PROJ . 'templates/admin/index.tpl';
+	require DIR_PROJ . 'templates/admin/template.tpl';

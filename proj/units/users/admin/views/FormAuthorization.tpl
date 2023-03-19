@@ -15,7 +15,7 @@
 
 		public function Render(): void { ?>
 			<div class = "view users form_authorization">
-				<form action = "<?= Users::instance()->auth->GetHref(); ?>">
+				<form action = "<?= Users::instance()->auth->GetPath(); ?>">
 					<input type = "text" name = "login">
 					<input type = "password" name = "password">
 					<input type = "submit" value = "Войти" onclick = "<?= Users::instance()->auth->GetClick(); ?>">

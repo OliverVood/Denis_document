@@ -12,4 +12,4 @@
 	require DIR_UNITS . 'site.units.inc';
 
 	require DIR_PROJ . 'templates/site/layout.inc';
-	require DIR_PROJ . 'templates/site/index.tpl';
+	require DIR_PROJ . 'templates/site/template.tpl';

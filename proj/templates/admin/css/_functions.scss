@@ -17,3 +17,23 @@
 		@content;
 	}
 }
+
+@function GetImage($file) {
+	@return url('img/' + $file);
+}
+
+@function GetImageUI($file) {
+	@return GetImage('ui/' + $file);
+}
+
+@function GetImageUIWhite($file) {
+	@return GetImageUI('white/' + $file);
+}
+
+@function GetImageUIPrimary($file) {
+	@return GetImageUI('primary/' + $file);
+}
+
+@function GetImageUIPrimaryLight($file) {
+	@return GetImageUI('primary_light/' + $file);
+}

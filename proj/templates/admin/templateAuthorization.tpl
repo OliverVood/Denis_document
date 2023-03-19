@@ -27,8 +27,7 @@
 					<?php $this->RenderSections(); ?>
 					<script>
 						$(function() {
-							//Base.Common.GlobalParams.Set('request', '<?//= \REQUEST; ?>//');
-							// Admin.Common.Layout.Initialization();
+							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
 						});
 					</script>
 				</body>

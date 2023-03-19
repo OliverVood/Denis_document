@@ -23,38 +23,22 @@
 		private string | null $uid = null;
 		private static bool $login = false;
 
-		private function __construct() {//unset($_SESSION['USERS']['LOGIN']);die;
+		private function __construct() { // unset($_SESSION['USERS']['LOGIN']); die;
 			parent::__construct();
 
 			$this->CheckSession();
 
-			$this->auth = new Action(self::NAME, 'auth', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, () => { console.log(1); }/*Admin.Login.Do*/); return false;");
+			$this->auth = new Action(self::NAME, 'auth', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, () => location. reload()); return false;");
 
 			Controller::instance()->init->Push($this->auth, [$this, 'Auth']);
-		}
-
-		public function IsPossible() {
-			if (!$this->IsLogin() && ((Controller::$area != self::NAME) || (Controller::$part != 'auth'))) $this->GetForm();
-		}
-
-		public function CheckSession(): void {
-			if (isset($_SESSION['USERS'])) {
-				self::$login = $_SESSION['USERS']['LOGIN'] ?? false;
-			}
 		}
 
 		public function IsLogin(): bool {
 			return self::$login;
 		}
 
-		#[NoReturn] public function GetForm():void {
-			require DIR_PROJ . 'templates/authorization/layout.inc';
-			require DIR_PROJ . 'templates/authorization/index.tpl';
-
-			LayoutAuthorization::instance()->main->Push(FormAuthorization::object()->ToVar());
-			TemplateAuthorization::object()->Render();
-
-			die;
+		public function IsPossible(): void {
+			if (!$this->IsLogin() && ((Controller::$area != self::NAME) || (Controller::$part != 'auth'))) $this->GetForm();
 		}
 
 		#[NoReturn] public function Auth(): void {
@@ -73,8 +57,24 @@
 			$_SESSION['USERS']['LOGIN'] = true;
 		}
 
-		private function PasswordHash($pass) {
-			return $pass;
+		private function CheckSession(): void {
+			if (isset($_SESSION['USERS'])) {
+				self::$login = $_SESSION['USERS']['LOGIN'] ?? false;
+			}
+		}
+
+		private function PasswordHash($pass): string {
+			return md5($pass);
+		}
+
+		#[NoReturn] private function GetForm(): void {
+			require DIR_PROJ . 'templates/admin/layoutAuthorization.inc';
+			require DIR_PROJ . 'templates/admin/templateAuthorization.tpl';
+
+			LayoutAuthorization::instance()->main->Push(FormAuthorization::object()->ToVar());
+			TemplateAuthorization::object()->Render();
+
+			die;
 		}
 
 	}

@@ -8,3 +8,7 @@
   &:hover { border-color: $color-secondary-dark; background-color: $color-secondary-dark; }
   &:focus-visible, &:active { border-color: $color-secondary-dark; background-color: $color-secondary-light; }
 }
+
+@mixin SampleText {
+  padding: 0.6rem 1.6rem; border: 1px solid $color-secondary; border-radius: 0.4rem;
+}

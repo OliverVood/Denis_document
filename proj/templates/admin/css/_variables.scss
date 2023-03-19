@@ -1,5 +1,7 @@
+$color-light					: #FFFFFF;
+
 $color-text						: #000000;
-$color-text-primary				: #FFFFFF;
+$color-text-primary				: $color-light;
 
 $color-primary					: #3E4246;
 $color-primary-light			: #76797C;
@@ -12,5 +14,13 @@ $color-secondary-dark			: #00506C;
 
 $color-tertiary-light			: #68909F;
 
+$color-negative					: #950000;
+//$color-negative-light					: #AD675B;
+
+//$color-neutral-black					: #565656;
+$color-neutral							: $color-primary-super-light;
+//$color-neutral-light					: #C5C5C5;
+//$color-neutral-extra-light				: #EAEAEA;
+
 $color-link						: $color-secondary-light;
-$color-link-primary				: $color-text-primary;
+$color-link-primary				: $color-light;

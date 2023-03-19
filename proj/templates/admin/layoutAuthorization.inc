@@ -25,7 +25,7 @@
 			self::AddVersionScript('base_common', '/base/template/js/common', BaseVersions\COMMON_JS);
 			self::AddVersionScript('admin_users', '/proj/templates/admin/js/users', AdminVersions\USERS_JS);
 
-			self::AddVersionStylesheet('main', DIR_REL_TPL . 'authorization/css/main', AdminVersions\MAIN_CSS);
+			self::AddVersionStylesheet('main', DIR_REL_TPL . 'admin/css/authorization', AdminVersions\AUTHORIZATION_CSS);
 		}
 
 	}
