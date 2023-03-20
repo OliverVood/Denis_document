@@ -10,9 +10,9 @@ input {
 }
 body {
 	margin: 0; height: 100%; display: flex; flex-direction: column;
-	> header { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
+	> header { padding: 1rem 0.6rem 1rem 3.5rem; background-color: $color-primary-dark; color: $color-text-primary; background-image: url("img/logo/logo.svg"); background-size: 26px; background-repeat: no-repeat; background-position: left 10px center; }
 	> main { flex: auto; display: flex; align-items: center; justify-content: center; }
-	> footer { padding: 1rem 0.6rem; background-color: $color-primary-dark; color: $color-text-primary; }
+	> footer { padding: 1rem 0.6rem; text-align: center; background-color: $color-primary-dark; color: $color-text-primary; }
 }
 
 main { padding: 0.2rem; }

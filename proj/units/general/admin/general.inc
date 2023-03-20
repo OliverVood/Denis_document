@@ -5,13 +5,13 @@
 	require DIR_UNITS . 'general/consts.inc';
 	require DIR_UNITS . 'general/admin/views/group.tpl';
 
-
 	use JetBrains\PhpStorm\NoReturn;
 
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
+	use Proj\Site\Params;
 	use Proj\Units\Consts;
 	use Proj\DBObject;
 	use Proj\Admin\Templates\Layout;
@@ -51,7 +51,8 @@
 		}
 
 		public function OutHead() {
-			Layout::instance()->header->Push('Привет, админ');
+			Layout::instance()->header->Push("<div>Привет, " . USER_LOGIN . "</div>");
+			Layout::instance()->header->Push(Users::instance()->exit->GetLink('', [], ['class' => 'logout']));
 		}
 
 		public function OutMenu() {
@@ -65,7 +66,7 @@
 		}
 
 		public function OutFooter() {
-			Layout::instance()->footer->Push('с Documents');
+			Layout::instance()->footer->Push('© ' . Params::$site_name);
 		}
 
 		#[NoReturn] public function Check() {

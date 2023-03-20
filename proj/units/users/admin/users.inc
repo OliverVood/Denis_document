@@ -14,11 +14,13 @@
 	use Proj\Admin\Templates\TemplateAuthorization;
 	use Proj\Admin\Templates\LayoutAuthorization;
 	use Proj\Admin\Templates\Users\FormAuthorization;
+	use Proj\Site\Params;
 
 	class Users extends Structure\Users {
 		use Instance;
 
 		public Action $auth;
+		public Action $exit;
 
 		private string | null $uid = null;
 		private static bool $login = false;
@@ -28,9 +30,11 @@
 
 			$this->CheckSession();
 
-			$this->auth = new Action(self::NAME, 'auth', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, () => location. reload()); return false;");
+			$this->auth = new Action(self::NAME, 'auth', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, () => location.reload()); return false;");
+			$this->exit = new Action(self::NAME, 'exit', 'default', /* @lang JavaScript */ "Base.Common.Query.Send('/users/exit', () => location.reload()); return false;");
 
 			Controller::instance()->init->Push($this->auth, [$this, 'Auth']);
+			Controller::instance()->init->Push($this->exit, [$this, 'Exit']);
 		}
 
 		public function IsLogin(): bool {
@@ -53,8 +57,18 @@
 			SendJSONSuccess([]);
 		}
 
-		private function Login() {
+		#[NoReturn] public function Exit(): void {
+			$this->Logout();
+
+			SendJSONSuccess([]);
+		}
+
+		private function Login(): void {
 			$_SESSION['USERS']['LOGIN'] = true;
+		}
+
+		private function Logout(): void {
+			$_SESSION['USERS']['LOGIN'] = false;
 		}
 
 		private function CheckSession(): void {
@@ -71,7 +85,10 @@
 			require DIR_PROJ . 'templates/admin/layoutAuthorization.inc';
 			require DIR_PROJ . 'templates/admin/templateAuthorization.tpl';
 
+			LayoutAuthorization::instance()->header->Push('Вход в систему');
 			LayoutAuthorization::instance()->main->Push(FormAuthorization::object()->ToVar());
+			LayoutAuthorization::instance()->footer->Push('© ' . Params::$site_name);
+
 			TemplateAuthorization::object()->Render();
 
 			die;
