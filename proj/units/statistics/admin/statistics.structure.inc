@@ -24,10 +24,6 @@
 			$this->table_ip->timestamp('datecr');
 			$this->table_ip->uint32('ip');
 			$this->table_ip->uint32('uid');
-			$this->table_ip->uint8('ip_part_I');
-			$this->table_ip->uint8('ip_part_II');
-			$this->table_ip->uint8('ip_part_III');
-			$this->table_ip->uint8('ip_part_IV');
 			$this->table_ip->string('path', 255);
 			$this->table_ip->string('params', 255);
 

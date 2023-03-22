@@ -41,10 +41,10 @@
 			};
 			$str_st = $this->CreationFormat();
 
-			if (is_null($str_db)) return ['name' => $this->name, 'state' => self::ERROR_MISSING];
+			if (is_null($str_db)) return ['name' => $this->name, 'state' => self::ERROR_MISSING, 'details' => ''];
 			if ($str_db !== $str_st) return ['name' => $this->name, 'state' => self::ERROR_VARIOUS, 'details' => $str_st];
 
-			return ['name' => $this->name, 'state' => self::ERROR_NULL];
+			return ['name' => $this->name, 'state' => self::ERROR_NULL, 'details' => ''];
 		}
 
 		public function Make() {

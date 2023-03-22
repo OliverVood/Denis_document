@@ -15,10 +15,9 @@
 
 			$this->AddScript('jq', 'https://code.jquery.com/jquery-3.6.1.min.js');
 			$this->AddVersionScript('base_common', '/base/template/js/common', BaseVersions\COMMON_JS);
-			$this->AddVersionScript('admin_common', '/proj/templates/admin/js/common', AdminVersions\COMMON_JS);
-			$this->AddVersionScript('admin_general', '/proj/templates/admin/js/general', AdminVersions\GENERAL_JS);
+			$this->AddVersionScript('admin_users', '/proj/templates/admin/js/users', AdminVersions\USERS_JS);
 
-			$this->AddVersionStylesheet('main', DIR_REL_TPL . 'admin/css/main', AdminVersions\MAIN_CSS);
+			$this->AddVersionStylesheet('main', DIR_REL_TPL . 'admin/css/authorization', AdminVersions\AUTHORIZATION_CSS);
 		}
 
 		public static function ToVar(): string {
