@@ -10,8 +10,8 @@
 		public Stage $work;
 		public Stage $view;
 
-		static public string $area = 'null';
-		static public string $part = 'null';
+		public static string $area = 'null';
+		public static string $part = 'null';
 
 		public function __construct() {
 			$this->init = new Stage();

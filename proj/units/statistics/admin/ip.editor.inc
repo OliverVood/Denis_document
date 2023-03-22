@@ -2,6 +2,7 @@
 
 	namespace Proj\Admin\Editor;
 
+	use Base\Editor\Skins;
 	use Base\Editor\EditorMySQLi;
 	use Base\DB\TableMySQLi;
 
@@ -24,14 +25,11 @@
 
 		protected function FieldsSelect(array $params): array {
 			return [
-				'datecr' => 'Дата',
-				'uid' => 'Пользователь',
-				'ip_part_I' => 'IP часть I',
-				'ip_part_II' => 'IP часть II',
-				'ip_part_III' => 'IP часть III',
-				'ip_part_IV' => 'IP часть IV',
-				'path' => 'Основной путь',
-				'params' => 'Параметры'
+				'datecr'	=> new Skins\Text('Дата'),
+				'uid'		=> new Skins\Text('Пользователь'),
+				'ip'		=> new Skins\Int2IP('IP aдрес'),
+				'path'		=> new Skins\Text('Путь'),
+				'params'	=> new Skins\Text('Параметры')
 			];
 		}
 

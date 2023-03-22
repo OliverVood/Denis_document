@@ -2,18 +2,18 @@
 
 	namespace Proj\Site\Templates\News;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Units\Consts\News;
 
-	class Show extends View {
+	abstract class Show {
 
-		public function ToVar(array $data): string {
-			$this->Start();
-			$this->Render($data);
-			return $this->Read();
+		public static function ToVar(array $data): string {
+			Template::Start();
+			self::Render($data);
+			return Template::Read();
 		}
 
-		public function Render(array $data): void {
+		public static function Render(array $data): void {
 			$background = $data['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $data['cover'] . ');"' : '';
 		?>
 			<div class = "view news show">

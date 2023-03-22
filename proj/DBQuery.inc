@@ -5,7 +5,7 @@
 	use Base\DB\DBQueryMySQLi;
 
 	class DBQuery extends DBQueryMySQLi {
-		static protected ?self $instance = null;
+		protected static ?self $instance = null;
 
 		public function __construct($hostname, $user, $password, $dbname) {
 			parent::__construct($hostname, $user, $password, $dbname);

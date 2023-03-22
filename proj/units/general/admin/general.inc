@@ -56,9 +56,9 @@
 		}
 
 		public function OutMenu() {
-			Layout::instance()->menu->Push(Item::object()->ToVar('<a href = "/" target = "_blank">Открыть сайт</a>'));
+			Layout::instance()->menu->Push(Item::ToVar('<a href = "/" target = "_blank">Открыть сайт</a>'));
 			Layout::instance()->menu->Push(
-				Group::object()->ToVar('База данных', [
+				Group::ToVar('База данных', [
 					$this->db_struct->GetLink('Структура'),
 					$this->db_check->GetLink('Проверить')
 				])

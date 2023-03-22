@@ -3,17 +3,17 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class Browse extends View {
+	abstract class Browse {
 
-		public function ToVar(Editor $editor, int $id, array $fields, array $item, array $data, string $title): string {
-			$this->Start();
-			$this->Render($editor, $id, $fields, $item, $data, $title);
-			return $this->Read();
+		public static function ToVar(Editor $editor, int $id, array $fields, array $item, array $data, string $title): string {
+			Template::Start();
+			self::Render($editor, $id, $fields, $item, $data, $title);
+			return Template::Read();
 		}
 
-		public function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title) { ?>
+		public static function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title): void { ?>
 			<div class = "navigate">
 				<?php foreach ($editor->navigateBrowse as $navigate) echo $navigate($editor->params); ?>
 			</div>

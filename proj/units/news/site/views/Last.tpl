@@ -2,19 +2,19 @@
 
 	namespace Proj\Site\Templates\News;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Units\Consts\News;
 	use Proj\Site\Units;
 
-	class Last extends View {
+	abstract class Last {
 
-		public function ToVar(array $items, $title): string {
-			$this->Start();
-			$this->Render($items, $title);
-			return $this->Read();
+		public static function ToVar(array $items, $title): string {
+			Template::Start();
+			self::Render($items, $title);
+			return Template::Read();
 		}
 
-		public function Render(array $items, $title): void {
+		public static function Render(array $items, $title): void {
 			if (!$items) return;
 		?>
 			<div class = "view news last_items">
@@ -24,13 +24,13 @@
 					</div>
 				</div>
 				<div class = "list grid col_3">
-					<?php foreach ($items as $item) $this->RenderItem($item); ?>
+					<?php foreach ($items as $item) self::RenderItem($item); ?>
 				</div>
 				<div class = "all"><?= Units\News::instance()->all->GetLink('Все новости'); ?></div>
 			</div>
 		<?php }
 
-		public function RenderItem(array $item): void {
+		public static function RenderItem(array $item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view news item">

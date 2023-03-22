@@ -3,17 +3,17 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class Select extends View {
+	abstract class Select {
 
-		public function ToVar(Editor $editor, array $fields, array $items, string $title): string {
-			$this->Start();
-			$this->Render($editor, $fields, $items, $title);
-			return $this->Read();
+		public static function ToVar(Editor $editor, array $fields, array $items, string $title): string {
+			Template::Start();
+			self::Render($editor, $fields, $items, $title);
+			return Template::Read();
 		}
 
-		public function Render(Editor $editor, array $fields, array $items, string $title) {
+		public static function Render(Editor $editor, array $fields, array $items, string $title): void {
 			$col = count($editor->manage);
 		?>
 			<div class = "navigate">
@@ -24,7 +24,7 @@
 				<thead>
 					<tr>
 						<?php foreach ($fields as $field) { ?>
-							<th><?= $field; ?></th>
+							<th><?= $field->GetName(); ?></th>
 						<?php } ?>
 						<?php if ($col) { ?><th colspan = "<?= $col ?>">Управление</th><?php } ?>
 					</tr>
@@ -34,7 +34,7 @@
 					    <tr>
 							<?php foreach ($fields as $key => $field) { ?>
 								<td>
-									<?= $item[$key]; ?>
+									<?= $field->ToVar($item[$key]); ?>
 								</td>
 							<?php } ?>
 							<?php foreach ($editor->manage as $manage) { ?>

@@ -2,18 +2,18 @@
 
 	namespace Proj\Site\Templates\Changes;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Site\Units;
 
-	class Last extends View {
+	abstract class Last {
 
-		public function ToVar(array $items, $title): string {
-			$this->Start();
-			$this->Render($items, $title);
-			return $this->Read();
+		public static function ToVar(array $items, $title): string {
+			Template::Start();
+			self::Render($items, $title);
+			return Template::Read();
 		}
 
-		public function Render(array $items, $title): void {
+		public static function Render(array $items, $title): void {
 			if (!$items) return;
 		?>
 			<div class = "view changes last_items">
@@ -23,13 +23,13 @@
 					</div>
 				</div>
 				<div class = "list">
-					<?php foreach ($items as $item) $this->RenderItem($item); ?>
+					<?php foreach ($items as $item) self::RenderItem($item); ?>
 				</div>
 				<div class = "all"><?= Units\Changes::instance()->list->GetLink('Все изменения'); ?></div>
 			</div>
 		<?php }
 
-		public function RenderItem(array $item): void { ?>
+		public static function RenderItem(array $item): void { ?>
 			<div class = "view changes item">
 				<?= Units\Changes::instance()->show->GetLink($item['header'], ['id' => $item['id']]); ?>
 			</div>

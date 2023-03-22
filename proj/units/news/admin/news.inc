@@ -32,7 +32,7 @@
 
 		public function OutMenu() {
 			Layout::instance()->menu->Push(
-				Group::object()->ToVar('Новости', [
+				Group::ToVar('Новости', [
 					$this->editor_news->select->GetLink('Список новостей'),
 					$this->editor_news->create->GetLink('Добавить новость')
 				])

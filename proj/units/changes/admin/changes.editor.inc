@@ -2,8 +2,9 @@
 
 	namespace Proj\Admin\Editor;
 
-	use Base\Editor\EditorMySQLi;
 	use Base\DB\TableMySQLi;
+	use Base\Editor\EditorMySQLi;
+	use Base\Editor\Skins;
 	use Proj\Units\Consts;
 
 	class Changes extends EditorMySQLi {
@@ -46,11 +47,11 @@
 
 		protected function FieldsSelect(array $params): array {
 			return [
-				'id' => '#',
-				'state' => 'Состояние',
-				'datepb' => 'Дата публикации',
-				'work_header' => 'Рабочий заголовок',
-				'header' => 'Заголовок',
+				'id'			=> new Skins\Text('#'),
+				'state'			=> new Skins\Text('Состояние'),
+				'datepb'		=> new Skins\Text('Дата публикации'),
+				'work_header'	=> new Skins\Text('Рабочий заголовок'),
+				'header'		=> new Skins\Text('Заголовок'),
 			];
 		}
 

@@ -2,17 +2,17 @@
 
 	namespace Proj\Site\Templates\General;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class Donations extends View {
+	abstract class Donations {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view general donations">
 				<div>
 					<div class = "description">
@@ -67,4 +67,5 @@
 				</div>
 			</div>
 		<?php }
+
 	}

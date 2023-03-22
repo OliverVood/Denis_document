@@ -2,18 +2,18 @@
 
 	namespace Proj\Site\Templates\Feedback;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Site\Units\Feedback;
 
-	class Form extends View {
+	abstract class Form {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view feedback form">
 				<form action = "/feedback/do">
 					<div>

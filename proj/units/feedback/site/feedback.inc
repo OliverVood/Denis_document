@@ -35,7 +35,7 @@
 		}
 
 		#[NoReturn] public function OnFeedback(): void {
-			SendJSONSuccess(['html' => Form::object()->ToVar()]);
+			SendJSONSuccess(['html' => Form::ToVar()]);
 		}
 
 		#[NoReturn] public function DoFeedback(): void {

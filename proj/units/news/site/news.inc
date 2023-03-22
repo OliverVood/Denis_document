@@ -62,7 +62,7 @@
 			$result = $this->db->Select(self::TABLES['news'], ['id', 'datecr', 'header', 'content'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 			$items = $this->db->FetchAll($result);
 
-			return Last::object()->ToVar($items, $title);
+			return Last::ToVar($items, $title);
 		}
 
 		private function ViewAll(?int $limit, $title): string {
@@ -71,7 +71,7 @@
 			$result = $this->db->Select(self::TABLES['news'], ['id', 'datecr', 'header', 'content'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 			$items = $this->db->FetchAll($result);
 
-			return All::object()->ToVar($items, $title);
+			return All::ToVar($items, $title);
 		}
 
 		private function ViewShow(int $id): string {
@@ -79,7 +79,7 @@
 
 			$data = $this->db->SelectOne(self::TABLES['news'], ['id', 'datecr', 'header', 'content', 'datepb'], "(`state` = {$state}) AND (`datepb` < NOW()) AND (`id` = {$id})", null, null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 
-			return Show::object()->ToVar($data);
+			return Show::ToVar($data);
 		}
 
 	}

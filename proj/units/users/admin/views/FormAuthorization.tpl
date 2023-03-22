@@ -2,18 +2,18 @@
 
 	namespace Proj\Admin\Templates\Users;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Admin\Units\Users;
 
-	class FormAuthorization extends View {
+	abstract class FormAuthorization {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view users form_authorization">
 				<form action = "<?= Users::instance()->auth->GetPath(); ?>">
 					<input type = "text" name = "login">

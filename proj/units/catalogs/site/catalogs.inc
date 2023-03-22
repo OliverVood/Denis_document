@@ -42,19 +42,19 @@
 		}
 
 		public function OutButtons() {
-			Layout::instance()->main->Push(Buttons::object()->ToVar());
+			Layout::instance()->main->Push(Buttons::ToVar());
 		}
 
 		public function OutEstimate() {
-			Layout::instance()->main->Push(Estimate::object()->ToVar());
+			Layout::instance()->main->Push(Estimate::ToVar());
 		}
 
 		public function OutCertificate() {
-			Layout::instance()->main->Push(Certificate::object()->ToVar());
+			Layout::instance()->main->Push(Certificate::ToVar());
 		}
 
 		public function OutPriceList() {
-			Layout::instance()->main->Push(PriceList::object()->ToVar());
+			Layout::instance()->main->Push(PriceList::ToVar());
 		}
 
 	}

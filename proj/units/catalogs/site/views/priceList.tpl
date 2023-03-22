@@ -2,17 +2,17 @@
 
 	namespace Proj\Site\Templates\Catalogs;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class PriceList extends View {
+	abstract class PriceList {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view catalogs work">
 				<h1 class = "glob_print_tabu">Работа с прайс-листами</h1>
 				<script>

@@ -2,6 +2,7 @@
 
 	namespace Base\Editor;
 
+	require DIR_BASE . 'editor/skin.inc';
 	require DIR_BASE . 'editor/views/select.tpl';
 	require DIR_BASE . 'editor/views/create.tpl';
 	require DIR_BASE . 'editor/views/update.tpl';
@@ -167,7 +168,7 @@
 				$items[] = $item;
 			});
 
-			return Select::object()->ToVar($this, $this->fieldsSelect, $items, $this->titleSelect);
+			return Select::ToVar($this, $this->fieldsSelect, $items, $this->titleSelect);
 		}
 
 		#[NoReturn] public function OnSelect(): void {
@@ -175,7 +176,7 @@
 		}
 
 		#[NoReturn] public function OnCreate(): void {
-			SendJSONSuccess(['html' => Create::object()->ToVar($this, $this->fieldsCreate, [], $this->titleCreate)]);
+			SendJSONSuccess(['html' => Create::ToVar($this, $this->fieldsCreate, [], $this->titleCreate)]);
 		}
 
 		#[NoReturn] public function OnUpdate(): void {
@@ -184,7 +185,7 @@
 			$data = [];
 
 			$this->PrepareOnUpdate($id, $item, $data);
-			SendJSONSuccess(['html' => Update::object()->ToVar($this, $id, $this->fieldsUpdate, $item, $data, $this->titleUpdate)]);
+			SendJSONSuccess(['html' => Update::ToVar($this, $id, $this->fieldsUpdate, $item, $data, $this->titleUpdate)]);
 		}
 
 		#[NoReturn] public function OnBrowse(): void {
@@ -193,7 +194,7 @@
 			$data = [];
 
 			$this->PrepareOnBrowse($id, $item, $data);
-			SendJSONSuccess(['html' => Browse::object()->ToVar($this, $id, $this->fieldsBrowse, $item, $data, $this->titleBrowse)]);
+			SendJSONSuccess(['html' => Browse::ToVar($this, $id, $this->fieldsBrowse, $item, $data, $this->titleBrowse)]);
 		}
 
 		#[NoReturn] public function DoCreate(): void {

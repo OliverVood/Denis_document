@@ -64,7 +64,7 @@
 
 		public function UpdateFormat(): string { return $this->CreationFormat(); }
 
-		static protected function DataToCreationFormat(array $data): string {
+		protected static function DataToCreationFormat(array $data): string {
 			$pieces = [];
 			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
 			$pieces['type'] = $data['COLUMN_TYPE'];

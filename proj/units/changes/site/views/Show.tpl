@@ -2,18 +2,18 @@
 
 	namespace Proj\Site\Templates\Changes;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Units\Consts\Changes;
 
-	class Show extends View {
+	abstract class Show {
 
-		public function ToVar(array $data, array $list): string {
-			$this->Start();
-			$this->Render($data, $list);
-			return $this->Read();
+		public static function ToVar(array $data, array $list): string {
+			Template::Start();
+			self::Render($data, $list);
+			return Template::Read();
 		}
 
-		public function Render(array $data, array $list): void { ?>
+		public static function Render(array $data, array $list): void { ?>
 			<div class = "view changes show">
 				<div class = "grid col_1">
 					<div>
@@ -21,13 +21,13 @@
 					</div>
 				</div>
 				<div class = "list">
-					<?php foreach ($list as $item) $this->RenderChange($item); ?>
+					<?php foreach ($list as $item) self::RenderChange($item); ?>
 				</div>
 				<div class = "data publish"><?= $data['datepb']; ?></div>
 			</div>
 		<?php }
 
-		private function RenderChange($item): void {
+		private static function RenderChange($item): void {
 			$background = $item['cover'] ? 'style = "background-image: url(' . Changes::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view change item">

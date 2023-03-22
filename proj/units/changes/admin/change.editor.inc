@@ -4,9 +4,10 @@
 
 	use JetBrains\PhpStorm\NoReturn;
 
-	use Base\Editor\EditorMySQLi;
-	use Base\Action;
 	use Base\DB\TableMySQLi;
+	use Base\Editor\EditorMySQLi;
+	use Base\Editor\Skins;
+	use Base\Action;
 	use Proj\Units\Consts;
 
 	class Change extends EditorMySQLi {
@@ -61,9 +62,9 @@
 
 		protected function FieldsSelect(array $params): array {
 			return [
-				'id' => '#',
-				'state' => 'Состояние',
-				'header' => 'Заголовок'
+				'id'		=> new Skins\Text('#'),
+				'state'		=> new Skins\Text('Состояние'),
+				'header'	=> new Skins\Text('Заголовок')
 			];
 		}
 

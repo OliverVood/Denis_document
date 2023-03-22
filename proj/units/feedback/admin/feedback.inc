@@ -32,7 +32,7 @@
 
 		public function OutMenu() {
 			Layout::instance()->menu->Push(
-				Group::object()->ToVar('Обратная связь', [
+				Group::ToVar('Обратная связь', [
 					$this->editor_feedback->select->GetLink('Список'),
 				])
 			);

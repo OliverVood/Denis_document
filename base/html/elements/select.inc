@@ -2,17 +2,17 @@
 
 	namespace Base\Templates\HTML\Element;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class Select extends View {
+	abstract class Select {
 
-		public function ToVar(string $name, string $value = '', array $data = [], array $params = []): string {
-			$this->Start();
-			$this->Render($name, $value, $data, $params);
-			return $this->Read();
+		public static function ToVar(string $name, string $value = '', array $data = [], array $params = []): string {
+			Template::Start();
+			self::Render($name, $value, $data, $params);
+			return Template::Read();
 		}
 
-		public function Render(string $name, string $value = '', array $data = [], array $params = []) { ?>
+		public static function Render(string $name, string $value = '', array $data = [], array $params = []): void { ?>
 			<label>
 				<select name = "<?= $name; ?>">
 					<?php foreach ($data as $key => $text) { ?>

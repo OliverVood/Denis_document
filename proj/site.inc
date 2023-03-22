@@ -12,4 +12,4 @@
 
 	Base\Controller::instance()->Execute();
 
-	Proj\Site\Templates\Template::object()->Render();
+	Proj\Site\Templates\Template::Render();

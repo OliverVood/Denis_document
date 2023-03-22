@@ -13,7 +13,7 @@
 			$this->set = $set;
 		}
 
-		static protected function DataToCreationFormat($data): string {
+		protected static function DataToCreationFormat($data): string {
 			$pieces = [];
 			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
 			$pieces['type'] = $data['COLUMN_TYPE'];

@@ -2,17 +2,17 @@
 
 	namespace Base\Templates\HTML\Element;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class File extends View {
+	abstract class File {
 
-		public function ToVar(string $name, string $value = '', array $params = []): string {
-			$this->Start();
-			$this->Render($name, $value, $params);
-			return $this->Read();
+		public static function ToVar(string $name, string $value = '', array $params = []): string {
+			Template::Start();
+			self::Render($name, $value, $params);
+			return Template::Read();
 		}
 
-		public function Render(string $name, string $value = '', array $params = []) {
+		public static function Render(string $name, string $value = '', array $params = []): void {
 			$accept = isset($params['accept']) ? ' accept = "' . $params['accept'] . '"' : '';
 		?>
 			<input type = "file" name = "<?= $name; ?>" value = "<?= $value; ?>"<?= $accept; ?>>

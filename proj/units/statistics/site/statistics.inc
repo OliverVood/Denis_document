@@ -37,10 +37,13 @@
 			if (Controller::$area == 'statistics') return;
 
 			$ip = GetUserIP();
+			$ipv6 = ip2long($ip);
 			$parts = explode('.', $ip);
 			$uri = explode('?', $_SERVER['REQUEST_URI']);
+
 			$this->db->Insert(self::TABLES['ip'], [
 				'uid' 			=> Users::GetUID(),
+				'ip'			=> $ipv6,
 				'ip_part_I' 	=> $parts[0] ?? 0,
 				'ip_part_II' 	=> $parts[1] ?? 0,
 				'ip_part_III' 	=> $parts[2] ?? 0,

@@ -22,6 +22,7 @@
 			$this->table_ip = new TableMySQLi(self::TABLES['ip'], $this->db);
 			$this->table_ip->id('id');
 			$this->table_ip->timestamp('datecr');
+			$this->table_ip->uint32('ip');
 			$this->table_ip->uint32('uid');
 			$this->table_ip->uint8('ip_part_I');
 			$this->table_ip->uint8('ip_part_II');

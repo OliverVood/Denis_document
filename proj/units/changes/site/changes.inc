@@ -62,7 +62,7 @@
 			$result = $this->db->Select(self::TABLES['changes'], ['id', 'header'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit);
 			$items = $this->db->FetchAll($result);
 
-			return Last::object()->ToVar($items, $title);
+			return Last::ToVar($items, $title);
 		}
 
 		private function ViewList(?int $limit, $title): string {
@@ -71,7 +71,7 @@
 			$result = $this->db->Select(self::TABLES['changes'], ['id', 'header'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $limit);
 			$items = $this->db->FetchAll($result);
 
-			return All::object()->ToVar($items, $title);
+			return All::ToVar($items, $title);
 		}
 
 		private function ViewShow(int $id): string {
@@ -81,7 +81,7 @@
 			if (!$data) return '';
 			$result = $this->db->Select(self::TABLES['change'], ['header', 'content'], "(`state` = {$state}) AND (`cid` = {$id})", '`id`', null, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);
 			$list_change = $this->db->FetchAll($result);
-			return Show::object()->ToVar($data, $list_change);
+			return Show::ToVar($data, $list_change);
 		}
 
 	}

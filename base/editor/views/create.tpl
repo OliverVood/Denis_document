@@ -3,19 +3,19 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Base\Templates\HTML\Element\Form;
 	use Base\Templates\HTML\Element\Text;
 
-	class Create extends View {
+	abstract class Create {
 
-		public function ToVar(Editor $editor, array $fields, array $data, string $title): string {
-			$this->Start();
-			$this->Render($editor, $fields, $data, $title);
-			return $this->Read();
+		public static function ToVar(Editor $editor, array $fields, array $data, string $title): string {
+			Template::Start();
+			self::Render($editor, $fields, $data, $title);
+			return Template::Read();
 		}
 
-		public function Render(Editor $editor, array $fields, array $data, string $title) {
+		public static function Render(Editor $editor, array $fields, array $data, string $title): void {
 			$form = new Form($data);
 		?>
 			<div class = "navigate">
@@ -24,7 +24,7 @@
 			<h1><?= $title; ?></h1>
 			<?php
 				$form->Begin($editor->do_create->GetPath());
-				foreach ($editor->params as $name => $params) Text::object()->Render($name, $params, ['type' => 'hidden']);
+				foreach ($editor->params as $name => $params) Text::Render($name, $params, ['type' => 'hidden']);
 				foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $field['default'])
 			?>
 			<table class = "create">

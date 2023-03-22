@@ -2,19 +2,19 @@
 
 	namespace Proj\Site\Templates\General;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Site\Params;
 	use Proj\Site\Units\General;
 
-	class PrivacyPolicy extends View {
+	abstract class PrivacyPolicy {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view documents privacy_policy">
 				<div class = "grid col_1">
 					<div>

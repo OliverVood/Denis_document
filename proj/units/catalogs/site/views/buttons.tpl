@@ -2,18 +2,18 @@
 
 	namespace Proj\Site\Templates\General;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Site\Units\Catalogs;
 
-	class Buttons extends View {
+	abstract class Buttons {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view catalogs buttons">
 				<div class = "grid col_1">
 					<div>

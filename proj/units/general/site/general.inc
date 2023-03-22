@@ -11,12 +11,14 @@
 	require DIR_UNITS . 'general/site/views/Footer.tpl';
 	require DIR_UNITS . 'general/site/views/Donations.tpl';
 
+	use JetBrains\PhpStorm\NoReturn;
+
 	use Base\Units;
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
-	use JetBrains\PhpStorm\NoReturn;
 	use Proj\Units\Consts;
+	use Proj\Site\Templates\Template;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\General\About;
 	use Proj\Site\Templates\General\Contacts;
@@ -76,35 +78,35 @@
 			if (Controller::$area != 'null') $path[] = Controller::$area;
 			if (Controller::$part != 'null') $path[] = Controller::$part;
 			$value = $path ? implode('_', $path) : 'main';
-			Layout::SetDataPage($value);
+			Template::instance()->SetDataPage($value);
 		}
 
 		public function About() {
-			Layout::instance()->main->Push(About::object()->ToVar());
+			Layout::instance()->main->Push(About::ToVar());
 		}
 
 		public function Contacts() {
-			Layout::instance()->main->Push(Contacts::object()->ToVar());
+			Layout::instance()->main->Push(Contacts::ToVar());
 		}
 
 		public function OutPrivacyPolicy() {
-			Layout::instance()->main->Push(PrivacyPolicy::object()->ToVar());
+			Layout::instance()->main->Push(PrivacyPolicy::ToVar());
 		}
 
 		public function OutTermsUse() {
-			Layout::instance()->main->Push(TermsUse::object()->ToVar());
+			Layout::instance()->main->Push(TermsUse::ToVar());
 		}
 
 		public function OutHeader() {
-			Layout::instance()->header->Push(Header::object()->ToVar());
+			Layout::instance()->header->Push(Header::ToVar());
 		}
 
 		public function OutFooter() {
-			Layout::instance()->footer->Push(Footer::object()->ToVar());
+			Layout::instance()->footer->Push(Footer::ToVar());
 		}
 
 		#[NoReturn] public function OnDonations() {
-			SendJSONSuccess(['html' => Donations::object()->ToVar()]);
+			SendJSONSuccess(['html' => Donations::ToVar()]);
 		}
 
 	}

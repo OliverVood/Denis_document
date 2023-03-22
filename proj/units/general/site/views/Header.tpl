@@ -2,19 +2,19 @@
 
 	namespace Proj\Site\Templates\General;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Proj\Site\Units\General;
 	use Proj\Site\Params;
 
-	class Header extends View {
+	abstract class Header {
 
-		public function ToVar(): string {
-			$this->Start();
-			$this->Render();
-			return $this->Read();
+		public static function ToVar(): string {
+			Template::Start();
+			self::Render();
+			return Template::Read();
 		}
 
-		public function Render(): void { ?>
+		public static function Render(): void { ?>
 			<div class = "view general header">
 				<div class = "agency">
 					<div class = "logo"><?= General::instance()->home->GetLink(''); ?></div>

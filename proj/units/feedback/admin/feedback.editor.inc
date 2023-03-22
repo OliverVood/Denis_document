@@ -2,10 +2,9 @@
 
 	namespace Proj\Admin\Editor;
 
-//	use JetBrains\PhpStorm\NoReturn;
-
-	use Base\Editor\EditorMySQLi;
 	use Base\DB\TableMySQLi;
+	use Base\Editor\EditorMySQLi;
+	use Base\Editor\Skins;
 	use Proj\Units\Consts;
 
 	class Feedback extends EditorMySQLi {
@@ -38,12 +37,12 @@
 
 		protected function FieldsSelect(array $params): array {
 			return [
-				'id' => '#',
-				'state' => 'Состояние',
-				'datecr' => 'Дата',
-				'name' => 'Имя',
-				'contacts' => 'Контакт',
-				'letter' => 'Тема сообщения'
+				'id'		=> new Skins\Text('#'),
+				'state'		=> new Skins\Text('Состояние'),
+				'datecr'	=> new Skins\Text('Дата'),
+				'name'		=> new Skins\Text('Имя'),
+				'contacts'	=> new Skins\Text('Контакт'),
+				'letter'	=> new Skins\Text('Тема сообщения')
 			];
 		}
 

@@ -5,7 +5,7 @@
 	use SQLite3;
 
 	class VersionsControl extends SQLite3 {
-		static protected ?self $instance = null;
+		protected static ?self $instance = null;
 		private array $versions = [];
 
 		private function __construct($filename) {

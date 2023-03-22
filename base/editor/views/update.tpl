@@ -3,19 +3,19 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\View;
+	use Base\Templates\Template;
 	use Base\Templates\HTML\Element\Form;
 	use Base\Templates\HTML\Element\Text;
 
-	class Update extends View {
+	abstract class Update {
 
-		public function ToVar(Editor $editor, int $id, array $fields, array $item, array $data, string $title): string {
-			$this->Start();
-			$this->Render($editor, $id, $fields, $item, $data, $title);
-			return $this->Read();
+		public static function ToVar(Editor $editor, int $id, array $fields, array $item, array $data, string $title): string {
+			Template::Start();
+			self::Render($editor, $id, $fields, $item, $data, $title);
+			return Template::Read();
 		}
 
-		public function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title) {
+		public static function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title): void {
 			$form = new Form($data);
 		?>
 			<div class = "navigate">
@@ -24,8 +24,8 @@
 			<h1><?= $title; ?></h1>
 		<?php
 			$form->Begin($editor->do_update->GetPath());
-			Text::object()->Render('id', $id, ['type' => 'hidden']);
-			foreach ($editor->params as $name => $params) Text::object()->Render($name, $params, ['type' => 'hidden']);
+			Text::Render('id', $id, ['type' => 'hidden']);
+			foreach ($editor->params as $name => $params) Text::Render($name, $params, ['type' => 'hidden']);
 			foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $item[$name]);
 		?>
 			<table class = "update">

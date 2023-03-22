@@ -2,17 +2,17 @@
 
 	namespace Proj\Admin\Templates\General;
 
-	use Base\Templates\View;
+	use Base\Templates\Template;
 
-	class Item extends View {
+	abstract class Item {
 
-		public function ToVar(string $item): string {
-			$this->Start();
-			$this->Render($item);
-			return $this->Read();
+		public static function ToVar(string $item): string {
+			Template::Start();
+			self::Render($item);
+			return Template::Read();
 		}
 
-		public function Render(string $item) { ?>
+		public static function Render(string $item): void { ?>
 			<li><?= $item; ?></li>
 		<?php }
 

@@ -86,10 +86,10 @@
 			require DIR_PROJ . 'templates/admin/templateAuthorization.tpl';
 
 			LayoutAuthorization::instance()->header->Push('Вход в систему');
-			LayoutAuthorization::instance()->main->Push(FormAuthorization::object()->ToVar());
+			LayoutAuthorization::instance()->main->Push(FormAuthorization::ToVar());
 			LayoutAuthorization::instance()->footer->Push('© ' . Params::$site_name);
 
-			TemplateAuthorization::object()->Render();
+			TemplateAuthorization::Render();
 
 			die;
 		}

@@ -4,8 +4,9 @@
 
 	use JetBrains\PhpStorm\NoReturn;
 
-	use Base\Editor\EditorMySQLi;
 	use Base\DB\TableMySQLi;
+	use Base\Editor\EditorMySQLi;
+	use Base\Editor\Skins;
 	use Proj\Units\Consts;
 
 	class News extends EditorMySQLi {
@@ -40,10 +41,10 @@
 
 		protected function FieldsSelect(array $params): array {
 			return [
-				'id' => '#',
-				'state' => 'Состояние',
-				'datepb' => 'Дата публикации',
-				'header' => 'Заголовок'
+				'id' 		=> new Skins\Text('#'),
+				'state' 	=> new Skins\Text('Состояние'),
+				'datepb'	=> new Skins\Text('Дата публикации'),
+				'header' 	=> new Skins\Text('Заголовок')
 			];
 		}
 
