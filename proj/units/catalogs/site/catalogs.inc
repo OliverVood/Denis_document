@@ -12,9 +12,11 @@
 	use Base\Instance;
 	use Base\Controller;
 	use Base\Action;
-	use Proj\Site\Templates\General\Buttons;
 	use Proj\Units\Consts;
+	use Proj\Site\Params;
+	use Proj\Site\Templates\Template;
 	use Proj\Site\Templates\Layout;
+	use Proj\Site\Templates\General\Buttons;
 	use Proj\Site\Templates\Catalogs\Estimate;
 	use Proj\Site\Templates\Catalogs\Certificate;
 	use Proj\Site\Templates\Catalogs\PriceList;
@@ -46,14 +48,17 @@
 		}
 
 		public function OutEstimate() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Сметы');
 			Layout::instance()->main->Push(Estimate::ToVar());
 		}
 
 		public function OutCertificate() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Акты выполненных работ');
 			Layout::instance()->main->Push(Certificate::ToVar());
 		}
 
 		public function OutPriceList() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Прайс-листы');
 			Layout::instance()->main->Push(PriceList::ToVar());
 		}
 

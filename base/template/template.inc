@@ -8,6 +8,7 @@
 
 		private string $title = '';
 		private string $description = '';
+		private string $keywords = '';
 
 		private array $data = [];
 
@@ -46,6 +47,7 @@
 
 		public function SetTitle(string $title): void { $this->title = $title; }
 		public function SetDescription(string $description): void { $this->description = $description; }
+		public function SetKeywords(string $keywords): void { $this->keywords = $keywords; }
 
 		public function SetData(string $name, string $value): void { $this->data[$name] = $value; }
 		public function SetDataPage(string $value): void { $this->SetData('page', $value); }
@@ -63,6 +65,7 @@
 			$this->BrowseStylesheets();
 			if ($this->title) ?><title><?= $this->title; ?></title><?php
 			if ($this->description) ?><meta name = "description" content = "<?= $this->description; ?>"><?php
+			if ($this->keywords) ?><meta name = "keywords" content = "<?= $this->keywords; ?>"><?php
 		}
 
 		public function BrowseData(): void {

@@ -44,10 +44,6 @@
 			$this->db->Insert(self::TABLES['ip'], [
 				'uid' 			=> Users::GetUID(),
 				'ip'			=> $ipv6,
-				'ip_part_I' 	=> $parts[0] ?? 0,
-				'ip_part_II' 	=> $parts[1] ?? 0,
-				'ip_part_III' 	=> $parts[2] ?? 0,
-				'ip_part_IV' 	=> $parts[3] ?? 0,
 				'path' 			=> $uri[0],
 				'params' 		=> $uri[1] ?? '',
 			]);

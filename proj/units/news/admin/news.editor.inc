@@ -48,6 +48,15 @@
 			];
 		}
 
+		protected function FieldsBrowse(array $params) : array {
+			return [
+				'state' => ['name' => 'Состояние'],
+				'header' => ['name' => 'Заголовок'],
+				'content' => ['name' => 'Текст'],
+				'datepb' => ['name' => 'Дата публикации'],
+			];
+		}
+
 		protected function FieldsCreate(array $params): array {
 			return [
 				'state' => ['skin' => 'hidden', 'name' => 'Состояние', 'default' => Consts\News::STATES['draft']],

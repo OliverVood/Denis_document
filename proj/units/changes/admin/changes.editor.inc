@@ -41,7 +41,7 @@
 			return [
 				function (array $params, array $item) { return $this->update->GetLink('Изменить', ['id' => $item['id']]); },
 				function (array $params, array $item) { return $this->do_delete->GetLink('Удалить', ['id' => $item['id']]); },
-				function (array $params, array $item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id']]); }
+				function (array $params, array $item) { return \Proj\Admin\Units\Changes::instance()->editor_change->select->GetLink('Список', ['cid' => $item['id'], 'page' => 1]); }
 			];
 		}
 

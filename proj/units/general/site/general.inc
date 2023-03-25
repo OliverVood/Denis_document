@@ -18,6 +18,7 @@
 	use Base\Controller;
 	use Base\Action;
 	use Proj\Units\Consts;
+	use Proj\Site\Params;
 	use Proj\Site\Templates\Template;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\General\About;
@@ -62,6 +63,7 @@
 
 			Controller::instance()->view->Push($this->set_data_page, [$this, 'SetDataPage']);
 
+			Controller::instance()->view->Push($this->home, [$this, 'Home']);
 			Controller::instance()->view->Push($this->about, [$this, 'About']);
 			Controller::instance()->view->Push($this->contacts, [$this, 'Contacts']);
 			Controller::instance()->view->Push($this->privacy_policy, [$this, 'OutPrivacyPolicy']);
@@ -81,19 +83,27 @@
 			Template::instance()->SetDataPage($value);
 		}
 
+		public function Home() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Главная');
+		}
+
 		public function About() {
+			Template::instance()->SetTitle(Params::$site_name . ' | О проекте');
 			Layout::instance()->main->Push(About::ToVar());
 		}
 
 		public function Contacts() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Контакты');
 			Layout::instance()->main->Push(Contacts::ToVar());
 		}
 
 		public function OutPrivacyPolicy() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Политика конфиденциальности');
 			Layout::instance()->main->Push(PrivacyPolicy::ToVar());
 		}
 
 		public function OutTermsUse() {
+			Template::instance()->SetTitle(Params::$site_name . ' | Пользовательское соглашение');
 			Layout::instance()->main->Push(TermsUse::ToVar());
 		}
 

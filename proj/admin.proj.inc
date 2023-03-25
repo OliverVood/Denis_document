@@ -11,6 +11,7 @@
 
 	require DIR_PROJ . 'DBObject.inc';
 
+	require DIR_BASE . 'pages.inc';
 	require DIR_BASE . 'editor/editor.inc';
 	require DIR_BASE . 'editor/editorMySQLi.inc';
 

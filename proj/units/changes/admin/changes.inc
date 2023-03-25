@@ -37,7 +37,7 @@
 		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Актуальное', [
-					$this->editor_changes->select->GetLink('Списки актуального'),
+					$this->editor_changes->select->GetLink('Списки актуального', ['page' => 1]),
 					$this->editor_changes->create->GetLink('Добавить список актуального')
 				])
 			);

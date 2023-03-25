@@ -16,7 +16,7 @@
 			parent::__construct($name, $table);
 		}
 
-		protected function RegActionSelect():void { $this->select = new Action($this->name, 'select', "/{$this->name}/select?cid=%cid%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/select', {cid: %cid%}, Admin.General.Render.ToMain); return false;"); }
+		protected function RegActionSelect():void { $this->select = new Action($this->name, 'select', "/{$this->name}/select?cid=%cid%&page=%page%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/select', {cid: %cid%, page: %page%}, Admin.General.Render.ToMain); return false;"); }
 		protected function RegActionCreate(): void { $this->create = new Action($this->name, 'create', "/{$this->name}/create?cid=%cid%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/create', {cid: %cid%}, Admin.General.Render.ToMain); return false;"); }
 		protected function RegActionUpdate(): void { $this->update = new Action($this->name, 'update', "/{$this->name}/update?id=%id%&cid=%cid%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update', {id: %id%, cid: %cid%}, Admin.General.Render.ToMain); return false;"); }
 
@@ -49,9 +49,9 @@
 			$this->titleDoUpdate = 'Актуальное изменено';
 		}
 
-		protected function NavigateSelect(): array { return [ function (array $params) { return $this->create->GetLink($this->titleCreate, ['cid' => $params['cid']]); } ]; }
-		protected function NavigateCreate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['cid' => $params['cid']]); } ]; }
-		protected function NavigateUpdate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['cid' => $params['cid']]); } ]; }
+		protected function NavigateSelect(): array { return [ function (array $params) { return $this->create->GetLink($this->titleCreate, ['cid' => $params['cid'], 'page' => 1]); } ]; }
+		protected function NavigateCreate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['cid' => $params['cid'], 'page' => 1]); } ]; }
+		protected function NavigateUpdate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['cid' => $params['cid'], 'page' => 1]); } ]; }
 
 		protected function Manage(): array {
 			return [

@@ -13,6 +13,7 @@
 	use Base\Controller;
 	use Base\Action;
 	use Base\DB\Table;
+	use Base\Pages;
 	use Base\Templates\Editor\Select;
 	use Base\Templates\Editor\Create;
 	use Base\Templates\Editor\Update;
@@ -59,6 +60,8 @@
 		protected string $titleDoUpdate = 'Изменено';
 		protected string $titleDoDelete = 'Удалено';
 
+		public int $page_entries = 100;
+
 		protected function __construct(string $name, Table $table) {
 			$this->name = $name;
 			$this->table = $table;
@@ -91,7 +94,8 @@
 			$this->RegActionDoDelete();
 		}
 
-		protected function RegActionSelect(): void { $this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;"); }
+//		protected function RegActionSelect(): void { $this->select = new Action($this->name, 'select', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/select', Admin.General.Render.ToMain); return false;"); }
+		protected function RegActionSelect(): void { $this->select = new Action($this->name, 'select', "/{$this->name}/do_update?page=%page%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/select', {page: %page%}, Admin.General.Render.ToMain); return false;"); }
 		protected function RegActionCreate(): void { $this->create = new Action($this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create', Admin.General.Render.ToMain); return false;"); }
 		protected function RegActionUpdate(): void { $this->update = new Action($this->name, 'update', "/{$this->name}/update?id=%id%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update', {id: %id%}, Admin.General.Render.ToMain); return false;"); }
 		protected function RegActionDelete(): void { /* $this->delete = new Action($this->name, 'delete', "/{$this->name}/delete?id=%id", /* @lang JavaScript * /"if (confirm({$this->titleDelete})) Base.Common.Query.SendData('/{$this->name}/delete', {id: %id%}, Admin.General.Render.ToMain); return false;"); */ }
@@ -143,9 +147,9 @@
 		}
 
 		protected function NavigateSelect(): array { return []; }
-		protected function NavigateCreate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}"); } ]; }
-		protected function NavigateUpdate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}"); } ]; }
-		protected function NavigateBrowse(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}"); } ]; }
+		protected function NavigateCreate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['page' => 1]); } ]; }
+		protected function NavigateUpdate(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['page' => 1]); } ]; }
+		protected function NavigateBrowse(): array { return [ function (array $params) { return $this->select->GetLink("<< {$this->titleSelect}", ['page' => 1]); } ]; }
 
 		protected function SetManage(): void {
 			$this->manage = $this->Manage();
@@ -159,16 +163,32 @@
 			];
 		}
 
-		protected function Select():string {
+		protected function Select(): string {
 			$where = ($this->where) ? implode(' AND ', $this->where) : null;
 			$order = ($this->order) ? implode(', ', $this->order) : null;
 
-			$result = $this->table->Select(null, $where, $order);
+			$limit = null;
+			$ext = [];
+
+			if ($this->page_entries) {
+				$page_current = GetInt('page', 1);
+				$start = ($page_current - 1) * $this->page_entries;
+				$limit = "{$start}, {$this->page_entries}";
+				$page_records = $this->table->SelectOneFieldCalc('COUNT(*) AS `count`', 'count', $where);
+
+				$ext['page'] = [
+					'records' => $page_records,
+					'current' => $page_current,
+					'count' => ceil($page_records / $this->page_entries)
+				];
+			}
+
+			$result = $this->table->Select(null, $where, $order, $limit);
 			$items = $this->table->FetchAll($result, function(& $items, $item) {
 				$items[] = $item;
 			});
 
-			return Select::ToVar($this, $this->fieldsSelect, $items, $this->titleSelect);
+			return Select::ToVar($this, $this->fieldsSelect, $items, $this->titleSelect, $ext);
 		}
 
 		#[NoReturn] public function OnSelect(): void {
@@ -225,5 +245,11 @@
 		protected function PrepareOnUpdate(int $id, array & $item, array & $data): void { }
 		protected function PrepareOnSelect(int $id, array & $item, array & $data): void { }
 		protected function PrepareOnBrowse(int $id, array & $item, array & $data): void { }
+
+		public function Pages($pages): string {
+			if (!$this->page_entries) return '';
+
+			return (new Pages($this->select, $pages['current'], $pages['count']))->ToString();
+		}
 
 	}

@@ -36,8 +36,8 @@
 		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Статистика', [
-					$this->editor_ip->select->GetLink('Запросы к серверу'),
-					$this->editor_act->select->GetLink('Действия пользователя')
+					$this->editor_ip->select->GetLink('Запросы к серверу', ['page' => 1]),
+					$this->editor_act->select->GetLink('Действия пользователя', ['page' => 1])
 				])
 			);
 		}

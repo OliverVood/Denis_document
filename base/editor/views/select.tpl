@@ -7,19 +7,21 @@
 
 	abstract class Select {
 
-		public static function ToVar(Editor $editor, array $fields, array $items, string $title): string {
+		public static function ToVar(Editor $editor, array $fields, array $items, string $title, array $ext): string {
 			Template::Start();
-			self::Render($editor, $fields, $items, $title);
+			self::Render($editor, $fields, $items, $title, $ext);
 			return Template::Read();
 		}
 
-		public static function Render(Editor $editor, array $fields, array $items, string $title): void {
+		public static function Render(Editor $editor, array $fields, array $items, string $title, array $ext): void {
 			$col = count($editor->manage);
+			$pages = $editor->Pages($ext['page'] ?? []);
 		?>
 			<div class = "navigate">
 				<?php foreach ($editor->navigateSelect as $navigate) echo $navigate($editor->params); ?>
 			</div>
 			<h1><?= $title; ?></h1>
+			<?= $pages; ?>
 			<table class = "select">
 				<thead>
 					<tr>
@@ -44,6 +46,7 @@
 					<?php } ?>
 				</tbody>
 			</table>
+			<?= $pages; ?>
 		<?php }
 
 	}

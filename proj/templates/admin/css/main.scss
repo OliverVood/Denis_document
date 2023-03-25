@@ -71,3 +71,12 @@ main {
 		}
 	}
 }
+
+.pagination {
+	margin: 0.5rem 0; font-size: 1.2rem;
+	> a {
+		display: inline-block; padding: 0.5rem;
+		&:not(.current):hover { background-color: $color-neutral-light; }
+		&.current { color: $color-text; }
+	}
+}
