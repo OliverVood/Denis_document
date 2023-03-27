@@ -49,16 +49,22 @@
 
 		public function OutEstimate() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Сметы');
+			Template::instance()->SetDescription('Составление сметы на оказание услуг и продажу товаров');
+			Template::instance()->SetKeywords('смета онлайн бесплатно, документы для самозанятых');
 			Layout::instance()->main->Push(Estimate::ToVar());
 		}
 
 		public function OutCertificate() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Акты выполненных работ');
+			Template::instance()->SetDescription('акт выполненных работ, для ИП, отчёты');
+			Template::instance()->SetKeywords('');
 			Layout::instance()->main->Push(Certificate::ToVar());
 		}
 
 		public function OutPriceList() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Прайс-листы');
+			Template::instance()->SetDescription('Составление прайс-листа на оказание услуг, проведение работ и продажу товаров');
+			Template::instance()->SetKeywords('прайс-лист онлайн, отчет оказание услуг, перечень цен на товары');
 			Layout::instance()->main->Push(PriceList::ToVar());
 		}
 

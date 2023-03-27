@@ -85,25 +85,35 @@
 
 		public function Home() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Главная');
+			Template::instance()->SetDescription(Params::$site_name . ' - ресурс в помощь ИП, самозанятым с документами и отчётами');
+			Template::instance()->SetKeywords('прайс-лист онлайн, составить акт выполненных работ, смета бесплатно, документы для ИП, отчёты самозанятые');
 		}
 
 		public function About() {
 			Template::instance()->SetTitle(Params::$site_name . ' | О проекте');
+			Template::instance()->SetDescription('О проекте ' . Params::$site_name);
+			Template::instance()->SetKeywords('проект ' . Params::$site_name);
 			Layout::instance()->main->Push(About::ToVar());
 		}
 
 		public function Contacts() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Контакты');
+			Template::instance()->SetDescription('Контакты');
+			Template::instance()->SetKeywords('контакты');
 			Layout::instance()->main->Push(Contacts::ToVar());
 		}
 
 		public function OutPrivacyPolicy() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Политика конфиденциальности');
+			Template::instance()->SetDescription('Политика конфиденциальности ' . Params::$site_name);
+			Template::instance()->SetKeywords('политика конфиденциальности');
 			Layout::instance()->main->Push(PrivacyPolicy::ToVar());
 		}
 
 		public function OutTermsUse() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Пользовательское соглашение');
+			Template::instance()->SetDescription('Пользовательское соглашение ' . Params::$site_name);
+			Template::instance()->SetKeywords('пользовательское соглашение');
 			Layout::instance()->main->Push(TermsUse::ToVar());
 		}
 

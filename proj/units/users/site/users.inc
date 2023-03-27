@@ -24,6 +24,8 @@
 		}
 
 		private function Identification() {
+//			$hash = bin2hex(random_bytes(16));
+
 			if (!isset($_SESSION['USERS']['UID'])) $_SESSION['USERS']['UID'] = $this->db->Insert(self::TABLES['users'], ['fic' => 1]);
 			self::$uid = $_SESSION['USERS']['UID'];
 		}
