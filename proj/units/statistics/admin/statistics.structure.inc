@@ -2,21 +2,20 @@
 
 	namespace Proj\Admin\Structure;
 
-	use Base\Units;
+	require DIR_UNITS . 'statistics/admin/statistics.actions.inc';
+
 	use Base\DB\TableMySQLi;
-	use Proj\Units\Consts;
+	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
-	require DIR_UNITS . 'statistics/consts.inc';
-
-	class Statistics extends Units implements Consts\Statistics {
+	class Statistics extends Actions\Statistics {
 		private DBObject $db;
 
 		protected TableMySQLi $table_ip;
 		protected TableMySQLi $table_act;
 
 		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+			parent::__construct();
 			$this->db = DBObject::instance();
 
 			$this->table_ip = new TableMySQLi(self::TABLES['ip'], $this->db);

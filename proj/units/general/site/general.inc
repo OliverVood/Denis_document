@@ -2,7 +2,7 @@
 
 	namespace Proj\Site\Units;
 
-	require DIR_UNITS . 'general/consts.inc';
+	require DIR_UNITS . 'general/general.consts.inc';
 	require DIR_UNITS . 'general/site/views/About.tpl';
 	require DIR_UNITS . 'general/site/views/Contacts.tpl';
 	require DIR_UNITS . 'general/site/views/PrivacyPolicy.tpl';
@@ -15,7 +15,6 @@
 
 	use Base\Units;
 	use Base\Instance;
-	use Base\Controller;
 	use Base\Action;
 	use Proj\Units\Consts;
 	use Proj\Site\Params;
@@ -61,24 +60,24 @@
 
 			$this->donations				= new Action('donations', 'null', 'default', /* @lang JavaScript */ "Site.General.On(); return false;");
 
-			Controller::instance()->view->Push($this->set_data_page, [$this, 'SetDataPage']);
+			self::$view->Push($this->set_data_page, [$this, 'SetDataPage']);
 
-			Controller::instance()->view->Push($this->home, [$this, 'Home']);
-			Controller::instance()->view->Push($this->about, [$this, 'About']);
-			Controller::instance()->view->Push($this->contacts, [$this, 'Contacts']);
-			Controller::instance()->view->Push($this->privacy_policy, [$this, 'OutPrivacyPolicy']);
-			Controller::instance()->view->Push($this->terms_use, [$this, 'OutTermsUse']);
+			self::$view->Push($this->home, [$this, 'Home']);
+			self::$view->Push($this->about, [$this, 'About']);
+			self::$view->Push($this->contacts, [$this, 'Contacts']);
+			self::$view->Push($this->privacy_policy, [$this, 'OutPrivacyPolicy']);
+			self::$view->Push($this->terms_use, [$this, 'OutTermsUse']);
 
-			Controller::instance()->view->Push($this->header, [$this, 'OutHeader']);
-			Controller::instance()->view->Push($this->header, [$this, 'OutFooter']);
+			self::$view->Push($this->header, [$this, 'OutHeader']);
+			self::$view->Push($this->header, [$this, 'OutFooter']);
 
-			Controller::instance()->view->Push($this->donations, [$this, 'OnDonations']);
+			self::$view->Push($this->donations, [$this, 'OnDonations']);
 		}
 
 		public function SetDataPage() {
 			$path = [];
-			if (Controller::$area != 'null') $path[] = Controller::$area;
-			if (Controller::$part != 'null') $path[] = Controller::$part;
+			if (self::$area != 'null') $path[] = self::$area;
+			if (self::$part != 'null') $path[] = self::$part;
 			$value = $path ? implode('_', $path) : 'main';
 			Template::instance()->SetDataPage($value);
 		}

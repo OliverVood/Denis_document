@@ -2,20 +2,19 @@
 
 	namespace Proj\Admin\Structure;
 
-	require DIR_UNITS . 'news/consts.inc';
+	require DIR_UNITS . 'news/admin/news.actions.inc';
 
-	use Base\Units;
 	use Base\DB\TableMySQLi;
-	use Proj\Units\Consts;
+	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
-	class News extends Units implements Consts\News {
+	class News extends Actions\News {
 		private DBObject $db;
 
 		protected TableMySQLi $table_news;
 
 		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+			parent::__construct();
 			$this->db = DBObject::instance();
 
 			$this->table_news = new TableMySQLi(self::TABLES['news'], $this->db);

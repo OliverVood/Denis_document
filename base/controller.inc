@@ -2,22 +2,20 @@
 
 	namespace Base;
 
-	class Controller {
-		use Instance;
-
-		public Stage $init;
-		public Stage $void;
-		public Stage $work;
-		public Stage $view;
+	abstract class Controller {
+		public static Stage $init;
+		public static Stage $void;
+		public static Stage $work;
+		public static Stage $view;
 
 		public static string $area = 'null';
 		public static string $part = 'null';
 
-		public function __construct() {
-			$this->init = new Stage();
-			$this->void = new Stage();
-			$this->work = new Stage();
-			$this->view = new Stage();
+		public static function start(): void {
+			self::$init = new Stage();
+			self::$void = new Stage();
+			self::$work = new Stage();
+			self::$view = new Stage();
 
 			self::$area = GetParam('__a', 'null');
 			self::$part = GetParam('__p', 'null');
@@ -27,13 +25,13 @@
 		 * Выполнить контроллер
 		 * @return void
 		 */
-		public function Execute(): void {
-			$this->init->Execute(self::$area, self::$part);
-			$this->void->Execute(self::$area, self::$part);
-			$this->work->Execute(self::$area, self::$part);
-			$this->view->Execute(self::$area, self::$part);
+		public static function Execute(): void {
+			self::$init->Execute(self::$area, self::$part);
+			self::$void->Execute(self::$area, self::$part);
+			self::$work->Execute(self::$area, self::$part);
+			self::$view->Execute(self::$area, self::$part);
 		}
 
 	}
 
-	Controller::init();
+	Controller::start();

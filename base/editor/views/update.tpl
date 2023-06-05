@@ -3,42 +3,39 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\Template;
-	use Base\Templates\HTML\Element\Form;
-	use Base\Templates\HTML\Element\Text;
+	use Base\Editor\Skins\Edit\Hidden;
+	use Base\Templates\Buffering;
 
 	abstract class Update {
 
-		public static function ToVar(Editor $editor, int $id, array $fields, array $item, array $data, string $title): string {
-			Template::Start();
-			self::Render($editor, $id, $fields, $item, $data, $title);
-			return Template::Read();
+		public static function ToVar(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate): string {
+			Buffering::Start();
+			self::Render($editor, $fields, $id, $item, $title, $navigate);
+			return Buffering::Read();
 		}
 
-		public static function Render(Editor $editor, int $id, array $fields, array $item, array $data, string $title): void {
-			$form = new Form($data);
-		?>
+		public static function Render(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate): void { ?>
 			<div class = "navigate">
-				<?php foreach ($editor->navigateUpdate as $navigate) echo $navigate($editor->params); ?>
+				<?php foreach ($navigate as $func) echo $func(); ?>
 			</div>
 			<h1><?= $title; ?></h1>
-		<?php
-			$form->Begin($editor->do_update->GetPath());
-			Text::Render('id', $id, ['type' => 'hidden']);
-			foreach ($editor->params as $name => $params) Text::Render($name, $params, ['type' => 'hidden']);
-			foreach ($fields as $name => $field) if ($field['skin'] == 'hidden') $form->Element('hidden', $name, $item[$name]);
-		?>
-			<table class = "update">
-				<tbody>
-				<?php foreach ($fields as $name => $field) { if ($field['skin'] == 'hidden') continue; ?>
-					<tr>
-						<th><?= $field['name']; ?>:</th>
-						<td><?php $form->Element($field['skin'], $name, $item[$name] ?? '', $fields['params'] ?? []); ?></td>
-					</tr>
-				<?php } ?>
-				</tbody>
-			</table>
-			<?php $form->Submit('Изменить', $editor->do_update->GetClick()); $form->End(); ?>
+			<form action = "<?= $editor->do_update->GetPath(); ?>">
+				<?php
+					(new Hidden('id', 'id'))->Render($id);
+					foreach ($fields as $key => $field) if (get_class($field) == 'Base\Editor\Skins\Edit\Hidden') echo $field->ToVar($item[$key] ?? null);
+				?>
+				<table class = "update">
+					<tbody>
+					<?php foreach ($fields as $key => $field) { if (get_class($field) == 'Base\Editor\Skins\Edit\Hidden') continue; ?>
+						<tr>
+							<th><?= $field->GetTitle(); ?>:</th>
+							<td><?= $field->ToVar($item[$key] ?? null); ?></td>
+						</tr>
+					<?php } ?>
+					</tbody>
+				</table>
+				<input type = "submit" value = "Изменить" onclick = "<?= $editor->do_create->GetClick(); ?>">
+			</form>
 		<?php }
 
 	}

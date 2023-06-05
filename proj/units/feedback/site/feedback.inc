@@ -7,7 +7,6 @@
 
 	use JetBrains\PhpStorm\NoReturn;
 
-	use Base\Controller;
 	use Base\Units;
 	use Base\Instance;
 	use Base\Action;
@@ -30,8 +29,8 @@
 			$this->feedback = new Action(self::NAME, 'null', 'default', /* @lang JavaScript */ "Site.Feedback.On(); return false;");
 			$this->do_feedback = new Action(self::NAME, 'do', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this, Site.Feedback.Do); return false;");
 
-			Controller::instance()->view->Push($this->feedback, [$this, 'OnFeedback']);
-			Controller::instance()->view->Push($this->do_feedback, [$this, 'DoFeedback']);
+			self::$view->Push($this->feedback, [$this, 'OnFeedback']);
+			self::$view->Push($this->do_feedback, [$this, 'DoFeedback']);
 		}
 
 		#[NoReturn] public function OnFeedback(): void {

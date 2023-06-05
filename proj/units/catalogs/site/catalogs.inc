@@ -10,7 +10,6 @@
 
 	use Base\Units;
 	use Base\Instance;
-	use Base\Controller;
 	use Base\Action;
 	use Proj\Units\Consts;
 	use Proj\Site\Params;
@@ -37,10 +36,10 @@
 			$this->action_certificate = new Action('certificate', 'null', '/certificate');
 			$this->action_price_list = new Action('price_list', 'null', '/price_list');
 
-			Controller::instance()->view->Push($this->out_buttons, [$this, 'OutButtons']);
-			Controller::instance()->view->Push($this->action_estimate, [$this, 'OutEstimate']);
-			Controller::instance()->view->Push($this->action_certificate, [$this, 'OutCertificate']);
-			Controller::instance()->view->Push($this->action_price_list, [$this, 'OutPriceList']);
+			self::$view->Push($this->out_buttons, [$this, 'OutButtons']);
+			self::$view->Push($this->action_estimate, [$this, 'OutEstimate']);
+			self::$view->Push($this->action_certificate, [$this, 'OutCertificate']);
+			self::$view->Push($this->action_price_list, [$this, 'OutPriceList']);
 		}
 
 		public function OutButtons() {

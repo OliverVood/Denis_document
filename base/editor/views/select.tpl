@@ -3,22 +3,21 @@
 	namespace Base\Templates\Editor;
 
 	use Base\Editor\Editor;
-	use Base\Templates\Template;
+	use Base\Templates\Buffering;
 
 	abstract class Select {
 
-		public static function ToVar(Editor $editor, array $fields, array $items, string $title, array $ext): string {
-			Template::Start();
-			self::Render($editor, $fields, $items, $title, $ext);
-			return Template::Read();
+		public static function ToVar(Editor $editor, array $fields, array $items, array $ext, string $title, array $navigate, array $manage): string {
+			Buffering::Start();
+			self::Render($editor, $fields, $items, $ext, $title, $navigate, $manage);
+			return Buffering::Read();
 		}
 
-		public static function Render(Editor $editor, array $fields, array $items, string $title, array $ext): void {
-			$col = count($editor->manage);
+		public static function Render(Editor $editor, array $fields, array $items, array $ext, string $title, array $navigate, array $manage): void {
 			$pages = $editor->Pages($ext['page'] ?? []);
 		?>
 			<div class = "navigate">
-				<?php foreach ($editor->navigateSelect as $navigate) echo $navigate($editor->params); ?>
+				<?php foreach ($navigate as $func) echo $func(); ?>
 			</div>
 			<h1><?= $title; ?></h1>
 			<?= $pages; ?>
@@ -26,9 +25,9 @@
 				<thead>
 					<tr>
 						<?php foreach ($fields as $field) { ?>
-							<th><?= $field->GetName(); ?></th>
+							<th><?= $field->GetTitle(); ?></th>
 						<?php } ?>
-						<?php if ($col) { ?><th colspan = "<?= $col ?>">Управление</th><?php } ?>
+						<?php if ($manage) { ?><th colspan = "<?= count($manage); ?>">Управление</th><?php } ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,8 +38,8 @@
 									<?= $field->ToVar($item[$key]); ?>
 								</td>
 							<?php } ?>
-							<?php foreach ($editor->manage as $manage) { ?>
-								<td><?= $manage($editor->params, $item); ?></td>
+							<?php foreach ($manage as $func) { ?>
+								<td><?= $func($item); ?></td>
 							<?php } ?>
 						</tr>
 					<?php } ?>

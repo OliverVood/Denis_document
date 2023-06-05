@@ -28,7 +28,7 @@
 	 * @return void
 	 */
 	#[NoReturn] function SendJSONSuccess(mixed $data): void {
-		SendJSONData(['state' => 'ok', 'data' => $data]);
+		SendJSONData(['state' => 'success', 'data' => $data]);
 	}
 
 	/**

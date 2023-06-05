@@ -33,19 +33,10 @@
 					<meta charset = "UTF-8">
 					<meta name = "viewport" content = "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 					<meta http-equiv = "X-UA-Compatible" content = "ie=edge">
-					<title>Document</title>
-					<?php
-						Template::$instance->BrowseHead();
-					?>
+					<?php Template::$instance->BrowseHead(); ?>
 				</head>
 				<body>
 					<?php self::RenderSections(); ?>
-					<script>
-						$(function() {
-							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
-							Admin.Common.Layout.Initialization();
-						});
-					</script>
 				</body>
 			</html>
 		<?php }
@@ -57,6 +48,16 @@
 				<main><?php Layout::instance()->main->Browse(); ?></main>
 			</div>
 			<footer><?php Layout::instance()->footer->Browse(); ?></footer>
+			<script>
+				<?php Layout::instance()->js_global->Browse(); ?>
+				$(() => {
+					Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
+					Base.Common.GlobalParams.Set('xhr', '<?= \XHR; ?>');
+					Base.Common.History.Initialization();
+					Admin.Common.Layout.Initialization();
+				<?php Layout::instance()->js_loaded->Browse(); ?>
+				});
+			</script>
 		<?php }
 
 	}

@@ -2,7 +2,7 @@
 
 	namespace Proj\Site\Units;
 
-	require DIR_UNITS . 'news/consts.inc';
+	require DIR_UNITS . 'news/news.consts.inc';
 	require DIR_UNITS . 'news/site/views/Last.tpl';
 	require DIR_UNITS . 'news/site/views/Show.tpl';
 	require DIR_UNITS . 'news/site/views/All.tpl';
@@ -35,9 +35,9 @@
 			$this->all = new Action(self::NAME, 'null', 'default');
 			$this->show = new Action(self::NAME, 'show', "/news/show?id=%id%");
 
-			Controller::instance()->view->Push($this->last, [$this, 'OnViewLast']);
-			Controller::instance()->view->Push($this->all, [$this, 'OnViewAll']);
-			Controller::instance()->view->Push($this->show, [$this, 'OnViewShow']);
+			self::$view->Push($this->last, [$this, 'OnViewLast']);
+			self::$view->Push($this->all, [$this, 'OnViewAll']);
+			self::$view->Push($this->show, [$this, 'OnViewShow']);
 		}
 
 		public function OnViewShow() {

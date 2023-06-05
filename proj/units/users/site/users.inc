@@ -2,7 +2,7 @@
 
 	namespace Proj\Site\Units;
 
-	require DIR_UNITS . 'users/consts.inc';
+	require DIR_UNITS . 'users/users.consts.inc';
 
 	use Base\Units;
 	use Base\Instance;

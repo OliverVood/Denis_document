@@ -2,7 +2,7 @@
 
 	namespace Base;
 
-	abstract class Units {
+	abstract class Units extends Controller {
 		private static array $names = [];
 		private static array $ids = [];
 

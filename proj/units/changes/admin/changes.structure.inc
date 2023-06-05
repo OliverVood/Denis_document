@@ -2,21 +2,20 @@
 
 	namespace Proj\Admin\Structure;
 
-	require DIR_UNITS . 'changes/consts.inc';
+	require DIR_UNITS . 'changes/admin/changes.actions.inc';
 
-	use Base\Units;
 	use Base\DB\TableMySQLi;
-	use Proj\Units\Consts;
+	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
-	class Changes extends Units implements Consts\Changes {
+	class Changes extends Actions\Changes {
 		private DBObject $db;
 
 		protected TableMySQLi $table_changes;
 		protected TableMySQLi $table_change;
 
 		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+			parent::__construct();
 			$this->db = DBObject::instance();
 
 			$this->table_changes = new TableMySQLi(self::TABLES['changes'], $this->db);

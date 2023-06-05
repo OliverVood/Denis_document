@@ -4,3 +4,4 @@
 
 	const DEBUG = true;
 	const REQUEST = ADDRESS;
+	const XHR = '/xhr';

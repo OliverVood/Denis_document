@@ -2,7 +2,7 @@
 
 	namespace Base\Templates;
 
-	abstract class Template {
+	abstract class Template extends Buffering {
 		private array $stylesheets = [];
 		private array $scripts = [];
 
@@ -13,17 +13,6 @@
 		private array $data = [];
 
 		protected function __construct() {  }
-
-		public static function Start(): void {
-			ob_start();
-		}
-
-		public static function Read(): string {
-			$val = ob_get_contents();
-			ob_end_clean();
-
-			return $val !== false ? $val : '';
-		}
 
 		public function AddScript(string $name, string $src) : void {
 			if (isset($this->scripts[$name])) die("Script «{$name}» exists");

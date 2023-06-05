@@ -2,14 +2,13 @@
 
 	namespace Proj\Site\Units;
 
-	require DIR_UNITS . 'changes/consts.inc';
+	require DIR_UNITS . 'changes/changes.consts.inc';
 	require DIR_UNITS . 'changes/site/views/Last.tpl';
 	require DIR_UNITS . 'changes/site/views/All.tpl';
 	require DIR_UNITS . 'changes/site/views/Show.tpl';
 
 	use Base\Units;
 	use Base\Instance;
-	use Base\Controller;
 	use Base\Action;
 	use Proj\Units\Consts;
 	use Proj\DBQuery;
@@ -35,9 +34,9 @@
 			$this->list = new Action(self::NAME, 'null', 'default');
 			$this->show = new Action(self::NAME, 'show', "/changes/show?id=%id%");
 
-			Controller::instance()->view->Push($this->last, [$this, 'OnViewLast']);
-			Controller::instance()->view->Push($this->list, [$this, 'OnViewList']);
-			Controller::instance()->view->Push($this->show, [$this, 'OnViewShow']);
+			self::$view->Push($this->last, [$this, 'OnViewLast']);
+			self::$view->Push($this->list, [$this, 'OnViewList']);
+			self::$view->Push($this->show, [$this, 'OnViewShow']);
 		}
 
 		public function OnViewShow() {

@@ -2,28 +2,38 @@ namespace Base {
 	export namespace Common {
 
 		type TypeRequestParams = {
-			method			?: 'get' | 'post',
-			request			?: string,
-			processData		?: boolean,
-			contentType		?: string | false
+			method					?: 'get' | 'post',
+			request					?: string,
+			processData				?: boolean,
+			contentType				?: string | false
 		}
 
-		type TypeResponse = {
-			state			: 'ok' | 'notice',
-			data			: any
+		type ResponseBase<Type, Data> = {
+			type					: Type,
+			data					: Data
 		}
+
+		type ResponseHistoryData	= { address: string, xhr: string, handler: string };
+		type ResponseSectionData	= { section: string, html: string, empty: boolean };
+		type ResponseNoticeData		= { type: 'ok' | 'info' | 'error', notice: string };
+
+		type ResponseHistory		= ResponseBase<'history', ResponseHistoryData>
+		type ResponseSection		= ResponseBase<'section', ResponseSectionData>
+		type ResponseNotice			= ResponseBase<'notice', ResponseNoticeData>
+
+		type Response 				= ResponseHistory | ResponseSection;
 
 		export class Query {
 
 			public static SendData(address :string, data :Object, handler ?:Function, params ?:TypeRequestParams) {
 				let method			: string			= 'post';
-				let request 		: string			= GlobalParams.Get('request');
+				let request 		: string			= GlobalParams.Get('xhr');
 				let contentType		: string | false	= 'application/x-www-form-urlencoded;charset=UTF-8';
 				let processData		: boolean			= true;
 
 				if (params) {
 					if (params.method) method = params.method;
-					if (params.request) request = params.request;
+					if (params.request !== undefined) request = params.request;
 					if (params.contentType !== undefined) contentType = params.contentType;
 					if (params.processData !== undefined) processData = params.processData;
 				}
@@ -61,11 +71,35 @@ namespace Base {
 				Query.SendForm($(e.currentTarget).closest('form'), handler);
 			}
 
-			private static Response(response :TypeResponse, handler :Function) {
-				switch (response['state']) {
-					case 'ok': if (handler) handler(response['data']); break;
-					case 'notice': Base.Common.Notice.Create(response['type'], response['notice']); break;
+			private static Response(response: Response, handler?: Function) {
+				for (const i in response) Query.Execute(response[i].type, response[i].data, handler);
+			}
+
+			private static Execute(type: string, data: any, handler?: Function): void {
+				switch (type) {
+					case 'history': Query.ExecuteHistory(data); break;
+					case 'section': Query.ExecuteSection(data); break;
+					case 'notice': Query.ExecuteNotice(data); break;
+					case 'data': Query.ExecuteHandler(handler, data); break;
 				}
+			}
+
+			private static ExecuteHistory(data: ResponseHistoryData): void {
+				window.history.pushState({xhr: data.xhr, handler: data.handler}, '', data.address);
+			}
+
+			private static ExecuteSection(data: ResponseSectionData): void {
+				let $section = $(data.section)
+				if (data.empty) $section.empty();
+				$section.append(data.html);/*Admin.Common.Layout.main.Fill*/
+			}
+
+			private static ExecuteNotice(data: ResponseNoticeData): void {
+				Base.Common.Notice.Create(data.type, data.notice);
+			}
+
+			private static ExecuteHandler(handler: Function | null, data: any): void {
+				if (handler) handler(data);
 			}
 
 		}

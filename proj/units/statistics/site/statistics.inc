@@ -2,11 +2,10 @@
 
 	namespace Proj\Site\Units;
 
-	require DIR_UNITS . 'statistics/consts.inc';
+	require DIR_UNITS . 'statistics/statistics.consts.inc';
 
 	use Base\Units;
 	use Base\Instance;
-	use Base\Controller;
 	use Base\Action;
 	use JetBrains\PhpStorm\NoReturn;
 	use Proj\Units\Consts;
@@ -29,12 +28,12 @@
 			$this->collect = new Action('always', 'always');
 			$this->act = new Action(self::NAME, 'act', 'default');
 
-			Controller::instance()->void->Push($this->collect, [$this, 'Collect']);
-			Controller::instance()->view->Push($this->act, [$this, 'DoAct']);
+			self::$void->Push($this->collect, [$this, 'Collect']);
+			self::$view->Push($this->act, [$this, 'DoAct']);
 		}
 
 		public function Collect(): void {
-			if (Controller::$area == 'statistics') return;
+			if (self::$area == 'statistics') return;
 
 			$ip = GetUserIP();
 			$ipv6 = ip2long($ip);

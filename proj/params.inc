@@ -1,6 +1,6 @@
 <?php
 
-	namespace Proj\Site;
+	namespace Proj;
 
 	class Params {
 

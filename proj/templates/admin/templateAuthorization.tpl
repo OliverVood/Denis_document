@@ -42,6 +42,7 @@
 					<script>
 						$(function() {
 							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
+							Base.Common.GlobalParams.Set('xhr', '<?= \XHR; ?>');
 						});
 					</script>
 				</body>

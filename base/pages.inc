@@ -2,7 +2,7 @@
 
 	namespace Base;
 
-	use Base\Templates\Template;
+	use Base\Templates\Buffering;
 
 	class Pages {
 		private Action $act;
@@ -22,7 +22,7 @@
 		}
 
 		public function ToString(): string {
-			Template::Start();
+			Buffering::Start();
 			if ($this->count > 1) {
 				echo '<div class = "pagination">';
 				if ($this->current > 1) {
@@ -36,7 +36,7 @@
 				}
 				echo '</div>';
 			}
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		private function GetCurrent(int $number): string {
@@ -60,7 +60,7 @@
 		}
 
 		private function GetLink(int $number, string $content, string $class = ''): string {
-			return $this->act->GetLink($content, [$this->name => $number], ['class' => $class]);
+			return $this->act->GetLinkHref($content, [$this->name => $number], ['class' => $class]);
 		}
 
 	}

@@ -40,6 +40,10 @@
 		abstract public function string(string $name, int $length): void;
 		abstract public function text(string $name): void;
 
+		public function Query(string $query) {
+			return $this->db->Query($query);
+		}
+
 		public function Select(?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null) {
 			return $this->db->Select($this->name, $fields, $where, $order, $limit, $calc);
 		}

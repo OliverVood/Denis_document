@@ -4,3 +4,4 @@
 
 	const DEBUG = true;
 	const REQUEST = '/admin';
+	const XHR = '/admin/xhr';
