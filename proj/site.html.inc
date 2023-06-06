@@ -6,9 +6,9 @@
 
 	require DIR_BASE . 'base.html.inc';
 
-	require DIR_ROOT . 'proj/params.inc';
-	require DIR_ROOT . 'proj/site.versions.inc';
-	require DIR_PROJ . 'site.proj.inc';
+	require DIR_PROJ . 'params.inc';
+	require DIR_PROJ . 'site.versions.inc';
+	require DIR_PROJ . 'site.proj.html.inc';
 
 	Base\Controller::Execute();
 

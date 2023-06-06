@@ -3,5 +3,6 @@
 	require DIR_ROOT . 'proj/consts.inc';
 
 	const DEBUG = true;
-	const REQUEST = ADDRESS;
+//	const REQUEST = ADDRESS;
+	const REQUEST = '';
 	const XHR = '/xhr';

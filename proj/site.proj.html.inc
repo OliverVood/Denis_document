@@ -9,7 +9,7 @@
 
 	require DIR_UNITS . 'consts.inc';
 
-	require DIR_UNITS . 'site.units.inc';
+	require DIR_UNITS . 'site.units.html.inc';
 
 	require DIR_PROJ . 'templates/site/layout.inc';
 	require DIR_PROJ . 'templates/site/template.tpl';
