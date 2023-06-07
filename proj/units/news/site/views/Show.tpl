@@ -2,19 +2,19 @@
 
 	namespace Proj\Site\Templates\News;
 
-	use Base\Templates\Template;
-	use Proj\Units\Consts\News;
+	use Base\Templates\Buffering;
+	use Proj\Units\Consts;
 
 	abstract class Show {
 
 		public static function ToVar(array $data): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render($data);
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(array $data): void {
-			$background = $data['cover'] ? 'style = "background-image: url(' . News::PATH_COVER_RELATIVE . $data['cover'] . ');"' : '';
+			$background = $data['cover'] ? 'style = "background-image: url(' . Consts\News::PATH_COVER_RELATIVE . $data['cover'] . ');"' : '';
 		?>
 			<div class = "view news show">
 				<div class = "cover"<?= $background; ?>>

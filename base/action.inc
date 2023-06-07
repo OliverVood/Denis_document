@@ -114,7 +114,7 @@
 		 * @return string
 		 */
 		public function GetHref(array $data = []): string {
-			return $this->ParseTarget($this->href, $data);
+			return $this->ParseTarget($this->href ?: '/', $data);
 		}
 
 		/**

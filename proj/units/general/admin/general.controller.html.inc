@@ -17,8 +17,12 @@
 	class General extends Actions\General {
 		use Instance;
 
+		private Model\General $model;
+
 		private function __construct() {
 			parent::__construct();
+
+			$this->model = Model\General::instance();
 
 			self::$view->Push(self::$out_head, [$this, 'OutHead']);
 			self::$view->Push(self::$out_menu, [$this, 'OutMenu']);
@@ -49,15 +53,15 @@
 		}
 
 		public function Structure() {
-			Layout::instance()->main->Push(Model\General::instance()->Structure());
+			Layout::instance()->main->Push($this->model->Structure());
 		}
 
 		public function Home() {
-			Layout::instance()->main->Push(Model\General::instance()->Home());
+			Layout::instance()->main->Push($this->model->Home());
 		}
 
 		public function Check() {
-			$result = json_encode(Model\General::instance()->DBCheck());
+			$result = json_encode($this->model->DBCheck());
 			Layout::instance()->js_loaded->Push(/** @lang JavaScript */ "Admin.General.Render.CheckDB({$result});");
 		}
 

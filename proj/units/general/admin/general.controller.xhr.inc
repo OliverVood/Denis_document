@@ -15,8 +15,12 @@
 	class General extends Actions\General {
 		use Instance;
 
+		private Model\General $model;
+
 		private function __construct() {
 			parent::__construct();
+
+			$this->model = Model\General::instance();
 
 			self::$view->Push(self::$home, [$this, 'Home']);
 			self::$view->Push(self::$db_structure, [$this, 'Structure']);
@@ -26,24 +30,24 @@
 
 		#[NoReturn] public function Home() {
 			Response::PushHistory(self::$home);
-			Response::PushSection('main', Model\General::instance()->Home());
+			Response::PushSection('main', $this->model->Home());
 			Response::SendJSON();
 		}
 
 		#[NoReturn] public function Structure() {
 			Response::PushHistory(self::$db_structure);
-			Response::PushSection('main', Model\General::instance()->Structure());
+			Response::PushSection('main', $this->model->Structure());
 			Response::SendJSON();
 		}
 
 		#[NoReturn] public function Check() {
 			Response::PushHistory(self::$db_check, [], 'Admin.General.Render.CheckDB');
-			Response::PushData(Model\General::instance()->DBCheck());
+			Response::PushData($this->model->DBCheck());
 			Response::SendJSON();
 		}
 
 		#[NoReturn] public function Make() {
-			Response::PushData(Model\General::instance()->DBMake());
+			Response::PushData($this->model->DBMake());
 			Response::SendJSON();
 		}
 

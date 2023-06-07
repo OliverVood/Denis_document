@@ -1,9 +1,9 @@
 <?php
 
-//	require DIR_UNITS . 'general/site/general.inc';
-//	require DIR_UNITS . 'users/site/users.inc';
-//	require DIR_UNITS . 'statistics/site/statistics.inc';
-//	require DIR_UNITS . 'catalogs/site/catalogs.inc';
-//	require	DIR_UNITS . 'news/site/news.inc';
-//	require DIR_UNITS . 'changes/site/changes.inc';
-//	require DIR_UNITS . 'feedback/site/feedback.inc';
+	require DIR_UNITS . 'general/site/general.controller.xhr.inc';
+	require DIR_UNITS . 'users/site/users.controller.xhr.inc';
+	require DIR_UNITS . 'statistics/site/statistics.controller.xhr.inc';
+	require DIR_UNITS . 'catalogs/site/catalogs.controller.xhr.inc';
+	require	DIR_UNITS . 'news/site/news.controller.xhr.inc';
+	require DIR_UNITS . 'changes/site/changes.controller.xhr.inc';
+	require DIR_UNITS . 'feedback/site/feedback.controller.xhr.inc';

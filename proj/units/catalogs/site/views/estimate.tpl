@@ -2,14 +2,14 @@
 
 	namespace Proj\Site\Templates\Catalogs;
 
-	use Base\Templates\Template;
+	use Base\Templates\Buffering;
 
 	abstract class Estimate {
 
 		public static function ToVar(): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render();
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(): void { ?>

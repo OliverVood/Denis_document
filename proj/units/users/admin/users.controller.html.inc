@@ -2,27 +2,31 @@
 
 	namespace Proj\Admin\Units\HTML;
 
-	require DIR_UNITS . 'users/admin/users.actions.inc';
+	require DIR_UNITS . 'users/admin/users.structure.inc';
 	require DIR_UNITS . 'users/admin/users.model.inc';
 	require DIR_UNITS . 'users/admin/views/FormAuthorization.tpl';
 
 	use Base\Instance;
-	use Proj\Admin\Actions;
+	use Proj\Admin\Structure;
 	use Proj\Admin\Model;
 	use Proj\Admin\Templates\LayoutAuthorization;
 	use Proj\Admin\Templates\TemplateAuthorization;
 	use Proj\Admin\Templates\Users\FormAuthorization;
 	use Proj\Params;
 
-	class Users extends Actions\Users {
+	class Users extends Structure\Users {
 		use Instance;
+
+		private Model\Users $model;
 
 		private function __construct() {
 			parent::__construct();
+
+			$this->model = Model\Users::instance();
 		}
 
 		public function IsPossible(): void {
-			if (Model\Users::instance()->IsLogin()) return;
+			if ($this->model->IsLogin()) return;
 
 			require DIR_PROJ . 'templates/admin/layoutAuthorization.inc';
 			require DIR_PROJ . 'templates/admin/templateAuthorization.tpl';

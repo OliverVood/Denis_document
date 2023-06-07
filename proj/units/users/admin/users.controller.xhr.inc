@@ -2,29 +2,33 @@
 
 	namespace Proj\Admin\Units\XHR;
 
-	require DIR_UNITS . 'users/admin/users.actions.inc';
+	require DIR_UNITS . 'users/admin/users.structure.inc';
 	require DIR_UNITS . 'users/admin/users.model.inc';
 
 	use JetBrains\PhpStorm\NoReturn;
 
 	use Base\Controller;
 	use Base\Instance;
-	use Proj\Admin\Actions;
+	use Proj\Admin\Structure;
 	use Proj\Admin\Model;
 	use Response;
 
-	class Users extends Actions\Users {
+	class Users extends Structure\Users {
 		use Instance;
+
+		private Model\Users $model;
 
 		private function __construct() {
 			parent::__construct();
+
+			$this->model = Model\Users::instance();
 
 			self::$init->Push(self::$auth, [$this, 'Auth']);
 			self::$init->Push(self::$exit, [$this, 'Exit']);
 		}
 
 		public function IsPossible(): void {
-			if (Model\Users::instance()->IsLogin() || ((Controller::$area == self::NAME) && (Controller::$part == 'auth'))) return;
+			if ($this->model->IsLogin() || ((Controller::$area == self::NAME) && (Controller::$part == 'auth'))) return;
 
 			Response::PushNoticeError('Пожалуйста, авторизуйтесь');
 			Response::SendJSON();
@@ -34,21 +38,21 @@
 		#[NoReturn] public function Auth(): void {
 			$login = GetParam('login', '');
 			$password = GetParam('password', '');
-			$hash = Model\Users::instance()->PasswordHash($password);
+			$hash = $this->model->PasswordHash($password);
 
 			if (($login != USER_LOGIN) || ($hash != USER_PASSWORD)) {
 				Response::PushNoticeError('Ошибка доступа');
 				Response::SendJSON();
 			}
 
-			Model\Users::instance()->Login();
+			$this->model->Login();
 
 			Response::PushData([]);
 			Response::SendJSON();
 		}
 
 		#[NoReturn] public function Exit(): void {
-			Model\Users::instance()->Logout();
+			$this->model->Logout();
 
 			Response::PushData([]);
 			Response::SendJSON();

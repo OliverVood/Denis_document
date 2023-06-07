@@ -1,16 +1,16 @@
 <?php
 
-	namespace Proj\Site\Templates\General;
+	namespace Proj\Site\Templates\Catalogs;
 
-	use Base\Templates\Template;
-	use Proj\Site\Units\Catalogs;
+	use Base\Templates\Buffering;
+	use Proj\Site\Actions;
 
 	abstract class Buttons {
 
 		public static function ToVar(): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render();
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(): void { ?>
@@ -21,9 +21,9 @@
 					</div>
 				</div>
 				<div class = "btns">
-					<?= Catalogs::instance()->action_estimate->GetLink('Сметы »', [], ['class' => 'button']); ?>
-					<?= Catalogs::instance()->action_certificate->GetLink('Акты выполненных работ »', [], ['class' => 'button']); ?>
-					<?= Catalogs::instance()->action_price_list->GetLink('Прайс-листы »', [], ['class' => 'button']); ?>
+					<?= Actions\Catalogs::$action_estimate->GetLinkHref('Сметы »', [], ['class' => 'button']); ?>
+					<?= Actions\Catalogs::$action_certificate->GetLinkHref('Акты выполненных работ »', [], ['class' => 'button']); ?>
+					<?= Actions\Catalogs::$action_price_list->GetLinkHref('Прайс-листы »', [], ['class' => 'button']); ?>
 				</div>
 			</div>
 		<?php }

@@ -2,15 +2,15 @@
 
 	namespace Proj\Site\Templates\Feedback;
 
-	use Base\Templates\Template;
-	use Proj\Site\Units\Feedback;
+	use Base\Templates\Buffering;
+	use Proj\Site\Actions;
 
 	abstract class Form {
 
 		public static function ToVar(): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render();
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(): void { ?>
@@ -33,7 +33,7 @@
 						<textarea name = "content" rows = "4"></textarea>
 					</div>
 					<div>
-						<input type = "submit" onclick = "<?= Feedback::instance()->do_feedback->GetClick(); ?>">
+						<input type = "submit" onclick = "<?= Actions\Feedback::$do_feedback->GetClick(); ?>">
 					</div>
 				</form>
 			</div>

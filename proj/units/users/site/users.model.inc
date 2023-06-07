@@ -1,15 +1,12 @@
 <?php
 
-	namespace Proj\Site\Units;
+	namespace Proj\Site\Model;
 
-	require DIR_UNITS . 'users/users.consts.inc';
-
-	use Base\Units;
 	use Base\Instance;
 	use Proj\Units\Consts;
 	use Proj\DBQuery;
 
-	class Users extends Units implements Consts\Users {
+	class Users {
 		use Instance;
 
 		private DBQuery $db;
@@ -17,16 +14,14 @@
 		private static string | null $uid = null;
 
 		private function __construct() {
-			parent::__construct(self::ID, self::NAME);
 			$this->db = DBQuery::instance();
 
 			$this->Identification();
 		}
 
-		private function Identification() {
+		private function Identification(): void {//TODO запомнить пользователя
 //			$hash = bin2hex(random_bytes(16));
-
-			if (!isset($_SESSION['USERS']['UID'])) $_SESSION['USERS']['UID'] = $this->db->Insert(self::TABLES['users'], ['fic' => 1]);
+			if (!isset($_SESSION['USERS']['UID'])) $_SESSION['USERS']['UID'] = $this->db->Insert(Consts\Users::TABLES['users'], ['fic' => 1]);
 			self::$uid = $_SESSION['USERS']['UID'];
 		}
 

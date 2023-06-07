@@ -49,6 +49,7 @@
 						let $ui_menu;
 						$(function() {
 							Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
+							Base.Common.GlobalParams.Set('xhr', '<?= \XHR; ?>');
 							Site.Common.Layout.Initialization();
 							$ui_menu = new Site.Common.Menu();
 						});

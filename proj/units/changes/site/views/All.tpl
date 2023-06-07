@@ -2,15 +2,15 @@
 
 	namespace Proj\Site\Templates\Changes;
 
-	use Base\Templates\Template;
-	use Proj\Site\Units;
+	use Base\Templates\Buffering;
+	use Proj\Site\Actions;
 
 	abstract class All {
 
 		public static function ToVar(array $items, $title): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render($items, $title);
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(array $items, $title): void { ?>
@@ -28,7 +28,7 @@
 
 		public static function RenderItem(array $item): void { ?>
 			<div class = "view changes item">
-				<?= Units\Changes::instance()->show->GetLink($item['header'], ['id' => $item['id']]); ?>
+				<?= Actions\Changes::$show->GetLinkHref($item['header'], ['id' => $item['id']]); ?>
 			</div>
 		<?php }
 

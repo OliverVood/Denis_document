@@ -10,6 +10,7 @@
 	require DIR_BASE . 'controller.inc';
 	require DIR_BASE . 'action.inc';
 	require DIR_BASE . 'units.inc';
+	require DIR_BASE . 'redirect.inc';
 
 	require DIR_BASE . 'template/layout.inc';
 	require DIR_BASE . 'template/section.inc';

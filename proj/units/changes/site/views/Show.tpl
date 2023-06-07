@@ -2,15 +2,15 @@
 
 	namespace Proj\Site\Templates\Changes;
 
-	use Base\Templates\Template;
-	use Proj\Units\Consts\Changes;
+	use Base\Templates\Buffering;
+	use Proj\Units\Consts;
 
 	abstract class Show {
 
 		public static function ToVar(array $data, array $list): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render($data, $list);
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(array $data, array $list): void { ?>
@@ -28,7 +28,7 @@
 		<?php }
 
 		private static function RenderChange($item): void {
-			$background = $item['cover'] ? 'style = "background-image: url(' . Changes::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
+			$background = $item['cover'] ? 'style = "background-image: url(' . Consts\Changes::PATH_COVER_RELATIVE . $item['cover'] . ');"' : '';
 		?>
 			<div class = "view change item">
 				<div class = "cover"<?= $background; ?>></div>
