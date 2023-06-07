@@ -14,6 +14,7 @@
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\Catalogs as TPL;
 	use Proj\Params;
+	use Closure;
 
 	class Catalogs extends Actions\Catalogs {
 		use Instance;
@@ -21,31 +22,31 @@
 		private function __construct() {
 			parent::__construct();
 
-			self::$view->Push(self::$out_buttons, [$this, 'OutButtons']);
-			self::$view->Push(self::$action_estimate, [$this, 'OutEstimate']);
-			self::$view->Push(self::$action_certificate, [$this, 'OutCertificate']);
-			self::$view->Push(self::$action_price_list, [$this, 'OutPriceList']);
+			self::$view->Push(self::$out_buttons, Closure::fromCallable([$this, 'OutButtons']));
+			self::$view->Push(self::$action_estimate, Closure::fromCallable([$this, 'OutEstimate']));
+			self::$view->Push(self::$action_certificate, Closure::fromCallable([$this, 'OutCertificate']));
+			self::$view->Push(self::$action_price_list, Closure::fromCallable([$this, 'OutPriceList']));
 		}
 
-		public function OutButtons(): void {
+		private function OutButtons(): void {
 			Layout::instance()->main->Push(TPL\Buttons::ToVar());
 		}
 
-		public function OutEstimate(): void {
+		private function OutEstimate(): void {
 			Template::instance()->SetTitle(Params::$site_name . ' | Сметы');
 			Template::instance()->SetDescription('Составление сметы на оказание услуг и продажу товаров');
 			Template::instance()->SetKeywords('смета онлайн бесплатно, документы для самозанятых');
 			Layout::instance()->main->Push(TPL\Estimate::ToVar());
 		}
 
-		public function OutCertificate(): void {
+		private function OutCertificate(): void {
 			Template::instance()->SetTitle(Params::$site_name . ' | Акты выполненных работ');
 			Template::instance()->SetDescription('акт выполненных работ, для ИП, отчёты');
 			Template::instance()->SetKeywords('');
 			Layout::instance()->main->Push(TPL\Certificate::ToVar());
 		}
 
-		public function OutPriceList(): void {
+		private function OutPriceList(): void {
 			Template::instance()->SetTitle(Params::$site_name . ' | Прайс-листы');
 			Template::instance()->SetDescription('Составление прайс-листа на оказание услуг, проведение работ и продажу товаров');
 			Template::instance()->SetKeywords('прайс-лист онлайн, отчет оказание услуг, перечень цен на товары');

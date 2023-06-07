@@ -13,6 +13,7 @@
 	use Proj\Site\Model;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\News as TPL;
+	use Closure;
 
 	class News extends Actions\News {
 		use Instance;
@@ -24,21 +25,21 @@
 
 			$this->model = Model\News::instance();
 
-			self::$view->Push(self::$last, [$this, 'OnViewLast']);
-			self::$view->Push(self::$all, [$this, 'OnViewAll']);
-			self::$view->Push(self::$show, [$this, 'OnViewShow']);
+			self::$view->Push(self::$last, Closure::fromCallable([$this, 'OnViewLast']));
+			self::$view->Push(self::$all, Closure::fromCallable([$this, 'OnViewAll']));
+			self::$view->Push(self::$show, Closure::fromCallable([$this, 'OnViewShow']));
 		}
 
-		public function OnViewShow() {
+		private function OnViewShow() {
 			$id = GetInt('id');
 			Layout::instance()->main->Push(TPL\Show::ToVar($this->model->GetNews($id)));
 		}
 
-		public function OnViewLast() {
+		private function OnViewLast() {
 			Layout::instance()->main->Push(TPL\Last::ToVar($this->model->GetLastNews(3), 'Последние новости'));
 		}
 
-		public function OnViewAll() {
+		private function OnViewAll() {
 			Layout::instance()->main->Push(TPL\All::ToVar($this->model->GetLastNews(null), 'Все новости'));
 		}
 

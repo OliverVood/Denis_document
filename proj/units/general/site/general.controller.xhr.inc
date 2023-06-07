@@ -11,6 +11,7 @@
 	use Proj\Site\Actions;
 	use Proj\Site\Templates\General as TPL;
 	use Response;
+	use Closure;
 
 	class General extends Actions\General {
 		use Instance;
@@ -18,10 +19,10 @@
 		private function __construct() {
 			parent::__construct();
 
-			self::$view->Push(self::$donations, [$this, 'OnDonations']);
+			self::$view->Push(self::$donations, Closure::fromCallable([$this, 'OnDonations']));
 		}
 
-		#[NoReturn] public function OnDonations() {
+		#[NoReturn] private function OnDonations() {
 			Response::PushData(['html' => TPL\Donations::ToVar()]);
 			Response::SendJSON();
 		}

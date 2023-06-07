@@ -11,6 +11,7 @@
 	use Proj\Admin\Actions;
 	use Proj\Admin\Model;
 	use Response;
+	use Closure;
 
 	class General extends Actions\General {
 		use Instance;
@@ -22,31 +23,31 @@
 
 			$this->model = Model\General::instance();
 
-			self::$view->Push(self::$home, [$this, 'Home']);
-			self::$view->Push(self::$db_structure, [$this, 'Structure']);
-			self::$view->Push(self::$db_check, [$this, 'Check']);
-			self::$view->Push(self::$db_make, [$this, 'Make']);
+			self::$view->Push(self::$home, Closure::fromCallable([$this, 'Home']));
+			self::$view->Push(self::$db_structure, Closure::fromCallable([$this, 'Structure']));
+			self::$view->Push(self::$db_check, Closure::fromCallable([$this, 'Check']));
+			self::$view->Push(self::$db_make, Closure::fromCallable([$this, 'Make']));
 		}
 
-		#[NoReturn] public function Home() {
+		#[NoReturn] private function Home() {
 			Response::PushHistory(self::$home);
 			Response::PushSection('main', $this->model->Home());
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function Structure() {
+		#[NoReturn] private function Structure() {
 			Response::PushHistory(self::$db_structure);
 			Response::PushSection('main', $this->model->Structure());
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function Check() {
+		#[NoReturn] private function Check() {
 			Response::PushHistory(self::$db_check, [], 'Admin.General.Render.CheckDB');
 			Response::PushData($this->model->DBCheck());
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function Make() {
+		#[NoReturn] private function Make() {
 			Response::PushData($this->model->DBMake());
 			Response::SendJSON();
 		}

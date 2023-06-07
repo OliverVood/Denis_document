@@ -4,6 +4,7 @@
 
 	use Base\Controller;
 	use Base\Editor\Skins\Browse;
+	use Closure;
 
 	trait Ip {
 
@@ -18,7 +19,7 @@
 		}
 
 		protected function SetHandlers(): void {
-			Controller::$view->Push($this->select, [$this, 'OnSelect']);
+			Controller::$view->Push($this->select, Closure::fromCallable([$this, 'OnSelect']));
 		}
 
 		protected function ManageSelect(): array {

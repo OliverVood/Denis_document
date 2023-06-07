@@ -14,6 +14,7 @@
 	use Base\Templates\Editor\Update;
 	use Base\Templates\Editor\Browse;
 	use Response;
+	use Closure;
 
 	abstract class Editor extends Base\Editor\Editor {
 		protected function __construct(string $name, Table $table) {
@@ -21,18 +22,18 @@
 		}
 
 		protected function SetHandlers(): void {
-			Controller::$view->Push($this->select, [$this, 'OnSelect']);
-			Controller::$view->Push($this->create, [$this, 'OnCreate']);
-			Controller::$view->Push($this->update, [$this, 'OnUpdate']);
-			Controller::$view->Push($this->browse, [$this, 'OnBrowse']);
+			Controller::$view->Push($this->select, Closure::fromCallable([$this, 'OnSelect']));
+			Controller::$view->Push($this->browse, Closure::fromCallable([$this, 'OnBrowse']));
+			Controller::$view->Push($this->create, Closure::fromCallable([$this, 'OnCreate']));
+			Controller::$view->Push($this->update, Closure::fromCallable([$this, 'OnUpdate']));
 
-			Controller::$view->Push($this->do_create, [$this, 'DoCreate']);
-			Controller::$view->Push($this->do_update, [$this, 'DoUpdate']);
-			Controller::$view->Push($this->do_delete, [$this, 'DoDelete']);
-			Controller::$view->Push($this->set_state, [$this, 'SetState']);
+			Controller::$view->Push($this->do_create, Closure::fromCallable([$this, 'DoCreate']));
+			Controller::$view->Push($this->do_update, Closure::fromCallable([$this, 'DoUpdate']));
+			Controller::$view->Push($this->do_delete, Closure::fromCallable([$this, 'DoDelete']));
+			Controller::$view->Push($this->set_state, Closure::fromCallable([$this, 'SetState']));
 		}
 
-		#[NoReturn] public function OnSelect(): void {
+		#[NoReturn] protected function OnSelect(): void {
 			$page = GetInt('page', 1);
 
 			$fields				= $this->FieldsSelect();
@@ -45,7 +46,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function OnBrowse(): void {
+		#[NoReturn] protected function OnBrowse(): void {
 			$fields				= $this->FieldsBrowse();
 			$navigate			= $this->NavigateBrowse();
 
@@ -57,7 +58,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function OnCreate(): void {
+		#[NoReturn] protected function OnCreate(): void {
 			$fields				= $this->FieldsCreate();
 			$navigate			= $this->NavigateCreate();
 
@@ -66,7 +67,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function OnUpdate(): void {
+		#[NoReturn] protected function OnUpdate(): void {
 			$id = GetInt('id');
 			$item = $this->table->SelectOne(null, "(`id` = {$id})");
 
@@ -78,7 +79,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function DoCreate(): void {
+		#[NoReturn] protected function DoCreate(): void {
 			$data = GetParam('form', []);
 
 			$this->table->Insert($data);
@@ -87,7 +88,7 @@
 			$this->OnSelect();
 		}
 
-		#[NoReturn] public function DoUpdate(): void {
+		#[NoReturn] protected function DoUpdate(): void {
 			$id = GetInt('id');
 			$data = GetParam('form', []);
 
@@ -97,7 +98,7 @@
 			$this->OnSelect();
 		}
 
-		#[NoReturn] public function DoDelete(): void {
+		#[NoReturn] protected function DoDelete(): void {
 			$id = GetInt('id');
 
 			$this->table->Update(['state' => 100], "`id` = {$id}");
@@ -112,7 +113,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function SetState(): void {
+		#[NoReturn] protected function SetState(): void {
 			$id = GetInt('id');
 			$state = GetInt('state');
 			$oldState = (int)$this->table->SelectOneField('state', "`id` = {$id}");

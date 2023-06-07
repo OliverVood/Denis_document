@@ -86,10 +86,10 @@
 
 		abstract protected function SetHandlers(): void;
 
-		abstract public function OnSelect(): void;
-		abstract public function OnBrowse(): void;
-		abstract public function OnCreate(): void;
-		abstract public function OnUpdate(): void;
+		abstract protected function OnSelect(): void;
+		abstract protected function OnBrowse(): void;
+		abstract protected function OnCreate(): void;
+		abstract protected function OnUpdate(): void;
 
 		protected function selectQuery(): string {
 			return $this->querySelect->calc('*')->table($this->table->GetName())->get();

@@ -12,6 +12,7 @@
 	use Proj\Admin\Structure;
 	use Proj\Admin\Model;
 	use Response;
+	use Closure;
 
 	class Users extends Structure\Users {
 		use Instance;
@@ -23,8 +24,8 @@
 
 			$this->model = Model\Users::instance();
 
-			self::$init->Push(self::$auth, [$this, 'Auth']);
-			self::$init->Push(self::$exit, [$this, 'Exit']);
+			self::$init->Push(self::$auth, Closure::fromCallable([$this, 'Auth']));
+			self::$init->Push(self::$exit, Closure::fromCallable([$this, 'Exit']));
 		}
 
 		public function IsPossible(): void {
@@ -35,7 +36,7 @@
 		}
 
 
-		#[NoReturn] public function Auth(): void {
+		#[NoReturn] private function Auth(): void {
 			$login = GetParam('login', '');
 			$password = GetParam('password', '');
 			$hash = $this->model->PasswordHash($password);
@@ -51,7 +52,7 @@
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function Exit(): void {
+		#[NoReturn] private function Exit(): void {
 			$this->model->Logout();
 
 			Response::PushData([]);

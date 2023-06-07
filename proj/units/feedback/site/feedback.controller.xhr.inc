@@ -13,6 +13,7 @@
 	use Proj\Site\Model;
 	use Proj\Site\Templates\Feedback as TPL;
 	use Response;
+	use Closure;
 
 	class Feedback extends Actions\Feedback {
 		use Instance;
@@ -23,16 +24,16 @@
 			parent::__construct();
 			$this->model = Model\Feedback::instance();
 
-			self::$view->Push(self::$feedback, [$this, 'OnFeedback']);
-			self::$view->Push(self::$do_feedback, [$this, 'DoFeedback']);
+			self::$view->Push(self::$feedback, Closure::fromCallable([$this, 'OnFeedback']));
+			self::$view->Push(self::$do_feedback, Closure::fromCallable([$this, 'DoFeedback']));
 		}
 
-		#[NoReturn] public function OnFeedback(): void {
+		#[NoReturn] private function OnFeedback(): void {
 			Response::PushData(['html' => TPL\Form::ToVar()]);
 			Response::SendJSON();
 		}
 
-		#[NoReturn] public function DoFeedback(): void {
+		#[NoReturn] private function DoFeedback(): void {
 			$state = self::STATES['new'];
 			$name = trim(GetParam('name', ''));
 			$contacts = trim(GetParam('contacts', ''));

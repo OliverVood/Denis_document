@@ -8,6 +8,7 @@
 	use Base\Instance;
 	use Proj\Site\Actions;
 	use Proj\Site\Model;
+	use Closure;
 
 	class Statistics extends Actions\Statistics {
 		use Instance;
@@ -19,10 +20,10 @@
 
 			$this->model = Model\Statistics::instance();
 
-			self::$void->Push(self::$collect, [$this, 'Collect']);
+			self::$void->Push(self::$collect, Closure::fromCallable([$this, 'Collect']));
 		}
 
-		public function Collect(): void {
+		private function Collect(): void {
 			if (self::$area == 'statistics') return;
 
 			$this->model->Collect();

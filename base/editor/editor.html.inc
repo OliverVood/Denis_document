@@ -14,6 +14,7 @@
 	use Base\Templates\Editor\Create;
 	use Base\Templates\Editor\Update;
 	use Base\Templates\Editor\Browse;
+	use Closure;
 
 	abstract class Editor extends Base\Editor\Editor {
 		protected function __construct(string $name, Table $table) {
@@ -21,13 +22,13 @@
 		}
 
 		protected function SetHandlers(): void {
-			Controller::$view->Push($this->select, [$this, 'OnSelect']);
-			Controller::$view->Push($this->create, [$this, 'OnCreate']);
-			Controller::$view->Push($this->update, [$this, 'OnUpdate']);
-			Controller::$view->Push($this->browse, [$this, 'OnBrowse']);
+			Controller::$view->Push($this->select, Closure::fromCallable([$this, 'OnSelect']));
+			Controller::$view->Push($this->browse, Closure::fromCallable([$this, 'OnBrowse']));
+			Controller::$view->Push($this->create, Closure::fromCallable([$this, 'OnCreate']));
+			Controller::$view->Push($this->update, Closure::fromCallable([$this, 'OnUpdate']));
 		}
 
-		#[NoReturn] public function OnSelect(): void {
+		#[NoReturn] protected function OnSelect(): void {
 			$fields				= $this->FieldsSelect();
 			[$items, $ext]		= $this->SelectData();
 			$navigate			= $this->NavigateSelect();
@@ -36,7 +37,7 @@
 			Layout::instance()->main->Push(Select::ToVar($this, $fields, $items, $ext, $this->titleSelect, $navigate, $manage));
 		}
 
-		#[NoReturn] public function OnBrowse(): void {
+		#[NoReturn] protected function OnBrowse(): void {
 			$fields				= $this->FieldsBrowse();
 			$navigate			= $this->NavigateBrowse();
 
@@ -46,14 +47,14 @@
 			Layout::instance()->main->Push(Browse::ToVar($this, $fields, $id, $item, "{$this->titleBrowse} #{$id}", $navigate));
 		}
 
-		#[NoReturn] public function OnCreate(): void {
+		#[NoReturn] protected function OnCreate(): void {
 			$fields				= $this->FieldsCreate();
 			$navigate			= $this->NavigateCreate();
 
 			Layout::instance()->main->Push(Create::ToVar($this, $fields, $this->titleCreate, $navigate));
 		}
 
-		#[NoReturn] public function OnUpdate(): void {
+		#[NoReturn] protected function OnUpdate(): void {
 			$id = GetInt('id');
 			$item = $this->table->SelectOne(null, "(`id` = {$id})");
 

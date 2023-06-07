@@ -11,6 +11,7 @@
 	use Proj\Site\Actions;
 	use Proj\Site\Model;
 	use Response;
+	use Closure;
 
 	class Statistics extends Actions\Statistics {
 		use Instance;
@@ -21,17 +22,17 @@
 			parent::__construct();
 			$this->model = Model\Statistics::instance();
 
-			self::$void->Push(self::$collect, [$this, 'Collect']);
-			self::$view->Push(self::$act, [$this, 'DoAct']);
+			self::$void->Push(self::$collect, Closure::fromCallable([$this, 'Collect']));
+			self::$view->Push(self::$act, Closure::fromCallable([$this, 'DoAct']));
 		}
 
-		public function Collect(): void {
+		private function Collect(): void {
 			if (self::$area == 'statistics') return;
 
 			$this->model->Collect();
 		}
 
-		#[NoReturn] public function DoAct(): void {
+		#[NoReturn] private function DoAct(): void {
 			$uid = Model\Users::GetUID();
 			$object = GetParam('object', '');
 			$action = GetParam('action', '');

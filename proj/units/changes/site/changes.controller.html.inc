@@ -14,6 +14,7 @@
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\Changes as TPL;
 	use Redirect;
+	use Closure;
 
 	class Changes extends Actions\Changes {
 		use Instance;
@@ -25,12 +26,12 @@
 
 			$this->model = Model\Changes::instance();
 
-			self::$view->Push(self::$last, [$this, 'OnViewLast']);
-			self::$view->Push(self::$list, [$this, 'OnViewList']);
-			self::$view->Push(self::$show, [$this, 'OnViewShow']);
+			self::$view->Push(self::$last, Closure::fromCallable([$this, 'OnViewLast']));
+			self::$view->Push(self::$list, Closure::fromCallable([$this, 'OnViewList']));
+			self::$view->Push(self::$show, Closure::fromCallable([$this, 'OnViewShow']));
 		}
 
-		public function OnViewShow(): void {
+		private function OnViewShow(): void {
 			$id = GetInt('id');
 			$changes = $this->model->GetChanges($id);
 
@@ -39,11 +40,11 @@
 			Layout::instance()->main->Push(TPL\Show::ToVar($changes, $this->model->GetListChange($id)));
 		}
 
-		public function OnViewLast(): void {
+		private function OnViewLast(): void {
 			Layout::instance()->main->Push(TPL\Last::ToVar($this->model->GetLatestChanges(4), 'Последние изменения на сайте'));
 		}
 
-		public function OnViewList(): void {
+		private function OnViewList(): void {
 			Layout::instance()->main->Push(TPL\All::ToVar($this->model->GetLatestChanges(null), 'Все изменения'));
 		}
 

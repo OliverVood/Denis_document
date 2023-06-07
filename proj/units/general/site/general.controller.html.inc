@@ -16,6 +16,7 @@
 	use Proj\Site\Templates\Template;
 	use Proj\Site\Templates\Layout;
 	use Proj\Site\Templates\General as TPL;
+	use Closure;
 
 	class General extends Actions\General {
 		use Instance;
@@ -23,20 +24,20 @@
 		private function __construct() {
 			parent::__construct();
 
-			self::$view->Push(self::$set_data_page, [$this, 'SetDataPage']);
+			self::$view->Push(self::$set_data_page, Closure::fromCallable([$this, 'SetDataPage']));
 
-			self::$view->Push(self::$home, [$this, 'Home']);
-			self::$view->Push(self::$about, [$this, 'About']);
-			self::$view->Push(self::$contacts, [$this, 'Contacts']);
-			self::$view->Push(self::$privacy_policy, [$this, 'OutPrivacyPolicy']);
-			self::$view->Push(self::$terms_use, [$this, 'OutTermsUse']);
-			self::$view->Push(self::$error404, [$this, 'Error404']);
+			self::$view->Push(self::$home, Closure::fromCallable([$this, 'Home']));
+			self::$view->Push(self::$about, Closure::fromCallable([$this, 'About']));
+			self::$view->Push(self::$contacts, Closure::fromCallable([$this, 'Contacts']));
+			self::$view->Push(self::$privacy_policy, Closure::fromCallable([$this, 'OutPrivacyPolicy']));
+			self::$view->Push(self::$terms_use, Closure::fromCallable([$this, 'OutTermsUse']));
+			self::$view->Push(self::$error404, Closure::fromCallable([$this, 'Error404']));
 
-			self::$view->Push(self::$header, [$this, 'OutHeader']);
-			self::$view->Push(self::$header, [$this, 'OutFooter']);
+			self::$view->Push(self::$header, Closure::fromCallable([$this, 'OutHeader']));
+			self::$view->Push(self::$header, Closure::fromCallable([$this, 'OutFooter']));
 		}
 
-		public function SetDataPage() {
+		private function SetDataPage() {
 			$path = [];
 			if (self::$area != 'null') $path[] = self::$area;
 			if (self::$part != 'null') $path[] = self::$part;
@@ -44,49 +45,49 @@
 			Template::instance()->SetDataPage($value);
 		}
 
-		public function Home() {
+		private function Home() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Главная');
 			Template::instance()->SetDescription(Params::$site_name . ' - ресурс в помощь ИП, самозанятым с документами и отчётами');
 			Template::instance()->SetKeywords('прайс-лист онлайн, составить акт выполненных работ, смета бесплатно, документы для ИП, отчёты самозанятые');
 		}
 
-		public function About() {
+		private function About() {
 			Template::instance()->SetTitle(Params::$site_name . ' | О проекте');
 			Template::instance()->SetDescription('О проекте ' . Params::$site_name);
 			Template::instance()->SetKeywords('проект ' . Params::$site_name);
 			Layout::instance()->main->Push(TPL\About::ToVar());
 		}
 
-		public function Contacts() {
+		private function Contacts() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Контакты');
 			Template::instance()->SetDescription('Контакты');
 			Template::instance()->SetKeywords('контакты');
 			Layout::instance()->main->Push(TPL\Contacts::ToVar());
 		}
 
-		public function OutPrivacyPolicy() {
+		private function OutPrivacyPolicy() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Политика конфиденциальности');
 			Template::instance()->SetDescription('Политика конфиденциальности ' . Params::$site_name);
 			Template::instance()->SetKeywords('политика конфиденциальности');
 			Layout::instance()->main->Push(TPL\PrivacyPolicy::ToVar());
 		}
 
-		public function OutTermsUse() {
+		private function OutTermsUse() {
 			Template::instance()->SetTitle(Params::$site_name . ' | Пользовательское соглашение');
 			Template::instance()->SetDescription('Пользовательское соглашение ' . Params::$site_name);
 			Template::instance()->SetKeywords('пользовательское соглашение');
 			Layout::instance()->main->Push(TPL\TermsUse::ToVar());
 		}
 
-		public function OutHeader() {
+		private function OutHeader() {
 			Layout::instance()->header->Push(TPL\Header::ToVar());
 		}
 
-		public function OutFooter() {
+		private function OutFooter() {
 			Layout::instance()->footer->Push(TPL\Footer::ToVar());
 		}
 
-		public function Error404() {
+		private function Error404() {
 			Layout::instance()->main->Push('<h1>Страница не найдена!<h1>');
 		}
 

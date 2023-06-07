@@ -13,6 +13,7 @@
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Item;
 	use Proj\Admin\Templates\General\Group;
+	use Closure;
 
 	class General extends Actions\General {
 		use Instance;
@@ -24,20 +25,20 @@
 
 			$this->model = Model\General::instance();
 
-			self::$view->Push(self::$out_head, [$this, 'OutHead']);
-			self::$view->Push(self::$out_menu, [$this, 'OutMenu']);
-			self::$view->Push(self::$out_footer, [$this, 'OutFooter']);
-			self::$view->Push(self::$home, [$this, 'Home']);
-			self::$view->Push(self::$db_structure, [$this, 'Structure']);
-			self::$view->Push(self::$db_check, [$this, 'Check']);
+			self::$view->Push(self::$out_head, Closure::fromCallable([$this, 'OutHead']));
+			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
+			self::$view->Push(self::$out_footer, Closure::fromCallable([$this, 'OutFooter']));
+			self::$view->Push(self::$home, Closure::fromCallable([$this, 'Home']));
+			self::$view->Push(self::$db_structure, Closure::fromCallable([$this, 'Structure']));
+			self::$view->Push(self::$db_check, Closure::fromCallable([$this, 'Check']));
 		}
 
-		public function OutHead(): void {
+		private function OutHead(): void {
 			Layout::instance()->header->Push("<div>Привет, " . USER_LOGIN . "</div>");
 			Layout::instance()->header->Push(Actions\Users::$exit->GetLinkHref('', [], ['class' => 'logout']));
 		}
 
-		public function OutMenu() {
+		private function OutMenu() {
 			Layout::instance()->menu->Push(Item::ToVar('<a href = "' . self::$site->GetAddress() . '" target = "_blank">Открыть сайт</a>'));
 			Layout::instance()->menu->Push(Item::ToVar(self::$home->GetLinkHref('Главная')));
 			Layout::instance()->menu->Push(
@@ -48,19 +49,19 @@
 			);
 		}
 
-		public function OutFooter() {
+		private function OutFooter() {
 			Layout::instance()->footer->Push('© ' . Params::$site_name);
 		}
 
-		public function Structure() {
+		private function Structure() {
 			Layout::instance()->main->Push($this->model->Structure());
 		}
 
-		public function Home() {
+		private function Home() {
 			Layout::instance()->main->Push($this->model->Home());
 		}
 
-		public function Check() {
+		private function Check() {
 			$result = json_encode($this->model->DBCheck());
 			Layout::instance()->js_loaded->Push(/** @lang JavaScript */ "Admin.General.Render.CheckDB({$result});");
 		}
