@@ -4,12 +4,12 @@
 
 	require DIR_UNITS . 'changes/admin/editors/changes/changes.editor.model.inc';
 
-	use Base\Editor\XHR\EditorMySQLi;
+	use Base\EditorMySQLi\XHR\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 	use Proj\Admin\Units\XHR as Units;
 
-	class Changes extends EditorMySQLi {
+	class Changes extends Editor {
 		use Model\Changes;
 
 		public function __construct(string $name, TableMySQLi $table) {

@@ -6,12 +6,12 @@
 
 	use JetBrains\PhpStorm\NoReturn;
 
-	use Base\Editor\XHR\EditorMySQLi;
+	use Base\EditorMySQLi\XHR\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 	use Response;
 
-	class Change extends EditorMySQLi {
+	class Change extends Editor {
 		use Model\Change;
 
 		public function __construct(string $name, TableMySQLi $table) {

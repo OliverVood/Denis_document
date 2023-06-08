@@ -13,7 +13,7 @@
 	require DIR_PROJ . 'DBObject.inc';
 
 	require DIR_BASE . 'pages.inc';
-	require DIR_BASE . 'editor/editorMySQLi.xhr.inc';
+	require DIR_BASE . 'editor/MySQLi/editor.xhr.inc';
 
 	require DIR_BASE . 'html/elements.inc';
 

@@ -4,11 +4,11 @@
 
 	require DIR_UNITS . 'changes/admin/editors/change/change.editor.model.inc';
 
-	use Base\Editor\HTML\EditorMySQLi;
+	use Base\EditorMySQLi\HTML\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 
-	class Change extends EditorMySQLi {
+	class Change extends Editor {
 		use Model\Change;
 
 		public function __construct(string $name, TableMySQLi $table) {

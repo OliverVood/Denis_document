@@ -4,11 +4,11 @@
 
 	require DIR_UNITS . 'statistics/admin/editors/ip/ip.editor.model.inc';
 
-	use Base\Editor\XHR\EditorMySQLi;
+	use Base\EditorMySQLi\XHR\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 
-	class Ip extends EditorMySQLi {
+	class Ip extends Editor {
 		use Model\Ip;
 
 		public function __construct(string $name, TableMySQLi $table) {

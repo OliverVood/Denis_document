@@ -4,11 +4,11 @@
 
 	require DIR_UNITS . 'feedback/admin/editors/feedback/feedback.editor.model.inc';
 
-	use Base\Editor\XHR\EditorMySQLi;
+	use Base\EditorMySQLi\XHR\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 
-	class Feedback extends EditorMySQLi {
+	class Feedback extends Editor {
 		use Model\feedback;
 
 		public function __construct(string $name, TableMySQLi $table) {

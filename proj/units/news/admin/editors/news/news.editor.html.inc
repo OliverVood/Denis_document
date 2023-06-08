@@ -4,11 +4,11 @@
 
 	require DIR_UNITS . 'news/admin/editors/news/news.editor.model.inc';
 
-	use Base\Editor\HTML\EditorMySQLi;
+	use Base\EditorMySQLi\HTML\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 
-	class News extends EditorMySQLi {
+	class News extends Editor {
 		use Model\News;
 
 		public function __construct(string $name, TableMySQLi $table) {

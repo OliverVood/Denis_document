@@ -4,11 +4,11 @@
 
 	require DIR_UNITS . 'statistics/admin/editors/actions/actions.editor.model.inc';
 
-	use Base\Editor\HTML\EditorMySQLi;
+	use Base\EditorMySQLi\HTML\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Editor\Model;
 
-	class Actions extends EditorMySQLi {
+	class Actions extends Editor {
 		use Model\Actions;
 
 		public function __construct(string $name, TableMySQLi $table) {
