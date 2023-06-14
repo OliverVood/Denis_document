@@ -8,7 +8,6 @@
 
 	use Base;
 	use Base\Controller;
-	use Base\DB\Table;
 	use Base\Templates\Editor\Select;
 	use Base\Templates\Editor\Create;
 	use Base\Templates\Editor\Update;
@@ -17,8 +16,8 @@
 	use Closure;
 
 	abstract class Editor extends Base\Editor\Editor {
-		protected function __construct(string $name, Table $table) {
-			parent::__construct($name, $table);
+		protected function __construct(string $name) {
+			parent::__construct($name);
 		}
 
 		protected function SetHandlers(): void {
@@ -37,7 +36,7 @@
 			$page = GetInt('page', 1);
 
 			$fields				= $this->FieldsSelect();
-			[$items, $ext]		= $this->SelectData();
+			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
 			$navigate			= $this->NavigateSelect();
 			$manage				= $this->ManageSelect();
 
@@ -51,7 +50,7 @@
 			$navigate			= $this->NavigateBrowse();
 
 			$id = GetInt('id');
-			$item = $this->table->SelectOne(null, "(`id` = {$id})");
+			$item = $this->model->GetItem($id);
 
 			Response::PushHistory($this->browse, array_merge(['id' => $id], $this->params));
 			Response::PushSection('main', Browse::ToVar($this, $fields, $id, $item, "{$this->titleBrowse} #{$id}", $navigate));
@@ -63,26 +62,26 @@
 			$navigate			= $this->NavigateCreate();
 
 			Response::PushHistory($this->create, $this->params);
-			Response::PushSection('main', Create::ToVar($this, $fields, $this->titleCreate, $navigate));
+			Response::PushSection('main', Create::ToVar($this, $fields, $this->titleCreate, $navigate, $this->params));
 			Response::SendJSON();
 		}
 
 		#[NoReturn] protected function OnUpdate(): void {
 			$id = GetInt('id');
-			$item = $this->table->SelectOne(null, "(`id` = {$id})");
+			$item = $this->model->GetItem($id);
 
 			$fields				= $this->FieldsUpdate();
 			$navigate			= $this->NavigateUpdate();
 
 			Response::PushHistory($this->update, array_merge(['id' => $id], $this->params));
-			Response::PushSection('main', Update::ToVar($this, $fields, $id, $item, "{$this->titleUpdate} #{$id}", $navigate));
+			Response::PushSection('main', Update::ToVar($this, $fields, $id, $item, "{$this->titleUpdate} #{$id}", $navigate, $this->params));
 			Response::SendJSON();
 		}
 
 		#[NoReturn] protected function DoCreate(): void {
 			$data = GetParam('form', []);
 
-			$this->table->Insert($data);
+			$this->model->Create($data);
 
 			Response::PushNoticeOk($this->titleDoCreate);
 			$this->OnSelect();
@@ -92,7 +91,7 @@
 			$id = GetInt('id');
 			$data = GetParam('form', []);
 
-			$this->table->Update($data, "`id` = {$id}");
+			$this->model->Update($data, $id);
 
 			Response::PushNoticeOk($this->titleDoUpdate);
 			$this->OnSelect();
@@ -100,11 +99,12 @@
 
 		#[NoReturn] protected function DoDelete(): void {
 			$id = GetInt('id');
+			$page = GetInt('page', 1);
 
-			$this->table->Update(['state' => 100], "`id` = {$id}");
+			$this->model->Delete($id);
 
 			$fields				= $this->FieldsSelect();
-			[$items, $ext]		= $this->SelectData();
+			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
 			$navigate			= $this->NavigateSelect();
 			$manage				= $this->ManageSelect();
 
@@ -116,14 +116,15 @@
 		#[NoReturn] protected function SetState(): void {
 			$id = GetInt('id');
 			$state = GetInt('state');
-			$oldState = (int)$this->table->SelectOneField('state', "`id` = {$id}");
+			$page = GetInt('page', 1);
 
-			if (!isset($this->states[$oldState]) || !in_array($state, $this->states[$oldState])) { Response::PushNoticeError($this->errorAccess); Response::SendJSON(); }
+			$oldState = $this->model->GetState($id);
+			if ($this->model->AccessState($oldState, $state)) { Response::PushNoticeError($this->errorAccess); Response::SendJSON(); }
 
-			$this->table->Update(['state' => $state], "`id` = {$id}");
+			$this->model->SetState($state, $id);
 
 			$fields				= $this->FieldsSelect();
-			[$items, $ext]		= $this->SelectData();
+			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);;
 			$navigate			= $this->NavigateSelect();
 			$manage				= $this->ManageSelect();
 

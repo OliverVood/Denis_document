@@ -8,20 +8,32 @@
 	class Model {
 		protected Table $table;
 		protected Select $querySelect;
+		protected array $states;
+		protected array $params;
 
-		public function __construct(Table $table) {
+		public function __construct(Table $table, array $params = []) {
 			$this->table = $table;
+			$this->params = $params;
 
-			$this->querySelect = new Select();
-			$this->querySelect->calc('*')->table($this->table->GetName());
+			$this->Init();
 		}
 
-		protected function SelectData(int $page_current = 1, int $page_entries = 0): array {
+		protected function Init(): void {
+			$this->querySelect = new Select();
+			$this->querySelect->calc('*')->table($this->table->GetName());
+
+			$this->states = [];
+		}
+
+		public function AccessState(int $from, int $to): bool {
+			return (!isset($this->states[$from]) || !in_array($to, $this->states[$from]));
+		}
+
+		public function SelectData(int $page_current = 1, int $page_entries = 0): array {
 			$query = $this->querySelect->get();
 
 			$ext = [];
 			if ($page_entries) {
-//				$page_current = GetInt('page', 1);
 				$start = ($page_current - 1) * $page_entries;
 				$result = $this->table->Query("SELECT COUNT(*) AS `count` FROM ({$query}) AS `table`");
 				$page_records = $this->table->Fetch($result)['count'];
@@ -60,6 +72,10 @@
 
 		public function Delete(int $id): void {
 			$this->table->Update(['state' => 100], "`id` = {$id}");
+		}
+
+		public function SetState(int $state, int $id): void {
+			$this->table->Update(['state' => $state], "`id` = {$id}");
 		}
 
 	}

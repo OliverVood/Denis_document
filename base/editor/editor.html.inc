@@ -8,17 +8,16 @@
 
 	use Base;
 	use Base\Controller;
-	use Base\DB\Table;
-	use Proj\Admin\Templates\Layout;
 	use Base\Templates\Editor\Select;
 	use Base\Templates\Editor\Create;
 	use Base\Templates\Editor\Update;
 	use Base\Templates\Editor\Browse;
+	use Proj\Admin\Templates\Layout;
 	use Closure;
 
 	abstract class Editor extends Base\Editor\Editor {
-		protected function __construct(string $name, Table $table) {
-			parent::__construct($name, $table);
+		protected function __construct(string $name) {
+			parent::__construct($name);
 		}
 
 		protected function SetHandlers(): void {
@@ -29,8 +28,10 @@
 		}
 
 		#[NoReturn] protected function OnSelect(): void {
+			$page = GetInt('page', 1);
+
 			$fields				= $this->FieldsSelect();
-			[$items, $ext]		= $this->SelectData();
+			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
 			$navigate			= $this->NavigateSelect();
 			$manage				= $this->ManageSelect();
 
@@ -38,11 +39,11 @@
 		}
 
 		#[NoReturn] protected function OnBrowse(): void {
+			$id = GetInt('id');
+			$item = $this->model->GetItem($id);
+
 			$fields				= $this->FieldsBrowse();
 			$navigate			= $this->NavigateBrowse();
-
-			$id = GetInt('id');
-			$item = $this->table->SelectOne(null, "(`id` = {$id})");
 
 			Layout::instance()->main->Push(Browse::ToVar($this, $fields, $id, $item, "{$this->titleBrowse} #{$id}", $navigate));
 		}
@@ -51,17 +52,17 @@
 			$fields				= $this->FieldsCreate();
 			$navigate			= $this->NavigateCreate();
 
-			Layout::instance()->main->Push(Create::ToVar($this, $fields, $this->titleCreate, $navigate));
+			Layout::instance()->main->Push(Create::ToVar($this, $fields, $this->titleCreate, $navigate, $this->params));
 		}
 
 		#[NoReturn] protected function OnUpdate(): void {
 			$id = GetInt('id');
-			$item = $this->table->SelectOne(null, "(`id` = {$id})");
+			$item = $this->model->GetItem($id);
 
 			$fields				= $this->FieldsUpdate();
 			$navigate			= $this->NavigateUpdate();
 
-			Layout::instance()->main->Push(Update::ToVar($this, $fields, $id, $item, "{$this->titleUpdate} #{$id}", $navigate));
+			Layout::instance()->main->Push(Update::ToVar($this, $fields, $id, $item, "{$this->titleUpdate} #{$id}", $navigate, $this->params));
 		}
 
 	}

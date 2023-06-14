@@ -12,13 +12,10 @@
 	require DIR_BASE . 'editor/views/update.tpl';
 	require DIR_BASE . 'editor/views/browse.tpl';
 
-	use Base\DB\Table;
-	use Base\DB\Select;
 	use Base\Pages;
 
 	abstract class Editor extends Actions {
 		protected Model $model;
-		protected Select $querySelect;
 
 		protected string $titleSelect = 'Выборка';
 		protected string $titleBrowse = 'Просмотр';
@@ -34,16 +31,12 @@
 
 		protected string $errorAccess = 'Доступ запрещён';
 
-		protected array $states	= [];
-
 		protected array $params = [];
-
-		protected array $manageSelect = [];
 
 		protected int $page_entries = 10;
 
-		protected function __construct(string $name, Table $table) {
-			parent::__construct($name, $table);
+		protected function __construct(string $name) {
+			parent::__construct($name);
 
 			$this->SetHandlers();
 		}
@@ -54,36 +47,6 @@
 		abstract protected function OnBrowse(): void;
 		abstract protected function OnCreate(): void;
 		abstract protected function OnUpdate(): void;
-
-		protected function selectQuery(): string {
-			return $this->querySelect->calc('*')->table($this->table->GetName())->get();
-		}
-
-		protected function SelectData(): array {
-			$query = $this->selectQuery();
-
-			$ext = [];
-			if ($this->page_entries) {
-				$page_current = GetInt('page', 1);
-				$start = ($page_current - 1) * $this->page_entries;
-				$result = $this->table->Query("SELECT COUNT(*) AS `count` FROM ({$query}) AS `table`");
-				$page_records = $this->table->Fetch($result)['count'];
-
-				$ext['page'] = [
-					'records' => $page_records,
-					'current' => $page_current,
-					'count' => (int)ceil($page_records / $this->page_entries)
-				];
-				$query = $this->querySelect->limit($start, $this->page_entries)->get();
-			}
-
-			$result = $this->table->Query($query);
-			$items = $this->table->FetchAll($result, function(& $items, $item) {
-				$items[] = $item;
-			});
-
-			return [$items, $ext];
-		}
 
 		protected function FieldsSelect(): array { return []; }
 		protected function FieldsBrowse(): array { return []; }

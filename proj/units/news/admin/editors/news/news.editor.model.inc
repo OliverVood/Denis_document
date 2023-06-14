@@ -2,65 +2,45 @@
 
 	namespace Proj\Admin\Editor\Model;
 
-	use Base\Editor\Skins\Browse;
-	use Base\Editor\Skins\Edit;
+	use Base\DB\Select;
+	use Base\DB\TableMySQLi;
+	use Base\EditorMySQLi\Model;
 	use Proj\Units\Consts;
 
-	trait News {
-
-		private function Init(): void {
-			$this->titleSelect = 'Список новостей';
-			$this->titleBrowse = 'Просмотр новости';
-			$this->titleCreate = 'Добавление новости';
-			$this->titleUpdate = 'Редактирование новости';
-			$this->titleDelete = 'Удалить новость?';
-
-			$this->querySelect->where('`state` != '. Consts\News::STATES['delete'])->order('datecr', 'DESC')->order('id', 'DESC');
+	class News extends Model {
+		public function __construct(TableMySQLi $table, array $params = []) {
+			parent::__construct($table, $params);
 		}
 
-		protected function FieldsSelect(): array {
-			return [
-				'id' 		=> new Browse\Text('#'),
-				'state' 	=> new Browse\ValueFromArray('Состояние', Consts\News::STATES_VIEW),
-				'datepb'	=> new Browse\DateFormat('Дата публикации', 'd.m.Y H:i'),
-				'header' 	=> new Browse\Text('Заголовок')
-			];
+		protected function Init(): void {
+			$this->querySelect = new Select();
+			$this->querySelect
+				->calc('*')
+				->table($this->table->GetName())
+				->where('`state` != '. Consts\News::STATE_DELETE)
+				->order('datecr', 'DESC')
+				->order('id', 'DESC');
 		}
 
-		protected function FieldsBrowse(): array {
-			return [
-				'state'		=> new Browse\ValueFromArray('Состояние', Consts\News::STATES_VIEW),
-				'header'	=> new Browse\Text('Заголовок'),
-				'content'	=> new Browse\Text('Текст'),
-				'datepb'	=> new Browse\DateFormat('Дата публикации', 'd.m.Y H:i')
-			];
+		public function Create(array $data): void {
+			$id = $this->table->Insert($data);
+
+			if ($_FILES['form']['tmp_name']['cover']) {
+				[$hash, $ext] = $this->SaveCover($id);
+				$this->table->Update(['hash' => $hash, 'ext' => $ext], "`id` = {$id}");
+			}
 		}
 
-		protected function FieldsCreate(): array {
-			return [
-				'state'		=> new Edit\Hidden('Состояние', 'form[state]', Consts\News::STATES['draft']),
-				'header'	=> new Edit\Text('Заголовок', 'form[header]'),
-				'content'	=> new Edit\TextArea('Текст', 'form[content]'),
-				'cover'		=> new Edit\File('Обложка', 'form[cover]', 'Выберите обложку', '.jpg, .jpeg, .png'),
-				'datepb'	=> new Edit\DateTime('Дата публикации', 'form[datepb]')
-			];
+		public function Update(array $data, int $id): void {
+			if ($_FILES['form']['tmp_name']['cover']) {
+				$this->DeleteCover($id);
+				[$data['hash'], $data['ext']] = $this->SaveCover($id);
+			}
+
+			$this->table->Update($data, "`id` = {$id}");
 		}
 
-		protected function FieldsUpdate(): array {
-			return [
-				'state'		=> new Edit\Select('Состояние', 'form[state]', [
-					Consts\News::STATE_DRAFT	=> 'Черновик',
-					Consts\News::STATE_ACTIVE	=> 'Активная',
-					Consts\News::STATE_INACTIVE	=> 'Не активная',
-				]),
-				'header'	=> new Edit\Text('Заголовок', 'form[header]'),
-				'content'	=> new Edit\TextArea('Текст', 'form[content]'),
-				'cover'		=> new Edit\File('Обложка', 'form[cover]', 'Выберите обложку', '.jpg, .jpeg, .png'),
-				'datepb'	=> new Edit\DateTime('Дата публикации', 'form[datepb]')
-			];
-		}
-
-		private function SaveFile(int $id): array {
+		private function SaveCover(int $id): array {
 			$temp_path = $_FILES['form']['tmp_name']['cover'];
 			$temp_name = $_FILES['form']['name']['cover'];
 			$dir = Consts\News::PATH_COVER;

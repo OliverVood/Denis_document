@@ -11,6 +11,7 @@
 
 		abstract public function Query(string $query);
 		abstract public function GetQueryList(): array;
+		abstract public function GetLastQuery(): string;
 
 		abstract public function Insert(string $tablename, array $data): int;
 		abstract public function Update(string $tablename, array $data, ?string $where): bool;

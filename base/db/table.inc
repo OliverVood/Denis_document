@@ -44,6 +44,15 @@
 			return $this->db->Query($query);
 		}
 
+		public function GetQueryList(): array {
+			return $this->db->GetQueryList();
+		}
+
+		public function GetLastQuery(): string {
+			return $this->db->GetLastQuery();
+		}
+
+
 		public function Select(?array $fields = null, ?string $where = null, ?string $order = null, ?string $limit = null, ?array $calc = null) {
 			return $this->db->Select($this->name, $fields, $where, $order, $limit, $calc);
 		}

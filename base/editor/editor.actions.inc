@@ -5,7 +5,6 @@
 	require DIR_BASE . 'editor/editor.basic.inc';
 
 	use Base\Action;
-	use Base\DB\Table;
 
 	abstract class Actions extends Basic {
 		protected string $name;
@@ -21,8 +20,8 @@
 		public Action $do_delete;
 		public Action $set_state;
 
-		protected function __construct(string $name, Table $table) {
-			parent::__construct($name, $table);
+		protected function __construct(string $name) {
+			parent::__construct($name);
 
 			$this->RegActions();
 		}

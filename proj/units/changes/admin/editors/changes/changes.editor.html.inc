@@ -2,18 +2,22 @@
 
 	namespace Proj\Admin\Editor\HTML;
 
+	require DIR_UNITS . 'changes/admin/editors/changes/changes.editor.common.inc';
 	require DIR_UNITS . 'changes/admin/editors/changes/changes.editor.model.inc';
 
 	use Base\EditorMySQLi\HTML\Editor;;
 	use Base\DB\TableMySQLi;
 	use Proj\Admin\Units\HTML as Units;
 	use Proj\Admin\Editor\Model;
+	use Proj\Admin\Editor\Common;
 
 	class Changes extends Editor {
-		use Model\Changes;
+		use Common\Changes;
 
 		public function __construct(string $name, TableMySQLi $table) {
-			parent::__construct($name, $table);
+			parent::__construct($name);
+
+			$this->model = new Model\Changes($table);
 
 			$this->Init();
 		}

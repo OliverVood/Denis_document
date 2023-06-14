@@ -2,38 +2,22 @@
 
 	namespace Proj\Admin\Editor\Model;
 
-	use Base\Controller;
-	use Base\Editor\Skins\Browse;
-	use Closure;
+	use Base\DB\Select;
+	use Base\DB\TableMySQLi;
+	use Base\EditorMySQLi\Model;
 
-	trait Actions {
-
-		private function Init(): void {
-			$this->titleSelect = 'Статистика действий пользователя';
-
-			$this->querySelect->order('datecr', 'DESC')->order('id', 'DESC');
+	class Actions extends Model {
+		public function __construct(TableMySQLi $table, array $params = []) {
+			parent::__construct($table, $params);
 		}
 
-		protected function RegActions(): void {
-			$this->RegActionSelect();
+		protected function Init(): void {
+			$this->querySelect = new Select();
+			$this->querySelect
+				->calc('*')
+				->table($this->table->GetName())
+				->order('datecr', 'DESC')
+				->order('id', 'DESC');
 		}
 
-		protected function SetHandlers(): void {
-			Controller::$view->Push($this->select, Closure::fromCallable([$this, 'OnSelect']));
-		}
-
-		protected function ManageSelect(): array {
-			return [];
-		}
-
-		protected function FieldsSelect(): array {
-			return [
-				'datecr'	=> new Browse\DateFormat( 'Дата', 'd.m.Y H:i'),
-				'uid' 		=> new Browse\Text( 'Пользователь'),
-				'object'	=> new Browse\Text( 'Объект'),
-				'action'	=> new Browse\Text( 'Действие'),
-				'params'	=> new Browse\Text( 'Параметры')
-			];
-		}
-
-}
+	}

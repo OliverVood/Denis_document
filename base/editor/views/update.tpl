@@ -8,19 +8,20 @@
 
 	abstract class Update {
 
-		public static function ToVar(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate): string {
+		public static function ToVar(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate, array $params): string {
 			Buffering::Start();
-			self::Render($editor, $fields, $id, $item, $title, $navigate);
+			self::Render($editor, $fields, $id, $item, $title, $navigate, $params);
 			return Buffering::Read();
 		}
 
-		public static function Render(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate): void { ?>
+		public static function Render(Editor $editor, array $fields, int $id, array $item, string $title, array $navigate, array $params): void { ?>
 			<div class = "navigate">
 				<?php foreach ($navigate as $func) echo $func(); ?>
 			</div>
 			<h1><?= $title; ?></h1>
 			<form action = "<?= $editor->do_update->GetPath(); ?>">
 				<?php
+					foreach ($params as $name => $value) (new Hidden('', $name))->Render($value);
 					(new Hidden('id', 'id'))->Render($id);
 					foreach ($fields as $key => $field) if (get_class($field) == 'Base\Editor\Skins\Edit\Hidden') echo $field->ToVar($item[$key] ?? null);
 				?>
