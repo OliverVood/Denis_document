@@ -9,6 +9,7 @@
 
 		public function __construct($hostname, $user, $password, $dbname) {
 			parent::__construct($hostname, $user, $password, $dbname);
+			self::Query("SET GLOBAL time_zone = 'UTC'");
 		}
 
 		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): self {

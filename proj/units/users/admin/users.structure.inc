@@ -21,6 +21,7 @@
 			$this->table_users->id('id');
 			$this->table_users->timestamp('datecr');
 			$this->table_users->timestamp('datemd', true);
+			$this->table_users->string('hash', 64);
 			$this->table_users->bool('fic');
 
 			$this->db->PushTables($this->table_users);

@@ -50,7 +50,7 @@
 		}
 
 		/**
-		 * Возвращмет код ошибки
+		 * Возвращает код ошибки
 		 * @return int
 		 */
 		public function GetErrorCode() :int {
@@ -274,6 +274,10 @@
 			else { while ($fitch = $this->Fetch($result)) $out[] = $fitch; }
 
 			return $out;
+		}
+
+		public function Escaping(string $str): string {
+			return $this->db->real_escape_string($str);
 		}
 
 	}
