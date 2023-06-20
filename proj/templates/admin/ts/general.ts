@@ -1,8 +1,8 @@
 namespace Admin {
 	export namespace General {
 
-		type TypeField = { name: string, state: number, error: string, details: string }[];
-		type TypeTable = { name: string, state: number, error: string, fields?: TypeField }[];
+		type TypeField = { name: string, action: number, error: string, details: string }[];
+		type TypeTable = { name: string, action: number, error: string, fields?: TypeField }[];
 
 		export class Render {
 
@@ -71,7 +71,7 @@ namespace Admin {
 
 			private static Table($tbody, table) {
 				/* Elements */
-				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${table.name}][state]`, value: table.state});
+				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${table.name}][action]`, value: table.action});
 
 				/* Handlers */
 				let OnSelectTable = () => {
@@ -102,12 +102,12 @@ namespace Admin {
 
 			private static Field($tbody, tablename, field) {
 				/* Elements */
-				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${tablename}][fields][${field.name}][state]`, value: field.state});
+				let $checkbox = $('<input/>', {type: 'checkbox', name: `tables[${tablename}][fields][${field.name}][action]`, value: field.action});
 				let textError = field.error + ((field.details) ? ` (${field.details})` : '');
 
 				/* Handlers */
 				let OnSelectField = () => {//TODO Если не выбрано ни одно
-					if ($checkbox.is(':checked')) $(`input[name^="tables[${tablename}][state]"]`).prop('checked', true);
+					if ($checkbox.is(':checked')) $(`input[name^="tables[${tablename}][action]"]`).prop('checked', true);
 				}
 
 				/* Events */

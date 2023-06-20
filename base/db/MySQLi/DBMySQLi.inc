@@ -5,16 +5,14 @@
 	use mysqli_result;
 
 	trait DBMySQLi {
-
-		private ?string $host;
-		private ?string $username;
-		private ?string $password;
-		private ?string $port;
-		private ?string $socket;
+		protected static ?self $instance = null;
 
 		private \mysqli $db;
 		private int $errno = 0;
 		private array $history = [];
+
+		public static function instance(): ?self { return self::$instance; }
+		public static function init(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): void { if (!self::$instance) self::$instance = self::Connect($host, $username, $password, $dbname, $port, $socket); }
 
 		/**
 		 * Соединение с базой данных
@@ -27,18 +25,13 @@
 		 * @return self
 		 */
 		public static function Connect(?string $hostname = null, ?string $user = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null): self {
-			return new self($hostname, $user, $password, $dbname, $port, $socket);
+			return new static($hostname, $user, $password, $dbname, $port, $socket);
 		}
 
 		private function Link($hostname, $username, $password, $dbname, $port, $socket): void {
-			$this->host				= $hostname;
-			$this->username			= $username;
-			$this->password			= $password;
 			$this->dbname			= $dbname;
-			$this->port				= $port;
-			$this->socket			= $socket;
 
-			@ $this->db = new \mysqli($this->host, $this->username, $this->password, $this->dbname, $this->port, $this->socket);
+			@ $this->db = new \mysqli($hostname, $username, $password, $this->dbname, $port, $socket);
 			mysqli_set_charset($this->db, 'utf8mb4');
 
 			if (!$this->db->connect_errno) {

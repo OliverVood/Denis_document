@@ -13,6 +13,9 @@
 			$this->length = $length;
 		}
 
-		public function CreationFormat(): string { return "`{$this->name}` varchar({$this->length}) NOT NULL DEFAULT ''"; }
+		private function GetFormat(): string { return "`{$this->name}` varchar({$this->length}) NOT NULL DEFAULT ''"; }
+
+		public function CreationFormat(): string { return $this->GetFormat(); }
+		public function UpdatingFormat(): string { return $this->GetFormat(); }
 
 	}

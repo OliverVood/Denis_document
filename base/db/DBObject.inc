@@ -5,7 +5,6 @@
 	require DIR_BASE . 'db/DBQuery.inc';
 
 	abstract class DBObject extends DBQuery {
-
 		protected string $dbname;
 
 		/** @var Table[] */ protected array $tables;
@@ -19,12 +18,16 @@
 		abstract public function Check(): array;
 		abstract public function Make(): bool;
 
-		public function GetName(): ?string {
+		public function GetName(): string {
 			return $this->dbname;
 		}
 
 		public function PushTables(Table ...$tables): void {
-			foreach ($tables as $table) $this->tables[$table->GetName()] = $table;
+			foreach ($tables as $table) {
+				$name = $table->GetName();
+				if (isset($this->tables[$name])) die('Database structure error! Table already exists.');
+				$this->tables[$name] = $table;
+			}
 		}
 
 		public function GetTable(string $tablename): Table {

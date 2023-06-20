@@ -24,7 +24,23 @@
 			$this->table_users->string('hash', 64);
 			$this->table_users->bool('fic');
 
-			$this->db->PushTables($this->table_users);
+			$test = new TableMySQLi('test', $this->db);
+			$test->id('id');
+			$test->string('str', 30);
+			$test->uint32('uint16');
+			$test->int32('int16');
+			$test->uint32('uintq');
+			$test->int16('intw');
+
+			$test2 = new TableMySQLi('test2', $this->db);
+			$test2->id('id');
+			$test2->string('str', 30);
+			$test2->uint32('uint16');
+			$test2->int32('int16');
+			$test2->uint32('uintq');
+			$test2->int16('intw');
+
+			$this->db->PushTables($this->table_users, $test);
 		}
 
 	}

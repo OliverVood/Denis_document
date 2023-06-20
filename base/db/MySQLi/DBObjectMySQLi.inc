@@ -36,28 +36,28 @@
 
 			/* Check tables */
 			foreach ($tables as $table) {
-				$state = TableMySQLi::ERROR_NULL;
+				$action = TableMySQLi::ERROR_NULL;
 				$error = null;
 				$fields = null;
 				if (!in_array($table, $tables_db)) {
-					$state = TableMySQLi::ERROR_CREATE;
+					$action = TableMySQLi::ERROR_CREATE;
 					$error = 'Создать таблицу';
 				}
 				else if (!in_array($table, $tables_struct)) {
-					$state = TableMySQLi::ERROR_DELETE;
+					$action = TableMySQLi::ERROR_DELETE;
 					$error = 'Удалить таблицу';
 				}
 				else {
 					$res = $this->GetTable($table)->Check();
-					if ($res['state'] < 0) {
-						$state = $res['state'];
+					if ($res['action'] < 0) {
+						$action = $res['action'];
 						$error = 'Изменить таблицу';
 						$fields = $res['fields'];
 					}
 				}
 
-				if ($state < 0) {
-					$_out = ['name' => $table, 'state' => $state, 'error' => $error];
+				if ($action < 0) {
+					$_out = ['name' => $table, 'action' => $action, 'error' => $error];
 					if ($fields) $_out['fields'] = $fields;
 					$out[] = $_out;
 				}
@@ -73,24 +73,14 @@
 		public function Make(): bool {
 			if (!$tables = GetParam('tables')) return false;
 
-			$queries = [];
-			foreach ($tables as $tablename => $table) {
-				$q = match ((int)$table['state']) {
-					TableMySQLi::ERROR_CREATE => $this->tables[$tablename]->Create(),
-					TableMySQLi::ERROR_UPDATE => $this->tables[$tablename]->Modify($table),
-					TableMySQLi::ERROR_DELETE => TableMySQLi::Remove($tablename),
-					default => ''
-				};
-				if (is_array($q)) foreach ($q as $query) $queries[] = $query;
-				else $queries[] = $q;
-			} //Debug($queries);die();
-
-			$this->MultiQuery(implode('; ', $queries));
-
-			//TODO continue from here
-
-//			Debug($tables);
-//			die();
+			foreach ($tables as $name => $table) {
+				$action = (int)$table['action'];
+				switch ($action) {
+					case TableMySQLi::ERROR_CREATE: $this->tables[$name]->Create(); break;
+					case TableMySQLi::ERROR_UPDATE: $this->tables[$name]->Make($table['fields']); break;
+					case TableMySQLi::ERROR_DELETE: $this->db->Query("DROP TABLE `{$name}`"); break;
+				}
+			}
 
 			return true;
 		}

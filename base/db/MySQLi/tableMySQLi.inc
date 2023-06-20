@@ -40,7 +40,7 @@
 		public function AddPrimary(array $primary): void { $this->primary[] = $primary; }
 
 		public function Check(): array {
-			$out = ['state' => 1, 'fields' => []];
+			$out = ['action' => 1, 'fields' => []];
 
 			$fields = [];
 
@@ -50,7 +50,7 @@
 			}
 
 			/* Get fields DB */
-			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE (TABLE_NAME = '{$this->name}') AND (TABLE_SCHEMA = '{$this->dbname}') ORDER BY `ORDINAL_POSITION`");
+			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE (TABLE_NAME = '{$this->name}') AND (TABLE_SCHEMA = '{$this->db->GetName()}') ORDER BY `ORDINAL_POSITION`");
 			$fields_db = $this->db->FetchAll($result, function(& $items, $item) use (& $fields) {
 				$items[$item['COLUMN_NAME']] = $item;
 				if (!in_array($item['COLUMN_NAME'], $fields)) $fields[] = $item['COLUMN_NAME'];
@@ -58,64 +58,55 @@
 
 			/* Check fields */
 			foreach ($fields as $field) {
-				$state = FieldMySQLi::ERROR_NULL;
+				$action = FieldMySQLi::ERROR_NULL;
 				$error = null;
 				$details = null;
 				if (!isset($fields_db[$field])) {
-					$state = FieldMySQLi::ERROR_CREATE;
+					$action = FieldMySQLi::ERROR_CREATE;
 					$error = 'Добавить поле';
 				}
 				else if (!isset($this->structure[$field])) {
-					$state = FieldMySQLi::ERROR_DELETE;
+					$action = FieldMySQLi::ERROR_DELETE;
 					$error = 'Удалить поле';
 				}
 				else {
 					$res = $this->structure[$field]->Check($fields_db[$field]);
-					if ($res['state'] < 0) {
-						$state = $res['state'];
+					if ($res['action'] < 0) {
+						$action = $res['action'];
 						$error = 'Изменить поле';
 						$details = $res['details'];
 					}
 				}
 
-				if ($state < 0) {
-					$_out = ['state' => $state, 'name' => $field, 'error' => $error];
+				if ($action < 0) {
+					$_out = ['action' => $action, 'name' => $field, 'error' => $error];
 					if ($details) $_out['details'] = $details;
 					$out['fields'][] = $_out;
-					$out['state'] = self::ERROR_UPDATE;
+					$out['action'] = self::ERROR_UPDATE;
 				}
 			}
 
 			return $out;
 		}
 
-		public function Make() {
-			echo "Make({$this->name});<br>";
-		}
-
-		public function Create(): string {
+		public function Create(): void {
 			$fields = [];
 			$primaries = [];
 			foreach ($this->structure as $field) $fields[] = $field->CreationFormat();
 			foreach ($this->primary as $primary) $primaries[] = ", PRIMARY KEY (`" . implode('`, `', $primary) . "`)";
-			return "CREATE TABLE `{$this->name}` (" . implode(', ', $fields) . implode('', $primaries) . ") ENGINE = {$this->engine}  DEFAULT CHARSET = {$this->encoding}";
+			$this->db->query("CREATE TABLE `{$this->name}` (" . implode(', ', $fields) . implode('', $primaries) . ") ENGINE = {$this->engine}  DEFAULT CHARSET = {$this->encoding}");
 		}
 
-		public function Modify($data): array {
-			$queries = [];
-			foreach ($data['fields'] as $fieldname => $field) {
-				$queries[] = match ((int)$field['state']) {
-					FieldMySQLi::ERROR_CREATE => $this->structure[$fieldname]->Create(),
-					FieldMySQLi::ERROR_VARIOUS => $this->structure[$fieldname]->Update($field),
-					FieldMySQLi::ERROR_DELETE => FieldMySQLi::Delete($this->name, $fieldname),
-					default => ''
-				};
+		public function Make(array $fields): bool {
+			foreach ($fields as $name => ['action' => $action]) {
+				switch ($action) {
+					case FieldMySQLi::ERROR_CREATE: $this->structure[$name]->Create(); break;
+					case FieldMySQLi::ERROR_VARIOUS: $this->structure[$name]->Update(); break;
+					case FieldMySQLi::ERROR_DELETE: $this->db->Query("ALTER TABLE `{$this->name}` DROP COLUMN `{$name}`"); break;
+				}
 			}
-			return $queries;
-		}
 
-		public static function Remove(string $tablename): string {
-			return "DROP TABLE `{$tablename}`";
+			return true;
 		}
 
 	}

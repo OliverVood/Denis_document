@@ -12,6 +12,7 @@
 		/** @var TableMySQLi $table */
 
 		abstract public function CreationFormat(): string;
+		abstract public function UpdatingFormat(): string;
 
 		public function Check(?array $data_field_db): ?array {
 			$hash = MD5($data_field_db['DATA_TYPE'] . $data_field_db['COLUMN_TYPE'] . $data_field_db['COLUMN_KEY']);
@@ -41,28 +42,11 @@
 			};
 			$str_st = $this->CreationFormat();
 
-			if (is_null($str_db)) return ['name' => $this->name, 'state' => self::ERROR_MISSING, 'details' => ''];
-			if ($str_db !== $str_st) return ['name' => $this->name, 'state' => self::ERROR_VARIOUS, 'details' => $str_st];
+			if (is_null($str_db)) return ['name' => $this->name, 'action' => self::ERROR_MISSING, 'details' => ''];
+			if ($str_db !== $str_st) return ['name' => $this->name, 'action' => self::ERROR_VARIOUS, 'details' => $str_st];
 
-			return ['name' => $this->name, 'state' => self::ERROR_NULL, 'details' => ''];
+			return ['name' => $this->name, 'action' => self::ERROR_NULL, 'details' => ''];
 		}
-
-		public function Make() {
-			echo "Make field $this->type<br>";
-			//$a = 'tinyint(1)';
-			//			$matches = null;
-			//			preg_match('/(tinyint)\(([0-9])/', $a, $matches);
-			//			Debug($matches);
-
-			//			else if () {
-			//				$matches = null;
-			//				preg_match('/^tinyint\(d+\)$/', $fieldDataDB['Type'], $matches);
-			//			}
-			//			return $out;
-			//		}
-		}
-
-		public function UpdateFormat(): string { return $this->CreationFormat(); }
 
 		protected static function DataToCreationFormat(array $data): string {
 			$pieces = [];
@@ -74,18 +58,17 @@
 			return implode(' ', $pieces);
 		}
 
-		public function Create(): string {
-			return "ALTER TABLE `{$this->tablename}` ADD {$this->UpdateFormat()}";
+		public function Create(): bool {
+			$this->table->Query("ALTER TABLE `{$this->table->GetName()}` ADD {$this->CreationFormat()}");
+
+			return true;
 		}
 
 		public function Update(): string {
-			return "ALTER TABLE `{$this->tablename}` CHANGE `{$this->name}` {$this->UpdateFormat()}";
-		}
+			$this->table->Query("ALTER TABLE `{$this->table->GetName()}` CHANGE `{$this->name}` {$this->UpdatingFormat()}");
 
-		public static function Delete($tablename, $fieldname): string {
-			return "ALTER TABLE `{$tablename}` DROP COLUMN `{$fieldname}`";
+			return true;
 		}
-
 
 	}
 

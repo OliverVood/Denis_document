@@ -24,6 +24,9 @@
 			return implode(' ', $pieces);
 		}
 
-		public function CreationFormat(): string { return "`{$this->name}` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
+		private function GetFormat(): string { return "`{$this->name}` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
+
+		public function CreationFormat(): string { return $this->GetFormat(); }
+		public function UpdatingFormat(): string { return $this->GetFormat(); }
 
 	}
