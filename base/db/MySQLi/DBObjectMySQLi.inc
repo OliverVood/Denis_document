@@ -11,56 +11,49 @@
 			$this->Link($host, $username, $password, $dbname, $port, $socket);
 		}
 
+		private function GetTableListApp(): array {
+			$out = [];
+			foreach ($this->tables as $table) $out[] = $table->GetName();
+
+			return $out;
+		}
+
+		private function GetTableListDB(): array {
+			$result = $this->Query("SELECT `table_name` AS `name` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
+			return $this->FetchAll($result, function(& $items, $item) {
+				$items[] = $item['name'];
+			});
+		}
+
 		/**
 		 * Проверка базы данных
 		 * @return array
 		 */
 		public function Check(): array {
+			$tableListApp = $this->GetTableListApp();
+			$tablesListDB = $this->GetTableListDB();
+			$tables = $tableListApp;
+			foreach ($tablesListDB as $table) if (!in_array($table, $tables)) $tables[] = $table;
+
 			$out = [];
-			$tables = [];
 
-			/* Get tables structure */
-			$tables_struct = [];
-			foreach ($this->tables as $table) {
-				$name = $table->GetName();
-				$tables_struct[] = $name;
-				$tables[] = $name;
-			}
-
-			/* Get tables DB */
-			$result = $this->Query("SELECT `table_name` AS `name` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '{$this->dbname}'");
-			$tables_db = $this->FetchAll($result, function(& $items, $item) use (& $tables) {
-				$items[] = $item['name'];
-				if (!in_array($item['name'], $tables)) $tables[] = $item['name'];
-			});
-
-			/* Check tables */
 			foreach ($tables as $table) {
-				$action = TableMySQLi::ERROR_NULL;
-				$error = null;
-				$fields = null;
-				if (!in_array($table, $tables_db)) {
-					$action = TableMySQLi::ERROR_CREATE;
-					$error = 'Создать таблицу';
-				}
-				else if (!in_array($table, $tables_struct)) {
-					$action = TableMySQLi::ERROR_DELETE;
-					$error = 'Удалить таблицу';
-				}
-				else {
-					$res = $this->GetTable($table)->Check();
-					if ($res['action'] < 0) {
-						$action = $res['action'];
-						$error = 'Изменить таблицу';
-						$fields = $res['fields'];
-					}
+
+				if (!in_array($table, $tablesListDB)) {
+					$out[] = ['name' => $table, 'action' => TableMySQLi::ACTION_CREATE, 'error' => 'Создать таблицу'];
+					continue;
 				}
 
-				if ($action < 0) {
-					$_out = ['name' => $table, 'action' => $action, 'error' => $error];
-					if ($fields) $_out['fields'] = $fields;
-					$out[] = $_out;
+				if (!in_array($table, $tableListApp)) {
+					$out[] = ['name' => $table, 'action' => TableMySQLi::ACTION_DELETE, 'error' => 'Удалить таблицу'];
+					continue;
 				}
+
+				$res = $this->GetTable($table)->Check();
+				if ($res['action'] < 0) {
+					$out[] = ['name' => $table, 'action' => $res['action'], 'error' => 'Изменить таблицу', 'fields' => $res['fields']];
+				}
+
 			}
 
 			return $out;
@@ -76,9 +69,9 @@
 			foreach ($tables as $name => $table) {
 				$action = (int)$table['action'];
 				switch ($action) {
-					case TableMySQLi::ERROR_CREATE: $this->tables[$name]->Create(); break;
-					case TableMySQLi::ERROR_UPDATE: $this->tables[$name]->Make($table['fields']); break;
-					case TableMySQLi::ERROR_DELETE: $this->db->Query("DROP TABLE `{$name}`"); break;
+					case TableMySQLi::ACTION_CREATE: $this->tables[$name]->Create(); break;
+					case TableMySQLi::ACTION_UPDATE: $this->tables[$name]->Make($table['fields']); break;
+					case TableMySQLi::ACTION_DELETE: $this->db->Query("DROP TABLE `{$name}`"); break;
 				}
 			}
 

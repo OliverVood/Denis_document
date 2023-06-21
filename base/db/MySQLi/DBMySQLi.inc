@@ -29,10 +29,9 @@
 		}
 
 		private function Link($hostname, $username, $password, $dbname, $port, $socket): void {
-			$this->dbname			= $dbname;
+			$this->dbname = $dbname;
 
 			@ $this->db = new \mysqli($hostname, $username, $password, $this->dbname, $port, $socket);
-			mysqli_set_charset($this->db, 'utf8mb4');
 
 			if (!$this->db->connect_errno) {
 				$this->state = true;
@@ -40,6 +39,10 @@
 				$this->state = false;
 				$this->errno = $this->db->connect_errno;
 			}
+		}
+
+		public function SetCharset(string $charset): void {
+			mysqli_set_charset($this->db, $charset);
 		}
 
 		/**
@@ -269,6 +272,11 @@
 			return $out;
 		}
 
+		/**
+		 * Экранирование символов
+		 * @param string $str - Исходная строка
+		 * @return string
+		 */
 		public function Escaping(string $str): string {
 			return $this->db->real_escape_string($str);
 		}

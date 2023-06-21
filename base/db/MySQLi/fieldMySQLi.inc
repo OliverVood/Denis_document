@@ -3,11 +3,11 @@
 	namespace Base\DB;
 
 	abstract class FieldMySQLi extends Field {
-		const ERROR_NULL	=  1;
-		const ERROR_CREATE 	= -1;
-		const ERROR_VARIOUS	= -2;
-		const ERROR_MISSING = -3;
-		const ERROR_DELETE 	= -4;
+		const ACTION_OK			=  1;
+		const ACTION_CREATE 	= -1;
+		const ACTION_VARIOUS	= -2;
+		const ACTION_MISSING 	= -3;
+		const ACTION_DELETE		= -4;
 
 		/** @var TableMySQLi $table */
 
@@ -42,10 +42,10 @@
 			};
 			$str_st = $this->CreationFormat();
 
-			if (is_null($str_db)) return ['name' => $this->name, 'action' => self::ERROR_MISSING, 'details' => ''];
-			if ($str_db !== $str_st) return ['name' => $this->name, 'action' => self::ERROR_VARIOUS, 'details' => $str_st];
+			if (!$str_db) return ['name' => $this->name, 'action' => self::ACTION_MISSING, 'details' => 'Тип не найден'];
+			if ($str_db !== $str_st) return ['name' => $this->name, 'action' => self::ACTION_VARIOUS, 'details' => "{$str_db} -> {$str_st}"];
 
-			return ['name' => $this->name, 'action' => self::ERROR_NULL, 'details' => ''];
+			return ['name' => $this->name, 'action' => self::ACTION_OK, 'details' => ''];
 		}
 
 		protected static function DataToCreationFormat(array $data): string {

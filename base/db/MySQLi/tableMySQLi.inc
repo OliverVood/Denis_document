@@ -3,10 +3,10 @@
 	namespace Base\DB;
 
 	class TableMySQLi extends Table {
-		const ERROR_NULL	=  1;
-		const ERROR_CREATE 	= -1;
-		const ERROR_UPDATE 	= -2;
-		const ERROR_DELETE 	= -3;
+		const ACTION_OK				=  1;
+		const ACTION_CREATE			= -1;
+		const ACTION_UPDATE			= -2;
+		const ACTION_DELETE 		= -3;
 
 		private string	$engine 	= 'InnoDB';
 		private string	$encoding 	= 'utf8';
@@ -39,51 +39,51 @@
 		public function text(string $name): void { $this->PushField(new FieldTextMySQLi($name, $this)); }
 		public function AddPrimary(array $primary): void { $this->primary[] = $primary; }
 
-		public function Check(): array {
-			$out = ['action' => 1, 'fields' => []];
+		private function GetFieldListApp(): array {
+			$out = [];
+			foreach ($this->structure as $name => $field) $out[] = $name;
 
-			$fields = [];
+			return $out;
+		}
 
-			/* Get fields struct */
-			foreach ($this->structure as $name => $field) {
-				$fields[] = $name;
-			}
-
-			/* Get fields DB */
+		private function GetListFieldDB(): array {
+			$fieldsData = [];
 			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE (TABLE_NAME = '{$this->name}') AND (TABLE_SCHEMA = '{$this->db->GetName()}') ORDER BY `ORDINAL_POSITION`");
-			$fields_db = $this->db->FetchAll($result, function(& $items, $item) use (& $fields) {
-				$items[$item['COLUMN_NAME']] = $item;
-				if (!in_array($item['COLUMN_NAME'], $fields)) $fields[] = $item['COLUMN_NAME'];
+			$fieldsList = $this->db->FetchAll($result, function(& $items, $item) use (& $fieldsData) {
+				$items[] = $item['COLUMN_NAME'];
+				$fieldsData[$item['COLUMN_NAME']] = $item;
 			});
 
-			/* Check fields */
+			return [$fieldsList, $fieldsData];
+		}
+
+		public function Check(): array {
+			$out = ['action' => self::ACTION_OK, 'fields' => []];
+
+			$fieldListApp = $this->GetFieldListApp();
+			[$fieldListDB, $fieldsData] = $this->GetListFieldDB();
+			$fields = $fieldListApp;
+			foreach ($fieldListDB as $field) if (!in_array($field, $fields)) $fields[] = $field;
+
 			foreach ($fields as $field) {
-				$action = FieldMySQLi::ERROR_NULL;
-				$error = null;
-				$details = null;
-				if (!isset($fields_db[$field])) {
-					$action = FieldMySQLi::ERROR_CREATE;
-					$error = 'Добавить поле';
+
+				if (!in_array($field, $fieldListDB)) {
+					$out['fields'][] = ['action' => FieldMySQLi::ACTION_CREATE, 'name' => $field, 'error' => 'Добавить поле'];
+					$out['action'] = self::ACTION_UPDATE;
+					continue;
 				}
-				else if (!isset($this->structure[$field])) {
-					$action = FieldMySQLi::ERROR_DELETE;
-					$error = 'Удалить поле';
-				}
-				else {
-					$res = $this->structure[$field]->Check($fields_db[$field]);
-					if ($res['action'] < 0) {
-						$action = $res['action'];
-						$error = 'Изменить поле';
-						$details = $res['details'];
-					}
+				if (!in_array($field, $fieldListApp)) {
+					$out['fields'][] = ['action' => FieldMySQLi::ACTION_DELETE, 'name' => $field, 'error' => 'Удалить поле'];
+					$out['action'] = self::ACTION_UPDATE;
+					continue;
 				}
 
-				if ($action < 0) {
-					$_out = ['action' => $action, 'name' => $field, 'error' => $error];
-					if ($details) $_out['details'] = $details;
-					$out['fields'][] = $_out;
-					$out['action'] = self::ERROR_UPDATE;
+				$res = $this->structure[$field]->Check($fieldsData[$field]);
+				if ($res['action'] < 0) {
+					$out['fields'][] = ['action' => $res['action'], 'name' => $field, 'error' => 'Изменить поле', 'details' => $res['details']];
+					$out['action'] = self::ACTION_UPDATE;
 				}
+
 			}
 
 			return $out;
@@ -100,9 +100,9 @@
 		public function Make(array $fields): bool {
 			foreach ($fields as $name => ['action' => $action]) {
 				switch ($action) {
-					case FieldMySQLi::ERROR_CREATE: $this->structure[$name]->Create(); break;
-					case FieldMySQLi::ERROR_VARIOUS: $this->structure[$name]->Update(); break;
-					case FieldMySQLi::ERROR_DELETE: $this->db->Query("ALTER TABLE `{$this->name}` DROP COLUMN `{$name}`"); break;
+					case FieldMySQLi::ACTION_CREATE: $this->structure[$name]->Create(); break;
+					case FieldMySQLi::ACTION_VARIOUS: $this->structure[$name]->Update(); break;
+					case FieldMySQLi::ACTION_DELETE: $this->db->Query("ALTER TABLE `{$this->name}` DROP COLUMN `{$name}`"); break;
 				}
 			}
 

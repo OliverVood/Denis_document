@@ -8,6 +8,7 @@
 
 		public function __construct($hostname, $user, $password, $dbname) {
 			parent::__construct($hostname, $user, $password, $dbname);
+			$this->SetCharset('utf8mb4');
 			self::Query("SET GLOBAL time_zone = 'UTC'");
 		}
 

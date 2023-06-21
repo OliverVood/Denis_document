@@ -29,7 +29,7 @@
 			$test->string('str', 30);
 			$test->uint32('uint16');
 			$test->int32('int16');
-			$test->uint32('uintq');
+			$test->uint16('uintq');
 			$test->int16('intw');
 
 			$test2 = new TableMySQLi('test2', $this->db);
@@ -40,7 +40,7 @@
 			$test2->uint32('uintq');
 			$test2->int16('intw');
 
-			$this->db->PushTables($this->table_users, $test);
+			$this->db->PushTables($this->table_users, $test, $test2);
 		}
 
 	}
