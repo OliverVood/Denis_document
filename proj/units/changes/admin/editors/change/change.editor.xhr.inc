@@ -6,14 +6,14 @@
 	require DIR_UNITS . 'changes/admin/editors/change/change.editor.model.inc';
 
 	use Base\EditorMySQLi\XHR\Editor;
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Editor\Common;
 	use Proj\Admin\Editor\Model;
 
 	class Change extends Editor {
 		use Common\Change;
 
-		public function __construct(string $name, TableMySQLi $table) {
+		public function __construct(string $name, Table $table) {
 			parent::__construct($name);
 
 			$this->Init();

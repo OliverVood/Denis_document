@@ -2,8 +2,8 @@
 
 	namespace Proj\Admin\Editor\Model;
 
+	use Base\DB\MySQLi\Table;
 	use Base\DB\Select;
-	use Base\DB\Table;
 	use Base\EditorMySQLi\Model;
 
 	class Ip extends Model {

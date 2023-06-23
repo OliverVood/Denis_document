@@ -28,7 +28,7 @@ body {
 			flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
 			a { color: $color-text-primary; }
 		}
-		main { flex: auto; }
+		main { flex: auto; /*position: relative;*/ }
 	}
 	> footer { padding: 1rem 0.6rem; text-align: center; background-color: $color-primary-dark; color: $color-text-primary; }
 }

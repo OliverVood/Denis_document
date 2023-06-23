@@ -1,9 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	abstract class DBObjectMySQLi extends DBObject {
-		use DBMySQLi;
+	abstract class DBObject extends \Base\DB\DBObject {
+		use DB;
 
 		protected function __construct(?string $host = null, ?string $username = null, ?string $password = null, ?string $dbname = null, string|int|null $port = null, ?string $socket = null) {
 			parent::__construct();
@@ -40,12 +40,12 @@
 			foreach ($tables as $table) {
 
 				if (!in_array($table, $tablesListDB)) {
-					$out[] = ['name' => $table, 'action' => TableMySQLi::ACTION_CREATE, 'error' => 'Создать таблицу'];
+					$out[] = ['name' => $table, 'action' => Table::ACTION_CREATE, 'error' => 'Создать таблицу'];
 					continue;
 				}
 
 				if (!in_array($table, $tableListApp)) {
-					$out[] = ['name' => $table, 'action' => TableMySQLi::ACTION_DELETE, 'error' => 'Удалить таблицу'];
+					$out[] = ['name' => $table, 'action' => Table::ACTION_DELETE, 'error' => 'Удалить таблицу'];
 					continue;
 				}
 
@@ -69,9 +69,9 @@
 			foreach ($tables as $name => $table) {
 				$action = (int)$table['action'];
 				switch ($action) {
-					case TableMySQLi::ACTION_CREATE: $this->tables[$name]->Create(); break;
-					case TableMySQLi::ACTION_UPDATE: $this->tables[$name]->Make($table['fields']); break;
-					case TableMySQLi::ACTION_DELETE: $this->db->Query("DROP TABLE `{$name}`"); break;
+					case Table::ACTION_CREATE: $this->tables[$name]->Create(); break;
+					case Table::ACTION_UPDATE: $this->tables[$name]->Make($table['fields']); break;
+					case Table::ACTION_DELETE: $this->db->Query("DROP TABLE `{$name}`"); break;
 				}
 			}
 

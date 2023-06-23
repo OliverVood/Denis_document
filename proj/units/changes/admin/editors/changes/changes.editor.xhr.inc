@@ -6,7 +6,7 @@
 	require DIR_UNITS . 'changes/admin/editors/changes/changes.editor.model.inc';
 
 	use Base\EditorMySQLi\XHR\Editor;;
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Editor\Common;
 	use Proj\Admin\Editor\Model;
 	use Proj\Admin\Units\XHR as Units;
@@ -14,7 +14,7 @@
 	class Changes extends Editor {
 		use Common\Changes;
 
-		public function __construct(string $name, TableMySQLi $table) {
+		public function __construct(string $name, Table $table) {
 			parent::__construct($name);
 
 			$this->model = new Model\Changes($table);

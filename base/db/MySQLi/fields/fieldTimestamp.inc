@@ -1,13 +1,11 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldTimestampMySQLi extends DB\FieldMySQLi {
+	class FieldTimestamp extends Field {
 		private bool $update;
 
-		public function __construct(string $name, bool $update, TableMySQLi $table) {
+		public function __construct(string $name, bool $update, Table $table) {
 			parent::__construct('timestamp', $name, $table);
 
 			$this->update = $update;

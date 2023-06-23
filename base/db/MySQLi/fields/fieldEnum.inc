@@ -1,13 +1,11 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldEnumMySQLi extends DB\FieldMySQLi {
+	class FieldEnum extends Field {
 		private array $enum;
 
-		public function __construct(string $name, array $enum, TableMySQLi $table) {
+		public function __construct(string $name, array $enum, Table $table) {
 			parent::__construct('enum', $name, $table);
 
 			$this->enum = $enum;

@@ -36,8 +36,9 @@
 		}
 
 		#[NoReturn] private function Structure() {
+			//$this->model->Structure()
 			Response::PushHistory(self::$db_structure);
-			Response::PushSection('main', $this->model->Structure());
+			Response::PushSection('main', '');
 			Response::SendJSON();
 		}
 

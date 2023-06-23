@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldInt32MySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldInt32 extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('int32', $name, $table);
 		}
 

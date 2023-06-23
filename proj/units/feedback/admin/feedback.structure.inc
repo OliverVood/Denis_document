@@ -4,20 +4,20 @@
 
 	require DIR_UNITS . 'feedback/admin/feedback.actions.inc';
 
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
 	class Feedback extends Actions\Feedback {
 		private DBObject $db;
 
-		protected TableMySQLi $table_feedback;
+		protected Table $table_feedback;
 
 		protected function __construct() {
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_feedback = new TableMySQLi(self::TABLES['feedback'], $this->db);
+			$this->table_feedback = new Table(self::TABLES['feedback'], $this->db);
 			$this->table_feedback->id('id');
 			$this->table_feedback->uint8('state');
 			$this->table_feedback->timestamp('datecr');

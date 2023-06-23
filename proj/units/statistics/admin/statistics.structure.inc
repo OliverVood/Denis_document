@@ -4,21 +4,21 @@
 
 	require DIR_UNITS . 'statistics/admin/statistics.actions.inc';
 
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
 	class Statistics extends Actions\Statistics {
 		private DBObject $db;
 
-		protected TableMySQLi $table_ip;
-		protected TableMySQLi $table_act;
+		protected Table $table_ip;
+		protected Table $table_act;
 
 		protected function __construct() {
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_ip = new TableMySQLi(self::TABLES['ip'], $this->db);
+			$this->table_ip = new Table(self::TABLES['ip'], $this->db);
 			$this->table_ip->id('id');
 			$this->table_ip->timestamp('datecr');
 			$this->table_ip->uint32('ip');
@@ -26,7 +26,7 @@
 			$this->table_ip->string('path', 255);
 			$this->table_ip->string('params', 255);
 
-			$this->table_act = new TableMySQLi(self::TABLES['act'], $this->db);
+			$this->table_act = new Table(self::TABLES['act'], $this->db);
 			$this->table_act->id('id');
 			$this->table_act->timestamp('datecr');
 			$this->table_act->uint32('uid');

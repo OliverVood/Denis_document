@@ -2,9 +2,9 @@
 
 	namespace Proj;
 
-	use Base\DB\DBQueryMySQLi;
+	use Base\DB\MySQLi;
 
-	class DBQuery extends DBQueryMySQLi {
+	class DBQuery extends MySQLi\DBQuery {
 
 		public function __construct($hostname, $user, $password, $dbname) {
 			parent::__construct($hostname, $user, $password, $dbname);

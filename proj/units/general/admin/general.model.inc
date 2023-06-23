@@ -18,8 +18,8 @@
 			return 'Главная';
 		}
 
-		public function Structure(): string {
-			return 'Структура базы данных';
+		public function Structure(): array {
+			return [];
 		}
 
 		public function DBCheck(): array {

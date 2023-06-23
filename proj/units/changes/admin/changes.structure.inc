@@ -4,21 +4,21 @@
 
 	require DIR_UNITS . 'changes/admin/changes.actions.inc';
 
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
 	class Changes extends Actions\Changes {
 		private DBObject $db;
 
-		protected TableMySQLi $table_changes;
-		protected TableMySQLi $table_change;
+		protected Table $table_changes;
+		protected Table $table_change;
 
 		protected function __construct() {
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_changes = new TableMySQLi(self::TABLES['changes'], $this->db);
+			$this->table_changes = new Table(self::TABLES['changes'], $this->db);
 			$this->table_changes->id('id');
 			$this->table_changes->uint8('state');
 			$this->table_changes->timestamp('datecr');
@@ -27,7 +27,7 @@
 			$this->table_changes->string('work_header', 255);
 			$this->table_changes->string('header', 255);
 
-			$this->table_change = new TableMySQLi(self::TABLES['change'], $this->db);
+			$this->table_change = new Table(self::TABLES['change'], $this->db);
 			$this->table_change->id('id');
 			$this->table_change->uint32('cid');
 			$this->table_change->uint8('state');

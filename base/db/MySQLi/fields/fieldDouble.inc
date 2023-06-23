@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldDoubleMySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldDouble extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('double', $name, $table);
 		}
 

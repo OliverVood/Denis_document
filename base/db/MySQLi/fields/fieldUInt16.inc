@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldUInt16MySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldUInt16 extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('uint16', $name, $table);
 		}
 

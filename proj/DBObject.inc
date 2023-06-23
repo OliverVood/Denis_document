@@ -2,9 +2,9 @@
 
 	namespace Proj;
 
-	use Base\DB\DBObjectMySQLi;
+	use Base\DB\MySQLi;
 
-	class DBObject extends DBObjectMySQLi {
+	class DBObject extends MySQLi\DBObject {
 
 		public function __construct($hostname, $user, $password, $dbname) {
 			parent::__construct($hostname, $user, $password, $dbname);

@@ -2,13 +2,13 @@
 
 	namespace Proj\Admin\Editor\Model;
 
+	use Base\DB\MySQLi\Table;
 	use Base\DB\Select;
-	use Base\DB\TableMySQLi;
 	use Base\EditorMySQLi\Model;
 	use Proj\Units\Consts;
 
 	class Changes extends Model {
-		public function __construct(TableMySQLi $table) {
+		public function __construct(Table $table) {
 			parent::__construct($table);
 		}
 

@@ -1,12 +1,14 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
+	class FieldSet extends Field {
+		private array $set;
 
-	class FieldTextMySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
-			parent::__construct('text', $name, $table);
+		public function __construct(string $name, array $set, Table $table) {
+			parent::__construct('set', $name, $table);
+
+			$this->set = $set;
 		}
 
 		protected static function DataToCreationFormat($data): string {
@@ -18,7 +20,7 @@
 			return implode(' ', $pieces);
 		}
 
-		private function GetFormat(): string { return "`{$this->name}` text NOT NULL"; }
+		private function GetFormat(): string { return "`{$this->name}` set('" . implode("','", $this->set) . "') NOT NULL"; }
 
 		public function CreationFormat(): string { return $this->GetFormat(); }
 		public function UpdatingFormat(): string { return $this->GetFormat(); }

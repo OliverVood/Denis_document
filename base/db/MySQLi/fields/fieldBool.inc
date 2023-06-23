@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldBoolMySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldBool extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('bool', $name, $table);
 		}
 

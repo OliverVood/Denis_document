@@ -4,11 +4,12 @@
 	require DIR_BASE . 'db/table.inc';
 	require DIR_BASE . 'db/field.inc';
 
-	require DIR_BASE . 'db/MySQLi/DBMySQLi.inc';
-	require DIR_BASE . 'db/MySQLi/DBObjectMySQLi.inc';
-	require DIR_BASE . 'db/MySQLi/MySQLiQuery.inc';
-	require DIR_BASE . 'db/MySQLi/tableMySQLi.inc';
-	require DIR_BASE . 'db/MySQLi/fieldMySQLi.inc';
+	require DIR_BASE . 'db/MySQLi/DB.inc';
+	require DIR_BASE . 'db/MySQLi/DBObject.inc';
+	require DIR_BASE . 'db/MySQLi/query.inc';
+	require DIR_BASE . 'db/MySQLi/table.inc';
+	require DIR_BASE . 'db/MySQLi/field.inc';
+	require DIR_BASE . 'db/MySQLi/key.inc';
 
 	require DIR_PROJ . 'DBObject.inc';
 

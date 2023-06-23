@@ -1,13 +1,14 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
+	use mysqli;
 	use mysqli_result;
 
-	trait DBMySQLi {
+	trait DB {
 		protected static ?self $instance = null;
 
-		private \mysqli $db;
+		private mysqli $db;
 		private int $errno = 0;
 		private array $history = [];
 
@@ -31,7 +32,7 @@
 		private function Link($hostname, $username, $password, $dbname, $port, $socket): void {
 			$this->dbname = $dbname;
 
-			@ $this->db = new \mysqli($hostname, $username, $password, $this->dbname, $port, $socket);
+			@ $this->db = new mysqli($hostname, $username, $password, $this->dbname, $port, $socket);
 
 			if (!$this->db->connect_errno) {
 				$this->state = true;

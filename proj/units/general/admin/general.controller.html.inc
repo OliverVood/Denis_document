@@ -5,14 +5,14 @@
 	require DIR_UNITS . 'general/admin/general.actions.inc';
 	require DIR_UNITS . 'general/admin/general.model.inc';
 	require DIR_UNITS . 'general/admin/views/group.tpl';
+	require DIR_UNITS . 'general/admin/views/structure.tpl';
 
 	use Base\Instance;
 	use Proj\Params;
 	use Proj\Admin\Actions;
 	use Proj\Admin\Model;
 	use Proj\Admin\Templates\Layout;
-	use Proj\Admin\Templates\General\Item;
-	use Proj\Admin\Templates\General\Group;
+	use Proj\Admin\Templates\General AS TPL;
 	use Closure;
 
 	class General extends Actions\General {
@@ -39,10 +39,10 @@
 		}
 
 		private function OutMenu() {
-			Layout::instance()->menu->Push(Item::ToVar('<a href = "' . self::$site->GetAddress() . '" target = "_blank">Открыть сайт</a>'));
-			Layout::instance()->menu->Push(Item::ToVar(self::$home->GetLinkHref('Главная')));
+			Layout::instance()->menu->Push(TPL\Item::ToVar('<a href = "' . self::$site->GetAddress() . '" target = "_blank">Открыть сайт</a>'));
+			Layout::instance()->menu->Push(TPL\Item::ToVar(self::$home->GetLinkHref('Главная')));
 			Layout::instance()->menu->Push(
-				Group::ToVar('База данных', [
+				TPL\Group::ToVar('База данных', [
 					self::$db_structure->GetLinkHref('Структура'),
 					self::$db_check->GetLinkHref('Проверить')
 				])
@@ -54,7 +54,7 @@
 		}
 
 		private function Structure() {
-			Layout::instance()->main->Push($this->model->Structure());
+			Layout::instance()->main->Push(TPL\Structure::ToVar($this->model->Structure()));
 		}
 
 		private function Home() {

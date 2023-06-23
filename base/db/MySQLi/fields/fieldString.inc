@@ -1,13 +1,11 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldStringMySQLi extends DB\FieldMySQLi {
+	class FieldString extends Field {
 		private int $length;
 
-		public function __construct(string $name, int $length, TableMySQLi $table) {
+		public function __construct(string $name, int $length, Table $table) {
 			parent::__construct('enum', $name, $table);
 
 			$this->length = $length;

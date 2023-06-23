@@ -4,20 +4,20 @@
 
 	require DIR_UNITS . 'news/admin/news.actions.inc';
 
-	use Base\DB\TableMySQLi;
+	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Actions;
 	use Proj\DBObject;
 
 	class News extends Actions\News {
 		private DBObject $db;
 
-		protected TableMySQLi $table_news;
+		protected Table $table_news;
 
 		protected function __construct() {
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_news = new TableMySQLi(self::TABLES['news'], $this->db);
+			$this->table_news = new Table(self::TABLES['news'], $this->db);
 			$this->table_news->id('id');
 			$this->table_news->uint8('state');
 			$this->table_news->timestamp('datecr');

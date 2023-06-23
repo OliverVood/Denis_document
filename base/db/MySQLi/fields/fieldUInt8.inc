@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldUInt8MySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldUInt8 extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('uint8', $name, $table);
 		}
 

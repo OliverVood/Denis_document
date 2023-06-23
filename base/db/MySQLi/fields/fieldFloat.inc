@@ -1,11 +1,9 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	use Base\DB;
-
-	class FieldFloatMySQLi extends DB\FieldMySQLi {
-		public function __construct(string $name, TableMySQLi $table) {
+	class FieldFloat extends Field {
+		public function __construct(string $name, Table $table) {
 			parent::__construct('float', $name, $table);
 		}
 
