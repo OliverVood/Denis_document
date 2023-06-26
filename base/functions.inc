@@ -111,6 +111,17 @@
 	}
 
 	/**
+	 * Вывод отладочной информации с остановкой скрипта
+	 * @param mixed $var - Переменная для вывода
+	 * @param string $title - Заголовок
+	 * @return void
+	 */
+	#[NoReturn] function dd(mixed $var, string $title = ''): void {
+		Debug($var, $title = '');
+		die;
+	}
+
+	/**
 	 * Получить IP пользователя
 	 * @return string
 	 */

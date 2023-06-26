@@ -34,7 +34,6 @@
 
 			$test2 = new Table('test2', $this->db);
 			$test2->id('id');
-//			$test2->id('id_');
 			$test2->uint8('uint8');
 			$test2->string('str', 30);
 			$test2->uint8('uint16');
@@ -58,9 +57,11 @@
 			$test3->float('float');
 			$test3->double('double');
 			$test3->timestamp('timestamp');
+			$test3->timestamp('timestamp_update', true);
 			$test3->enum('enum', ['a', 'b', 'c']);
 			$test3->set('set', ['a', 'b', 'c']);
 			$test3->string('string', 20);
+			$test3->string('string_30', 20);
 			$test3->text('text');
 
 			$this->db->PushTables($this->table_users, $test, $test2, $test3);

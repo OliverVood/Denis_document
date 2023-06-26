@@ -5,21 +5,17 @@
 	class FieldID extends Field {
 		public function __construct(string $name, Table $table) {
 			parent::__construct('id', $name, $table);
-		}
 
-		protected static function DataToCreationFormat($data): string {
-			$pieces = [];
-			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
-			$pieces['type'] = $data['COLUMN_TYPE'];
-			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
-			if (strripos($data['EXTRA'], 'auto_increment') !== false) $pieces['ai'] =  'AUTO_INCREMENT';
-
-			return implode(' ', $pieces);
+			$this->_type = 'int unsigned';
+			$this->_null = 'NO';
+			$this->_key = 'PRI';
+			$this->_default = null;
+			$this->_extra = 'auto_increment';
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` int unsigned NOT NULL AUTO_INCREMENT"; }
 
 		public function CreationFormat(): string { return $this->GetFormat(); }
-		public function UpdatingFormat(): string { return $this->GetFormat(); }
+		public function UpdatingFormat(): string { return $this->GetFormat(); }//ALTER TABLE test.users DROP PRIMARY KEY, ADD PRIMARY KEY(USERNAME);
 
 	}

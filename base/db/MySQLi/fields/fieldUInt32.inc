@@ -5,6 +5,12 @@
 	class FieldUInt32 extends Field {
 		public function __construct(string $name, Table $table) {
 			parent::__construct('uint32', $name, $table);
+
+			$this->_type = 'int unsigned';
+			$this->_null = 'NO';
+			$this->_key = '';
+			$this->_default = '0';
+			$this->_extra = '';
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` int unsigned NOT NULL DEFAULT '0'"; }

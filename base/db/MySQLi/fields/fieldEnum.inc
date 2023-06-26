@@ -9,15 +9,12 @@
 			parent::__construct('enum', $name, $table);
 
 			$this->enum = $enum;
-		}
 
-		protected static function DataToCreationFormat($data): string {
-			$pieces = [];
-			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
-			$pieces['type'] = $data['COLUMN_TYPE'];
-			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
-
-			return implode(' ', $pieces);
+			$this->_type = "enum('" . implode("','", $this->enum) . "')";
+			$this->_null = 'NO';
+			$this->_key = '';
+			$this->_default = null;
+			$this->_extra = '';
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` enum('" . implode("','", $this->enum) . "') NOT NULL"; }

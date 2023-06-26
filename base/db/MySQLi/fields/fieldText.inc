@@ -5,15 +5,12 @@
 	class FieldText extends Field {
 		public function __construct(string $name, Table $table) {
 			parent::__construct('text', $name, $table);
-		}
 
-		protected static function DataToCreationFormat($data): string {
-			$pieces = [];
-			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
-			$pieces['type'] = $data['COLUMN_TYPE'];
-			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
-
-			return implode(' ', $pieces);
+			$this->_type = 'text';
+			$this->_null = 'NO';
+			$this->_key = '';
+			$this->_default = null;
+			$this->_extra = '';
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` text NOT NULL"; }

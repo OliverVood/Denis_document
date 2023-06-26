@@ -49,10 +49,10 @@
 
 		private function GetListFieldDB(): array {
 			$fieldsData = [];
-			$result = $this->db->Query("SELECT `COLUMN_NAME`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `DATA_TYPE`, `CHARACTER_MAXIMUM_LENGTH`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA` FROM information_schema.`COLUMNS` WHERE (TABLE_NAME = '{$this->name}') AND (TABLE_SCHEMA = '{$this->db->GetName()}') ORDER BY `ORDINAL_POSITION`");
+			$result = $this->db->Query("SHOW FIELDS FROM `{$this->name}`");
 			$fieldsList = $this->db->FetchAll($result, function(& $items, $item) use (& $fieldsData) {
-				$items[] = $item['COLUMN_NAME'];
-				$fieldsData[$item['COLUMN_NAME']] = $item;
+				$items[] = $item['Field'];
+				$fieldsData[$item['Field']] = $item;
 			});
 
 			return [$fieldsList, $fieldsData];
@@ -69,7 +69,7 @@
 			foreach ($fields as $field) {
 
 				if (!in_array($field, $fieldListDB)) {
-					$out['fields'][] = ['action' => Field::ACTION_CREATE, 'name' => $field, 'error' => 'Добавить поле', 'details' => $this->structure[$field]->UpdatingFormat()];
+					$out['fields'][] = ['action' => Field::ACTION_CREATE, 'name' => $field, 'error' => 'Добавить поле', 'details' => $this->structure[$field]->CreationFormat()];
 					$out['action'] = self::ACTION_UPDATE;
 					continue;
 				}
@@ -80,8 +80,9 @@
 				}
 
 				$res = $this->structure[$field]->Check($fieldsData[$field]);
-				if ($res['action'] < 0) {
-					$out['fields'][] = ['action' => $res['action'], 'name' => $field, 'error' => 'Изменить поле', 'details' => $res['details']];
+
+				if (!$res) {
+					$out['fields'][] = ['action' => Field::ACTION_UPDATE, 'name' => $field, 'error' => 'Изменить поле', 'details' => $this->structure[$field]->UpdatingFormat()];
 					$out['action'] = self::ACTION_UPDATE;
 				}
 
@@ -94,7 +95,7 @@
 			foreach ($fields as $name => ['action' => $action]) {
 				switch ($action) {
 					case Field::ACTION_CREATE: $this->structure[$name]->Create(); break;
-					case Field::ACTION_VARIOUS: $this->structure[$name]->Update(); break;
+					case Field::ACTION_UPDATE: $this->structure[$name]->Update(); break;
 					case Field::ACTION_DELETE: $this->db->Query("ALTER TABLE `{$this->name}` DROP COLUMN `{$name}`"); break;
 				}
 			}

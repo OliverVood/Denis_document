@@ -9,17 +9,12 @@
 			parent::__construct('timestamp', $name, $table);
 
 			$this->update = $update;
-		}
 
-		protected static function DataToCreationFormat($data): string {
-			$pieces = [];
-			$pieces['name'] = "`{$data['COLUMN_NAME']}`";
-			$pieces['type'] = $data['COLUMN_TYPE'];
-			$pieces['null'] = ($data['IS_NULLABLE'] === 'YES') ? 'NULL' : 'NOT NULL';
-			$pieces['default'] = 'DEFAULT CURRENT_TIMESTAMP';
-			if (strripos($data['EXTRA'], 'on update CURRENT_TIMESTAMP') !== false) $pieces['ai'] =  'ON UPDATE CURRENT_TIMESTAMP';
-
-			return implode(' ', $pieces);
+			$this->_type = 'timestamp';
+			$this->_null = 'NO';
+			$this->_key = '';
+			$this->_default = 'CURRENT_TIMESTAMP';
+			$this->_extra = $this->update ? 'DEFAULT_GENERATED on update CURRENT_TIMESTAMP' : 'DEFAULT_GENERATED';
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP" . ($this->update ? ' ON UPDATE CURRENT_TIMESTAMP' : ''); }
