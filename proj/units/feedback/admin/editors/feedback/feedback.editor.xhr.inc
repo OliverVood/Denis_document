@@ -5,7 +5,7 @@
 	require DIR_UNITS . 'feedback/admin/editors/feedback/feedback.editor.common.inc';
 	require DIR_UNITS . 'feedback/admin/editors/feedback/feedback.editor.model.inc';
 
-	use Base\EditorMySQLi\XHR\Editor;;
+	use Base\Editor\MySQLi\XHR\Editor;
 	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Editor\Common;
 	use Proj\Admin\Editor\Model;

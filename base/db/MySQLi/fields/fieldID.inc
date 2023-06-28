@@ -3,14 +3,16 @@
 	namespace Base\DB\MySQLi;
 
 	class FieldID extends Field {
+		protected int $size = 10;
+
 		public function __construct(string $name, Table $table) {
 			parent::__construct('id', $name, $table);
 
-			$this->_type = 'int unsigned';
+			$this->_type = ['int unsigned', "int({$this->size}) unsigned"];
 			$this->_null = 'NO';
 			$this->_key = 'PRI';
 			$this->_default = null;
-			$this->_extra = 'auto_increment';
+			$this->_extra = ['auto_increment'];
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` int unsigned NOT NULL AUTO_INCREMENT"; }

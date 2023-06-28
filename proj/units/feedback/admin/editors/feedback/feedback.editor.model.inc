@@ -3,8 +3,8 @@
 	namespace Proj\Admin\Editor\Model;
 
 	use Base\DB\MySQLi\Table;
-	use Base\DB\Select;
-	use Base\EditorMySQLi\Model;
+	use Base\DB\MySQLi\Select;
+	use Base\Editor\MySQLi\Model;
 	use Proj\Units\Consts;
 
 	class Feedback extends Model {

@@ -11,11 +11,6 @@
 			$columns = '(`' . implode('`, `', $this->fields) . '`)';
 			$this->table->Query("ALTER TABLE `{$this->table->GetName()}` ADD CONSTRAINT `{$this->name}` PRIMARY KEY {$columns};");
 		}
-//		ALTER TABLE books
-//		DROP PRIMARY KEY;
-
-//		ALTER TABLE books
-//		ADD PRIMARY KEY (book_id);
 
 		public function GetFields(): array {
 			return $this->fields;

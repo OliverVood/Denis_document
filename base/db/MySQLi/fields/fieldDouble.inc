@@ -6,11 +6,11 @@
 		public function __construct(string $name, Table $table) {
 			parent::__construct('double', $name, $table);
 
-			$this->_type = 'double';
+			$this->_type = ['double'];
 			$this->_null = 'NO';
 			$this->_key = '';
 			$this->_default = '0';
-			$this->_extra = '';
+			$this->_extra = [''];
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` double NOT NULL DEFAULT '0'"; }

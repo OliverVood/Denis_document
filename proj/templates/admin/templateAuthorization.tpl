@@ -34,7 +34,7 @@
 					<meta http-equiv = "X-UA-Compatible" content = "ie=edge">
 					<title>Document</title>
 					<?php
-						TemplateAuthorization::$instance->BrowseHead();;
+						TemplateAuthorization::$instance->BrowseHead();
 					?>
 				</head>
 				<body>

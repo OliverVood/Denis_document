@@ -14,7 +14,7 @@
 			$this->table = $table;
 		}
 
-		abstract public function Check(?array $data_field_db);
+		abstract public function Check(array $data): bool;
 
 		public function GetName(): string {
 			return $this->name;

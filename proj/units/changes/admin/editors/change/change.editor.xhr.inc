@@ -5,7 +5,7 @@
 	require DIR_UNITS . 'changes/admin/editors/change/change.editor.common.inc';
 	require DIR_UNITS . 'changes/admin/editors/change/change.editor.model.inc';
 
-	use Base\EditorMySQLi\XHR\Editor;
+	use Base\Editor\MySQLi\XHR\Editor;
 	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Editor\Common;
 	use Proj\Admin\Editor\Model;

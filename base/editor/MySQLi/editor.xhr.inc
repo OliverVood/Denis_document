@@ -1,6 +1,6 @@
 <?php
 
-	namespace Base\EditorMySQLi\XHR;
+	namespace Base\Editor\MySQLi\XHR;
 
 	require DIR_BASE . 'editor/editor.xhr.inc';
 	require DIR_BASE . 'editor/MySQLi/editor.model.inc';

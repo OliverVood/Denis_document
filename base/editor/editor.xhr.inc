@@ -124,7 +124,7 @@
 			$this->model->SetState($state, $id);
 
 			$fields				= $this->FieldsSelect();
-			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);;
+			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
 			$navigate			= $this->NavigateSelect();
 			$manage				= $this->ManageSelect();
 

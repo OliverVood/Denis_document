@@ -1,8 +1,8 @@
 <?php
 
-	namespace Base\DB;
+	namespace Base\DB\MySQLi;
 
-	class Select extends Query {
+	class Select implements \Base\DB\Select {
 		private array $fields			= [];
 		private array $calc				= [];
 		private string $table			= '';
@@ -66,7 +66,9 @@
 				$order = ' ORDER BY ' . implode(', ', $order);
 			}
 
-			return "SELECT {$fields} FROM `{$this->table}`{$where}{$order}{$limit}";
+			$group = $this->group ? ' GROUP BY `' . implode('`, `', $this->group) . '`' : '';
+
+			return "SELECT {$fields} FROM `{$this->table}`{$where}{$order}{$group}{$limit}";
 		}
 
 	}

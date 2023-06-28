@@ -8,24 +8,24 @@
 		const ACTION_UPDATE		= -2;
 		const ACTION_DELETE		= -4;
 
-		protected string $_type;
+		protected array $_type;
 		protected string $_null;
 		protected string $_key;
 		protected ?string $_default;
-		protected string $_extra;
+		protected array $_extra;
 
 		/** @var Table $table */
 
 		abstract public function CreationFormat(): string;
 		abstract public function UpdatingFormat(): string;
 
-		public function Check(?array $data): bool {
+		public function Check(array $data): bool {
 			if (
-				$data['Type'] !== $this->_type ||
+				!in_array($data['Type'], $this->_type) ||
 				$data['Null'] !== $this->_null ||
 				$data['Key'] !== $this->_key ||
 				$data['Default'] !== $this->_default ||
-				$data['Extra'] !== $this->_extra
+				!in_array($data['Extra'], $this->_extra)
 			) return false;
 
 			return true;

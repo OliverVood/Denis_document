@@ -2,12 +2,10 @@
 
 	namespace Base\Editor;
 
-	use Base\DB\Select;
 	use Base\DB\Table;
 
 	class Model {
 		protected Table $table;
-		protected Select $querySelect;
 		protected array $states;
 		protected array $params;
 
@@ -19,9 +17,6 @@
 		}
 
 		protected function Init(): void {
-			$this->querySelect = new Select();
-			$this->querySelect->calc('*')->table($this->table->GetName());
-
 			$this->states = [];
 		}
 

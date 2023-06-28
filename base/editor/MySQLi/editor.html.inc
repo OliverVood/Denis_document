@@ -1,6 +1,6 @@
 <?php
 
-	namespace Base\EditorMySQLi\HTML;
+	namespace Base\Editor\MySQLi\HTML;
 
 	require DIR_BASE . 'editor/editor.html.inc';
 	require DIR_BASE . 'editor/MySQLi/editor.model.inc';

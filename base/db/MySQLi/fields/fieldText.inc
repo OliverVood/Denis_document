@@ -6,11 +6,11 @@
 		public function __construct(string $name, Table $table) {
 			parent::__construct('text', $name, $table);
 
-			$this->_type = 'text';
+			$this->_type = ['text'];
 			$this->_null = 'NO';
 			$this->_key = '';
 			$this->_default = null;
-			$this->_extra = '';
+			$this->_extra = [''];
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` text NOT NULL"; }

@@ -6,11 +6,11 @@
 		public function __construct(string $name, Table $table) {
 			parent::__construct('float', $name, $table);
 
-			$this->_type = 'float';
+			$this->_type = ['float'];
 			$this->_null = 'NO';
 			$this->_key = '';
 			$this->_default = '0';
-			$this->_extra = '';
+			$this->_extra = [''];
 		}
 
 		private function GetFormat(): string { return "`{$this->name}` float NOT NULL DEFAULT '0'"; }

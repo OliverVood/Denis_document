@@ -5,7 +5,7 @@
 	require DIR_UNITS . 'news/admin/editors/news/news.editor.common.inc';
 	require DIR_UNITS . 'news/admin/editors/news/news.editor.model.inc';
 
-	use Base\EditorMySQLi\HTML\Editor;;
+	use Base\Editor\MySQLi\HTML\Editor;
 	use Base\DB\MySQLi\Table;
 	use Proj\Admin\Editor\Common;
 	use Proj\Admin\Editor\Model;
