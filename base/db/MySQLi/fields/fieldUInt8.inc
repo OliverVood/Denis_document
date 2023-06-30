@@ -5,8 +5,8 @@
 	class FieldUInt8 extends Field {
 		protected int $size = 3;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('uint8', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('uint8', $name, $table, $description);
 
 			$this->_type = ['tinyint unsigned', "tinyint({$this->size}) unsigned"];
 			$this->_null = 'NO';

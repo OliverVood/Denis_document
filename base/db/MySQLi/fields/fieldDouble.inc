@@ -3,8 +3,8 @@
 	namespace Base\DB\MySQLi;
 
 	class FieldDouble extends Field {
-		public function __construct(string $name, Table $table) {
-			parent::__construct('double', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('double', $name, $table, $description);
 
 			$this->_type = ['double'];
 			$this->_null = 'NO';

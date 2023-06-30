@@ -15,7 +15,7 @@ input {
 body {
 	margin: 0; height: 100%; display: flex; flex-direction: column;
 	> header {
-		display: flex; background-color: $color-primary-dark; color: $color-text-primary; background-image: url("img/logo/logo.svg"); background-size: 26px; background-repeat: no-repeat; background-position: left 10px center;
+		position: relative; display: flex; background-color: $color-primary-dark; color: $color-text-primary; background-image: url("img/logo/logo.svg"); background-size: 26px; background-repeat: no-repeat; background-position: left 10px center;
 		> div { flex: auto; padding: 1rem 0.6rem 1rem 3.5rem; }
 		> .logout {
 			flex: none; width: 40px; background-image: url("img/ui/white/exit.svg"); background-size: 19px; background-position: center; background-repeat: no-repeat;
@@ -25,12 +25,12 @@ body {
 	> div {
 		flex: auto; display: flex;
 		menu {
-			flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
+			position: relative; z-index: 1; flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
 			a { color: $color-text-primary; }
 		}
-		main { flex: auto; /*position: relative;*/ }
+		main { flex: auto; position: relative; }
 	}
-	> footer { padding: 1rem 0.6rem; text-align: center; background-color: $color-primary-dark; color: $color-text-primary; }
+	> footer { position: relative; padding: 1rem 0.6rem; text-align: center; background-color: $color-primary-dark; color: $color-text-primary; }
 }
 
 menu {

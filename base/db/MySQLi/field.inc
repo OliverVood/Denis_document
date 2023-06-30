@@ -43,6 +43,10 @@
 			return true;
 		}
 
+		public function Structure() : array {
+			return ['name' => $this->name, 'type' => $this->type, 'description' => $this->description];
+		}
+
 	}
 
 	require DIR_BASE . 'db/MySQLi/fields/fieldID.inc';

@@ -5,8 +5,8 @@
 	class FieldInt24 extends Field {
 		protected int $size = 8;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('int24', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('int24', $name, $table, $description);
 
 			$this->_type = ['mediumint', "mediumint({$this->size})"];
 			$this->_null = 'NO';

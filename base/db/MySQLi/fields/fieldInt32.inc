@@ -5,8 +5,8 @@
 	class FieldInt32 extends Field {
 		protected int $size = 10;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('int32', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('int32', $name, $table, $description);
 
 			$this->_type = ['int', "int({$this->size})"];
 			$this->_null = 'NO';

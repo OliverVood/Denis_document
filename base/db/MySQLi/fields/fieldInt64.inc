@@ -5,8 +5,8 @@
 	class FieldInt64 extends Field {
 		protected int $size = 20;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('int64', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('int64', $name, $table, $description);
 
 			$this->_type = ['bigint', "bigint({$this->size})"];
 			$this->_null = 'NO';

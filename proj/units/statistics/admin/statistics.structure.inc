@@ -18,21 +18,21 @@
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_ip = new Table(self::TABLES['ip'], $this->db);
-			$this->table_ip->id('id');
-			$this->table_ip->timestamp('datecr');
-			$this->table_ip->uint32('ip');
-			$this->table_ip->uint32('uid');
-			$this->table_ip->string('path', 255);
-			$this->table_ip->string('params', 255);
+			$this->table_ip = new Table(self::TABLES['ip'], $this->db, 'Статистика посещений');
+			$this->table_ip->id('id', 'Идентификатор');
+			$this->table_ip->timestamp('datecr', false, 'Дата создания');
+			$this->table_ip->uint32('ip', 'IP адрес');
+			$this->table_ip->uint32('uid', 'ID пользователя');
+			$this->table_ip->string('path', 255, 'Путь');
+			$this->table_ip->string('params', 255, 'Параметры');
 
-			$this->table_act = new Table(self::TABLES['act'], $this->db);
-			$this->table_act->id('id');
-			$this->table_act->timestamp('datecr');
-			$this->table_act->uint32('uid');
-			$this->table_act->string('object', 30);
-			$this->table_act->string('action', 30);
-			$this->table_act->string('params', 500);
+			$this->table_act = new Table(self::TABLES['act'], $this->db, '');
+			$this->table_act->id('id', 'Идентификатор');
+			$this->table_act->timestamp('datecr', false, 'Дата создания');
+			$this->table_act->uint32('uid', 'ID пользователя');
+			$this->table_act->string('object', 30, 'Объект');
+			$this->table_act->string('action', 30, 'Действие');
+			$this->table_act->string('params', 500, 'Параметры');
 
 			$this->db->PushTables(
 				$this->table_ip,

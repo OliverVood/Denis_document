@@ -19,7 +19,7 @@
 		}
 
 		public function Structure(): array {
-			return [];
+			return $this->db->Structure();
 		}
 
 		public function DBCheck(): array {

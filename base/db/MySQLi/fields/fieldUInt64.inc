@@ -5,8 +5,8 @@
 	class FieldUInt64 extends Field {
 		protected int $size = 20;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('uint64', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('uint64', $name, $table, $description);
 
 			$this->_type = ['bigint unsigned', "bigint({$this->size}) unsigned"];
 			$this->_null = 'NO';

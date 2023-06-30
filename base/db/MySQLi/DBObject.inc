@@ -78,4 +78,18 @@
 			return true;
 		}
 
+		/**
+		 * Возвращает структуру базы данных
+		 * @return array
+		 */
+		public function Structure(): array {
+			$structure = [
+				'name' => $this->GetName(),
+				'tables' => []
+			];
+			foreach ($this->tables as $table) $structure['tables'][] = $table->Structure();
+
+			return $structure;
+		}
+
 	}

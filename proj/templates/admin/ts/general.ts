@@ -132,5 +132,96 @@ namespace Admin {
 
 		}
 
+		type StructureField		= { name: string, type: string; description: string; };
+		type StructureTable			= { name: string, description: string, params: {[key: string]: string}, fields: StructureField[] };
+		type StructureDB			= { name: string, tables: StructureTable[] };
+		type DisplayMode			= 'name' | 'description';
+
+		export class Structure {
+			db						: DB;
+			display_mode			: DisplayMode;
+
+			$structure				: HTMLElement;
+			$panel					: HTMLDivElement;
+			$display				: HTMLDivElement;
+
+			constructor(data: StructureDB) {
+				this.$structure		= document.getElementById('structure');
+				this.db 			= new DB(data);
+				this.display_mode	= 'description';
+
+				this.$panel			= document.createElement('div'); this.$panel.className			= 'panel';
+				this.$display		= document.createElement('div'); this.$display.className		= 'display';
+				this.SwitchDisplayMode();
+
+				this.$display.addEventListener('click', () => this.SwitchDisplayMode());
+
+				this.$panel.append(this.$display);
+				this.$structure.append(this.$panel);
+			}
+
+			private SwitchDisplayMode(): void {
+				this.$display.innerText = (this.display_mode === 'name') ? 'D' : 'N';
+				this.display_mode = (this.display_mode === 'name') ? 'description' : 'name';
+				this.$structure.className = (this.display_mode === 'name') ? 'display_description' : 'display_name';
+			}
+
+		}
+
+		class DB {
+			tables					: Table[];
+
+			constructor(data: StructureDB) {
+				this.tables			= [];
+				for (const i in data['tables']) this.tables.push(new Table(data['tables'][i]));
+			}
+
+		}
+
+		class Table {
+			private readonly $table				: HTMLDivElement;
+			private readonly $drag				: HTMLDivElement;
+			private readonly $header			: HTMLDivElement;
+			private readonly $title				: HTMLDivElement;
+			private readonly $name				: HTMLDivElement;
+			private readonly $description		: HTMLDivElement;
+			private readonly $menu				: HTMLDivElement;
+			private readonly $rows				: HTMLDivElement;
+
+			constructor(data: StructureTable) {
+				this.$table 					= document.createElement('div'); this.$table.className			= 'table';
+				this.$drag 						= document.createElement('div'); this.$drag.className			= 'drag';
+				this.$header 					= document.createElement('div'); this.$header.className			= 'header';
+				this.$title 					= document.createElement('div'); this.$title.className			= 'title';
+				this.$name 						= document.createElement('div'); this.$name.className			= 'name';
+				this.$description 				= document.createElement('div'); this.$description.className	= 'description';
+				this.$menu 						= document.createElement('div'); this.$menu.className			= 'menu';
+				this.$rows 						= document.createElement('div'); this.$rows.className			= 'rows';
+
+				this.$name.innerText			= data.name;
+				this.$description.innerText		= data.description;
+				this.$menu.innerText			= '▼';
+
+				this.$table.append(this.$drag, this.$header, this.$rows);
+				this.$header.append(this.$title, this.$menu);
+				this.$title.append(this.$name, this.$description);
+
+				for (const i in data['fields']) {
+					let $wrap				= document.createElement('div');
+					let $name				= document.createElement('div'); $name.className			= 'name';
+					let $description		= document.createElement('div'); $description.className		= 'description';
+
+					$name.innerText			= data['fields'][i].name;
+					$description.innerText	= data['fields'][i].description;
+
+					$wrap.append($name, $description);
+					this.$rows.append($wrap);
+				}
+
+				document.getElementById('structure').append(this.$table);
+			}
+
+		}
+
 	}
 }

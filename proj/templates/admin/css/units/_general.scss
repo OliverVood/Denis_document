@@ -26,4 +26,33 @@
 	}
 }
 
-//#structure { position: absolute; top: 3.6rem; right: 0.2rem; bottom: 0.2rem; left: 0.2rem; }
+#structure {
+	position: absolute; top: 3.6rem; right: 0.2rem; bottom: 0.2rem; left: 0.2rem; overflow: auto;
+	> div {
+		background-color: rgba($color-bg, 0.8);
+		&.panel {
+			position: absolute; left: 300px; top: 50px; border: 1px solid $color-secondary; box-shadow: $color-neutral-black 0 0 2px; user-select: none;
+			> .display { padding: 5px; cursor: pointer; }
+		}
+		&.table {
+			position: absolute; border: 1px solid $color-secondary; box-shadow: $color-neutral-black 0 0 2px; cursor: default;
+			> .drag { position: absolute; top: 5px; right: 5px; left: 5px; height: 10px; border-radius: 5px; background-color: $color-light; cursor: grab; }
+			> .header {
+				display: flex; padding-top: 20px; background-color: $color-secondary; color: $color-text-primary;
+				> .title { flex: auto; padding: 5px; font-weight: bold; }
+				> .menu { padding: 5px; cursor: pointer; }
+			}
+			> .rows > div {
+				padding: 5px;
+				&:hover { background-color: $color-neutral-light; }
+			}
+		}
+	}
+	&.display_name {
+		.name { display: none; }
+		.description { display: block; }
+	}	&.display_description {
+		.name { display: block; }
+		.description { display: none; }
+	}
+}

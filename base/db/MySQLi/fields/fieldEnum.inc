@@ -5,8 +5,8 @@
 	class FieldEnum extends Field {
 		private array $enum;
 
-		public function __construct(string $name, array $enum, Table $table) {
-			parent::__construct('enum', $name, $table);
+		public function __construct(string $name, array $enum, Table $table, string $description) {
+			parent::__construct('enum', $name, $table, $description);
 
 			$this->enum = $enum;
 

@@ -3,8 +3,8 @@
 	namespace Base\DB\MySQLi;
 
 	class FieldText extends Field {
-		public function __construct(string $name, Table $table) {
-			parent::__construct('text', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('text', $name, $table, $description);
 
 			$this->_type = ['text'];
 			$this->_null = 'NO';

@@ -17,12 +17,12 @@
 			parent::__construct();
 			$this->db = DBObject::instance();
 
-			$this->table_users = new Table(self::TABLES['users'], $this->db);
-			$this->table_users->id('id');
-			$this->table_users->timestamp('datecr');
-			$this->table_users->timestamp('datemd', true);
-			$this->table_users->string('hash', 64);
-			$this->table_users->bool('fic');
+			$this->table_users = new Table(self::TABLES['users'], $this->db, 'Пользователи');
+			$this->table_users->id('id', 'Идентификатор');
+			$this->table_users->timestamp('datecr', false, 'Дата создания');
+			$this->table_users->timestamp('datemd', true, 'Дата изменения');
+			$this->table_users->string('hash', 64, 'Хэш');
+			$this->table_users->bool('fic', 'Фиктивность');
 
 			$this->db->PushTables($this->table_users);
 		}

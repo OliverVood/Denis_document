@@ -17,6 +17,7 @@
 
 		abstract public function Check(): array;
 		abstract public function Make(): bool;
+		abstract public function Structure(): array;
 
 		public function GetName(): string {
 			return $this->dbname;

@@ -5,8 +5,8 @@
 	class FieldBool extends Field {
 		protected int $size = 1;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('bool', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('bool', $name, $table, $description);
 
 			$this->_type = ["tinyint({$this->size})"];
 			$this->_null = 'NO';

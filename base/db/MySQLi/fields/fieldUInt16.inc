@@ -5,8 +5,8 @@
 	class FieldUInt16 extends Field {
 		protected int $size = 5;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('uint16', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('uint16', $name, $table, $description);
 
 			$this->_type = ['smallint unsigned', "smallint({$this->size}) unsigned"];
 			$this->_null = 'NO';

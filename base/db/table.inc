@@ -4,13 +4,15 @@
 
 	abstract class Table {
 		protected string $name;
+		protected string $description;
 
 		protected DBObject $db;
 
 		/** @var Field[] */ protected array $structure;
 
-		protected function __construct($name, $db) {
+		protected function __construct($name, $db, string $description = '') {
 			$this->name = $name;
+			$this->description = $description;
 			$this->db = $db;
 
 			$this->structure = [];
@@ -18,10 +20,11 @@
 
 		abstract public function Check();
 		abstract public function Make(array $fields): bool;
+		abstract public function Structure(): array;
 
 		abstract public function Create();
 
-		abstract public function id(string $name): void;
+		abstract public function id(string $name, string $description): void;
 		abstract public function bool(string $name): void;
 		abstract public function int8(string $name): void;
 		abstract public function int16(string $name): void;

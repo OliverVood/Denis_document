@@ -5,8 +5,8 @@
 	class FieldUInt32 extends Field {
 		protected int $size = 10;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('uint32', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('uint32', $name, $table, $description);
 
 			$this->_type = ['int unsigned', "int({$this->size}) unsigned"];
 			$this->_null = 'NO';

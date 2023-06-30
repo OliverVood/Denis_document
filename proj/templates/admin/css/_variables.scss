@@ -15,12 +15,14 @@ $color-secondary-dark			: #00506C;
 $color-tertiary-light			: #68909F;
 
 $color-negative					: #950000;
-//$color-negative-light					: #AD675B;
+//$color-negative-light			: #AD675B;
 
-//$color-neutral-black					: #565656;
-$color-neutral							: $color-primary-super-light;
-$color-neutral-light					: #d9d9d9;
-$color-neutral-extra-light				: #efefef;
+$color-neutral					: $color-primary-super-light;
+$color-neutral-light			: #d9d9d9;
+$color-neutral-extra-light		: #efefef;
+$color-neutral-black			: $color-primary;
 
 $color-link						: $color-secondary-light;
 $color-link-primary				: $color-light;
+
+$color-bg						: $color-light;

@@ -5,8 +5,8 @@
 	class FieldID extends Field {
 		protected int $size = 10;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('id', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('id', $name, $table, $description);
 
 			$this->_type = ['int unsigned', "int({$this->size}) unsigned"];
 			$this->_null = 'NO';

@@ -3,8 +3,8 @@
 	namespace Base\DB\MySQLi;
 
 	class FieldFloat extends Field {
-		public function __construct(string $name, Table $table) {
-			parent::__construct('float', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('float', $name, $table, $description);
 
 			$this->_type = ['float'];
 			$this->_null = 'NO';

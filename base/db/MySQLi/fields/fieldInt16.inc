@@ -5,8 +5,8 @@
 	class FieldInt16 extends Field {
 		protected int $size = 6;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('int16', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('int16', $name, $table, $description);
 
 			$this->_type = ['smallint', "smallint({$this->size})"];
 			$this->_null = 'NO';

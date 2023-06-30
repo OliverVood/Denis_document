@@ -5,8 +5,8 @@
 	class FieldString extends Field {
 		private int $length;
 
-		public function __construct(string $name, int $length, Table $table) {
-			parent::__construct('enum', $name, $table);
+		public function __construct(string $name, int $length, Table $table, string $description) {
+			parent::__construct('enum', $name, $table, $description);
 
 			$this->length = $length;
 

@@ -5,8 +5,8 @@
 	class FieldTimestamp extends Field {
 		private bool $update;
 
-		public function __construct(string $name, bool $update, Table $table) {
-			parent::__construct('timestamp', $name, $table);
+		public function __construct(string $name, bool $update, Table $table, string $description) {
+			parent::__construct('timestamp', $name, $table, $description);
 
 			$this->update = $update;
 

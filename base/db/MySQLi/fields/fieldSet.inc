@@ -5,8 +5,8 @@
 	class FieldSet extends Field {
 		private array $set;
 
-		public function __construct(string $name, array $set, Table $table) {
-			parent::__construct('set', $name, $table);
+		public function __construct(string $name, array $set, Table $table, string $description) {
+			parent::__construct('set', $name, $table, $description);
 
 			$this->set = $set;
 

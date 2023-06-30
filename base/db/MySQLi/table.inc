@@ -15,29 +15,29 @@
 
 		/** @var DBObject $db */
 
-		public function __construct($name, $db) {
-			parent::__construct($name, $db);
+		public function __construct($name, $db, string $description = '') {
+			parent::__construct($name, $db, $description);
 		}
 
-		public function id(string $name): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primaryIndex = new Primary($name, [$name], $this); $this->PushField(new FieldID($name, $this)); }
-		public function bool(string $name): void { $this->PushField(new FieldBool($name, $this)); }
-		public function int8(string $name): void { $this->PushField(new FieldInt8($name, $this)); }
-		public function int16(string $name): void { $this->PushField(new FieldInt16($name, $this)); }
-		public function int24(string $name): void { $this->PushField(new FieldInt24($name, $this)); }
-		public function int32(string $name): void { $this->PushField(new FieldInt32($name, $this)); }
-		public function int64(string $name): void { $this->PushField(new FieldInt64($name, $this)); }
-		public function uint8(string $name): void { $this->PushField(new FieldUInt8($name, $this)); }
-		public function uint16(string $name): void { $this->PushField(new FieldUInt16($name, $this)); }
-		public function uint24(string $name): void { $this->PushField(new FieldUInt24($name, $this)); }
-		public function uint32(string $name): void { $this->PushField(new FieldUInt32($name, $this)); }
-		public function uint64(string $name): void { $this->PushField(new FieldUInt64($name, $this)); }
-		public function float(string $name): void { $this->PushField(new FieldFloat($name, $this)); }
-		public function double(string $name): void { $this->PushField(new FieldDouble($name, $this)); }
-		public function timestamp(string $name, bool $update = false): void { $this->PushField(new FieldTimestamp($name, $update, $this)); }
-		public function enum(string $name, array $enum): void { $this->PushField(new FieldEnum($name, $enum, $this)); }
-		public function set(string $name, array $set): void { $this->PushField(new FieldSet($name, $set, $this)); }
-		public function string(string $name, int $length): void { $this->PushField(new FieldString($name, $length, $this)); }
-		public function text(string $name): void { $this->PushField(new FieldText($name, $this)); }
+		public function id(string $name, string $description = ''): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primaryIndex = new Primary($name, [$name], $this); $this->PushField(new FieldID($name, $this, $description)); }
+		public function bool(string $name, string $description = ''): void { $this->PushField(new FieldBool($name, $this, $description)); }
+		public function int8(string $name, string $description = ''): void { $this->PushField(new FieldInt8($name, $this, $description)); }
+		public function int16(string $name, string $description = ''): void { $this->PushField(new FieldInt16($name, $this, $description)); }
+		public function int24(string $name, string $description = ''): void { $this->PushField(new FieldInt24($name, $this, $description)); }
+		public function int32(string $name, string $description = ''): void { $this->PushField(new FieldInt32($name, $this, $description)); }
+		public function int64(string $name, string $description = ''): void { $this->PushField(new FieldInt64($name, $this, $description)); }
+		public function uint8(string $name, string $description = ''): void { $this->PushField(new FieldUInt8($name, $this, $description)); }
+		public function uint16(string $name, string $description = ''): void { $this->PushField(new FieldUInt16($name, $this, $description)); }
+		public function uint24(string $name, string $description = ''): void { $this->PushField(new FieldUInt24($name, $this, $description)); }
+		public function uint32(string $name, string $description = ''): void { $this->PushField(new FieldUInt32($name, $this, $description)); }
+		public function uint64(string $name, string $description = ''): void { $this->PushField(new FieldUInt64($name, $this, $description)); }
+		public function float(string $name, string $description = ''): void { $this->PushField(new FieldFloat($name, $this, $description)); }
+		public function double(string $name, string $description = ''): void { $this->PushField(new FieldDouble($name, $this, $description)); }
+		public function timestamp(string $name, bool $update = false, string $description = ''): void { $this->PushField(new FieldTimestamp($name, $update, $this, $description)); }
+		public function enum(string $name, array $enum, string $description = ''): void { $this->PushField(new FieldEnum($name, $enum, $this, $description)); }
+		public function set(string $name, array $set, string $description = ''): void { $this->PushField(new FieldSet($name, $set, $this, $description)); }
+		public function string(string $name, int $length, string $description = ''): void { $this->PushField(new FieldString($name, $length, $this, $description)); }
+		public function text(string $name, string $description = ''): void { $this->PushField(new FieldText($name, $this, $description)); }
 //		public function AddPrimary(string $name, array $fields): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primary = new Primary($name, $fields, $this); }
 
 		private function GetFieldListApp(): array {
@@ -112,6 +112,21 @@
 			if ($this->primaryIndex) $after .= ", PRIMARY KEY (`{$this->primaryIndex->GetFields()[0]}`)";
 			$this->db->query("CREATE TABLE `{$this->name}` ({$fields}{$after}) ENGINE = {$this->engine} DEFAULT CHARSET = {$this->encoding}");
 			$this->primary?->Create();
+		}
+
+		public function Structure(): array {
+			$table = [
+				'name' => $this->name,
+				'description' => $this->description,
+				'params' => [
+					'engine' => $this->engine,
+					'encoding' => $this->encoding
+				],
+				'fields' => []
+			];
+			foreach ($this->structure as $field) $table['fields'][] = $field->Structure();
+
+			return $table;
 		}
 
 	}

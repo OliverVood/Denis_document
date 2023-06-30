@@ -5,8 +5,8 @@
 	class FieldInt8 extends Field {
 		protected int $size = 3;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct('int8', $name, $table);
+		public function __construct(string $name, Table $table, string $description) {
+			parent::__construct('int8', $name, $table, $description);
 
 			$this->_type = ['tinyint', "tinyint({$this->size})"];
 			$this->_null = 'NO';
