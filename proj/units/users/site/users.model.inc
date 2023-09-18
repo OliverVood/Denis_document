@@ -2,11 +2,12 @@
 
 	namespace Proj\Site\Model;
 
+	use Base\Model;
 	use Base\Instance;
 	use Proj\Units\Consts;
 	use Proj\DBQuery;
 
-	class Users {
+	class Users extends Model {
 		use Instance;
 
 		private DBQuery $db;
@@ -14,6 +15,8 @@
 		private static string | null $uid = null;
 
 		private function __construct() {
+			parent::__construct(__FILE__);
+
 			$this->db = DBQuery::instance();
 
 			$this->Identification();

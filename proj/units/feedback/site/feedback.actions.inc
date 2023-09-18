@@ -12,8 +12,8 @@
 		public static Action $feedback;
 		public static Action $do_feedback;
 
-		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+		protected function __construct($file) {
+			parent::__construct($file);
 		}
 
 		public static function RegActions() {

@@ -3,8 +3,8 @@
 	namespace Base\DB\MySQLi;
 
 	class Primary extends Key {
-		public function __construct(string $name, array $fields, Table $table) {
-			parent::__construct($name, $fields, $table);
+		public function __construct(string $name, Table $table, array $fields) {
+			parent::__construct('primary', $name, $table, $fields);
 		}
 
 		public function Create(): void {
@@ -14,6 +14,14 @@
 
 		public function GetFields(): array {
 			return $this->fields;
+		}
+
+		public function Structure(): array {
+			return [
+				'type' => $this->type,
+				'name' => $this->name,
+				'fields' => $this->fields
+			];
 		}
 
 	}

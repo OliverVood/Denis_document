@@ -3,6 +3,7 @@
 	namespace Proj;
 
 	use Base\DB\MySQLi;
+	use Base\Debugger;
 
 	class DBObject extends MySQLi\DBObject {
 
@@ -17,3 +18,5 @@
 	DBObject::init(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	if (!DBObject::instance()->State()) die('MySQLi database connection error! Code: ' . DBObject::instance()->GetErrorCode());
+
+	Debugger::SetDB(DBObject::instance());

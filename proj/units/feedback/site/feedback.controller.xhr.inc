@@ -21,7 +21,7 @@
 		private Model\Feedback $model;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 			$this->model = Model\Feedback::instance();
 
 			self::$view->Push(self::$feedback, Closure::fromCallable([$this, 'OnFeedback']));

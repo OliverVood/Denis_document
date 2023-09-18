@@ -13,8 +13,8 @@
 
 		protected Table $table_users;
 
-		protected function __construct() {
-			parent::__construct();
+		protected function __construct($file) {
+			parent::__construct($file);
 			$this->db = DBObject::instance();
 
 			$this->table_users = new Table(self::TABLES['users'], $this->db, 'Пользователи');

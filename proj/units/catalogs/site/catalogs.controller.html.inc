@@ -20,7 +20,7 @@
 		use Instance;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			self::$view->Push(self::$out_buttons, Closure::fromCallable([$this, 'OutButtons']));
 			self::$view->Push(self::$action_estimate, Closure::fromCallable([$this, 'OutEstimate']));

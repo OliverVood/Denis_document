@@ -18,7 +18,7 @@
 		public Editor\News $editor_news;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
 

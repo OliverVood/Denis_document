@@ -2,10 +2,10 @@
 
 	namespace Proj\Admin\Templates;
 
-	use Base\Templates;
+	use Base\Debugger;use Base\Templates;
 	use Base\Instance;
 	use Base\Templates\Versions as BaseVersions;
-	use Proj\Templates\Admin\Versions as AdminVersions;
+use Proj\DBObject;use Proj\Templates\Admin\Versions as AdminVersions;
 
 	class Template extends Templates\Template {
 		use Instance;
@@ -55,6 +55,8 @@
 					Base.Common.GlobalParams.Set('xhr', '<?= \XHR; ?>');
 					Base.Common.History.Initialization();
 					Admin.Common.Layout.Initialization();
+					Base.Common.Debugger.Initialization();
+					Base.Common.Debugger.Append(<?= json_encode(Debugger::Get()); ?>);
 				<?php Layout::instance()->js_loaded->Browse(); ?>
 				});
 			</script>

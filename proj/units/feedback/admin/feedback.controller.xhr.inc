@@ -15,7 +15,7 @@
 		public Editor\Feedback $editor_feedback;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->editor_feedback = new Editor\Feedback(self::NAME, $this->table_feedback);
 		}

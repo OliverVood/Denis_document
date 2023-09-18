@@ -20,8 +20,9 @@ namespace Base {
 		type ResponseHistory		= ResponseBase<'history', ResponseHistoryData>
 		type ResponseSection		= ResponseBase<'section', ResponseSectionData>
 		type ResponseNotice			= ResponseBase<'notice', ResponseNoticeData>
+		type ResponseDebugger		= ResponseBase<'debugger', any>
 
-		type Response 				= ResponseHistory | ResponseSection;
+		type Response 				= ResponseHistory | ResponseSection | ResponseDebugger;
 
 		export class Query {
 
@@ -81,6 +82,7 @@ namespace Base {
 					case 'section': Query.ExecuteSection(data); break;
 					case 'notice': Query.ExecuteNotice(data); break;
 					case 'data': Query.ExecuteHandler(handler, data); break;
+					case 'debugger': Debugger.Append(data); break;
 				}
 			}
 

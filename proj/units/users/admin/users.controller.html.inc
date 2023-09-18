@@ -20,7 +20,7 @@
 		private Model\Users $model;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->model = Model\Users::instance();
 		}

@@ -12,6 +12,7 @@
 		private string	$encoding 			= 'utf8';
 		private ?Primary $primary			= null;
 		private ?Primary $primaryIndex		= null;
+		private array $foreigners			= [];
 
 		/** @var DBObject $db */
 
@@ -19,7 +20,7 @@
 			parent::__construct($name, $db, $description);
 		}
 
-		public function id(string $name, string $description = ''): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primaryIndex = new Primary($name, [$name], $this); $this->PushField(new FieldID($name, $this, $description)); }
+		public function id(string $name, string $description = ''): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primaryIndex = new Primary($name, $this, [$name]); $this->PushField(new FieldID($name, $this, $description)); }
 		public function bool(string $name, string $description = ''): void { $this->PushField(new FieldBool($name, $this, $description)); }
 		public function int8(string $name, string $description = ''): void { $this->PushField(new FieldInt8($name, $this, $description)); }
 		public function int16(string $name, string $description = ''): void { $this->PushField(new FieldInt16($name, $this, $description)); }
@@ -38,7 +39,8 @@
 		public function set(string $name, array $set, string $description = ''): void { $this->PushField(new FieldSet($name, $set, $this, $description)); }
 		public function string(string $name, int $length, string $description = ''): void { $this->PushField(new FieldString($name, $length, $this, $description)); }
 		public function text(string $name, string $description = ''): void { $this->PushField(new FieldText($name, $this, $description)); }
-//		public function AddPrimary(string $name, array $fields): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primary = new Primary($name, $fields, $this); }
+//		public function AddPrimary(string $name, array $fields): void { if ($this->primary || $this->primaryIndex) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->primary = new Primary($name, $this, $fields); }
+		public function AddForeign(string $name, array $fields, string $references_table, array $references_fields, int $relationship_from = \Base\DB\DBObject::ER_RELATIONSHIP_MANY, int $relationship_to = \Base\DB\DBObject::ER_RELATIONSHIP_ONE): void { if (isset($this->foreigners[$name])) { die("Table `{$this->name}` structure error! Primary key already exists."); } $this->foreigners[] = new Foreign($name, $this, $fields, $references_table, $references_fields, $relationship_from, $relationship_to); }
 
 		private function GetFieldListApp(): array {
 			$out = [];
@@ -122,9 +124,12 @@
 					'engine' => $this->engine,
 					'encoding' => $this->encoding
 				],
-				'fields' => []
+				'fields' => [],
+				'keys' => []
 			];
 			foreach ($this->structure as $field) $table['fields'][] = $field->Structure();
+			if ($this->primaryIndex) $table['keys'][] = $this->primaryIndex->Structure();
+			foreach ($this->foreigners as $foreigner) $table['keys'][] = $foreigner->Structure();
 
 			return $table;
 		}

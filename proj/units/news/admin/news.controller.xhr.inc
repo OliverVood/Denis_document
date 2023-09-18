@@ -15,7 +15,7 @@
 		public Editor\News $editor_news;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->editor_news = new Editor\News(self::NAME, $this->table_news);
 		}

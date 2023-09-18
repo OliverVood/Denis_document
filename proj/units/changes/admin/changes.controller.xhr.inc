@@ -17,7 +17,7 @@
 		public Editor\Change $editor_change;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->editor_changes = new Editor\Changes(self::NAME, $this->table_changes);
 			$this->editor_change = new Editor\Change('change', $this->table_change);

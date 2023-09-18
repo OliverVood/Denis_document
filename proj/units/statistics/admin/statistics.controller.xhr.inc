@@ -17,7 +17,7 @@
 		public Editor\Actions $editor_act;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->editor_ip = new Editor\Ip(self::NAME . '_ip', $this->table_ip);
 			$this->editor_act = new Editor\Actions(self::NAME . '_act', $this->table_act);

@@ -2,16 +2,19 @@
 
 	namespace Proj\Site\Model;
 
+	use Base\Model;
 	use Base\Instance;
 	use Proj\Units\Consts;
 	use Proj\DBQuery;
 
-	class News {
+	class News extends Model {
 		use Instance;
 
 		private DBQuery $db;
 
 		private function __construct() {
+			parent::__construct(__FILE__);
+
 			$this->db = DBQuery::instance();
 		}
 

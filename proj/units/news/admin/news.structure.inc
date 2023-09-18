@@ -13,8 +13,8 @@
 
 		protected Table $table_news;
 
-		protected function __construct() {
-			parent::__construct();
+		protected function __construct($file) {
+			parent::__construct($file);
 			$this->db = DBObject::instance();
 
 			$this->table_news = new Table(self::TABLES['news'], $this->db, 'Новости');

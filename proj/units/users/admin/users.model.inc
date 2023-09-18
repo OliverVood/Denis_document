@@ -2,15 +2,20 @@
 
 	namespace Proj\Admin\Model;
 
+	use Base\Model;
 	use Base\Instance;
 
-	class Users {
+	class Users extends Model {
 		use Instance;
 
 		private static string | null $uid = null;
 		private static bool $login = false;
 
-		private function __construct() { $this->CheckSession(); }
+		private function __construct() {
+			parent::__construct(__FILE__);
+
+			$this->CheckSession();
+		}
 
 		private function CheckSession(): void {
 			if (isset($_SESSION['USERS'])) {

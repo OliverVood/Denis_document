@@ -3,6 +3,7 @@
 	namespace Proj;
 
 	use Base\DB\MySQLi;
+	use Base\Debugger;
 
 	class DBQuery extends MySQLi\DBQuery {
 
@@ -17,3 +18,5 @@
 	DBQuery::init(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	if (!DBQuery::instance()->State()) die('MySQLi database connection error! Code: ' . DBQuery::instance()->GetErrorCode());
+
+	Debugger::SetDB(DBQuery::instance());

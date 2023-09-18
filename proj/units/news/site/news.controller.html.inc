@@ -21,7 +21,7 @@
 		private Model\News $model;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->model = Model\News::instance();
 

@@ -11,7 +11,7 @@
 		use Instance;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 		}
 
 	}

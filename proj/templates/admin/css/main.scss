@@ -12,6 +12,7 @@ input {
 	outline: none; font-family: AjarSans, sans-serif; font-size: 1rem;
 	&[type="submit"] { @include MixBtn; cursor: pointer; }
 }
+.hide { display: none; }
 body {
 	margin: 0; height: 100%; display: flex; flex-direction: column;
 	> header {
@@ -82,3 +83,173 @@ main {
 }
 
 @import "units/general";
+
+$debug_color_head: #dd5e00;
+$debug_color_keyword: #dd5e00;
+$debug_color_number: #13b900;
+$debug_color_string: #0095b9;
+
+body.div.debugger { display: block; }
+.debugger {
+	position: absolute; right: 0; bottom: 0; left: 0; z-index: 1; color: $color-text-primary;
+	> .manager {
+		position: absolute; bottom: 0; left: 0; width: 40px; height: 40px;
+		> .toggle {
+			position: absolute; bottom: 0; left: 0; height: 30px; width: 30px; margin: 5px; border-radius: 0.2rem; background-image: url("img/ui/debuger/gear.svg"); background-size: 20px; background-position: center; background-repeat: no-repeat; cursor: pointer;
+			&:hover { box-shadow: 0 0 6px $color-primary; }
+		}
+		> .setting {
+			display: none; position: absolute; bottom: 40px; left: 0; background-color: $color-primary-dark;
+			> a {
+				height: 30px; width: 30px; margin: 5px; display: block; border-radius: 0.2rem; background-size: 14px; background-position: center; background-repeat: no-repeat; cursor: pointer;
+				&.record {
+					background-image: url("img/ui/debuger/record.svg");
+					&.active { background-image: url("img/ui/debuger/stop.svg"); }
+				}
+				&.track {
+					background-image: url("img/ui/debuger/track.svg");
+					&.active { background-image: url("img/ui/debuger/intrack.svg"); }
+				}
+				&.clear { background-image: url("img/ui/debuger/trash.svg"); }
+				&:hover { box-shadow: 0 0 6px $color-primary; }
+			}
+		}
+		&:hover > .setting { display: block; }
+	}
+	> .work {
+		width: 100%; background-color: $color-primary-dark;
+		> .drag { height: 2px; background-color: $color-primary-dark; cursor: n-resize; }
+		> .spaces {
+			padding: 5px; height: 200px; overflow: auto; background-color: $color-primary;
+		}
+		> .panel {
+			display: flex; align-items: center; gap: 5px; margin-left: 40px; height: 40px;
+			> a {
+				padding: 5px; color: $color-text-primary; cursor: pointer;
+				&:hover, &.active { background-color: $color-primary; }
+			}
+		}
+	}
+	.link {
+		cursor: pointer;
+		&:hover { color: $color-secondary-light; }
+	}
+	.table {
+		display: table; border-collapse: collapse;
+		> div {
+			display: table-row;
+			> div {
+				display: table-cell;
+				&:not(:last-child) { border-right: 10px solid #ff000000; }
+			}
+			&:not(:last-child) { border-bottom: 10px solid #ff000000; }
+		}
+		.head { font-weight: bold; color: $debug_color_head; }
+	}
+	.dump {
+		margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid $color-neutral;
+		> .title { margin-bottom: 4px; }
+		.variable {
+			display: flex; gap: 10px;
+			> .type { font-weight: bold; color: $debug_color_keyword; }
+			&.integer, &.double { > .value { color: $debug_color_number; } }
+			&.string > .value { color: $debug_color_string; }
+			&.NULL > .value { color: $color-text-primary; }
+			&.array > .value {
+				> .more {
+					+ .elems {
+						display: none;
+						> div {
+							display: flex; gap: 10px;
+							> .key {
+								&.number > span { color: $debug_color_number; }
+								&.string > span { color: $debug_color_string; }
+							}
+						}
+					}
+					&:before { content: "▶"; color: $color-text-primary; cursor: pointer; }
+					&.open {
+						&:before { content: "▼"; }
+						+ .elems { display: block; }
+					}
+				}
+			}
+			&.object {
+				> .value {
+					display: flex;
+					> .more {
+						+ .info {
+							display: none; flex-direction: column; gap: 5px;
+						}
+						&:before { content: "▶"; color: $color-text-primary; cursor: pointer; }
+						&.open {
+							&:before { content: "▼"; }
+							+ .info { display: flex; }
+						}
+					}
+				}
+				.namespace {
+					display: flex; align-items: center; gap: 10px;
+					.icon { background-image: url("img/ui/debuger/namespace.svg"), url("img/ui/debuger/rhombus.svg"); }
+				}
+				.class {
+					display: flex; align-items: center; gap: 10px;
+					.icon { background-image: url("img/ui/debuger/class.svg"), url("img/ui/debuger/circle.svg"); }
+				}
+				.constants {
+					display: flex; flex-direction: column; gap: 5px;
+					> div {
+						display: flex; gap: 10px;
+						> .icon {
+							&.public { background-image: url("img/ui/debuger/constant.svg"), url("img/ui/debuger/public.svg"); }
+							&.private { background-image: url("img/ui/debuger/constant.svg"), url("img/ui/debuger/private.svg"); }
+							&.protected { background-image: url("img/ui/debuger/constant.svg"), url("img/ui/debuger/protected.svg"); }
+							&.final.public { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/constant.svg"), url("img/ui/debuger/public.svg"); }
+							&.final.private { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/constant.svg"), url("img/ui/debuger/private.svg"); }
+							&.final.protected { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/constant.svg"), url("img/ui/debuger/protected.svg"); }
+						}
+						> .name { margin-top: 4px; }
+						> .variable { margin-top: 4px; }
+					}
+				}
+				.properties {
+					display: flex; flex-direction: column; gap: 5px;
+					> div {
+						display: flex; gap: 10px;
+						> .icon {
+							&.public { background-image: url("img/ui/debuger/field.svg"), url("img/ui/debuger/public.svg"); }
+							&.private { background-image: url("img/ui/debuger/field.svg"), url("img/ui/debuger/private.svg"); }
+							&.protected { background-image: url("img/ui/debuger/field.svg"), url("img/ui/debuger/protected.svg"); }
+							&.static.public { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/field.svg"), url("img/ui/debuger/public.svg"); }
+							&.static.private { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/field.svg"), url("img/ui/debuger/private.svg"); }
+							&.static.protected { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/field.svg"), url("img/ui/debuger/protected.svg"); }
+						}
+						> .name { margin-top: 4px; }
+						> .variable { margin-top: 4px; }
+					}
+				}
+				.methods {
+					display: flex; flex-direction: column; gap: 5px;
+					> div {
+						display: flex; gap: 10px; align-items: center;
+						> .icon {
+							&.public { background-image: url("img/ui/debuger/method.svg"), url("img/ui/debuger/public.svg"); }
+							&.private { background-image: url("img/ui/debuger/method.svg"), url("img/ui/debuger/private.svg"); }
+							&.protected { background-image: url("img/ui/debuger/method.svg"), url("img/ui/debuger/protected.svg"); }
+							&.static.public { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/public.svg"); }
+							&.static.private { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/private.svg"); }
+							&.static.protected { background-image: url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/protected.svg"); }
+							&.final.public { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/public.svg"); }
+							&.final.private { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/private.svg"); }
+							&.final.protected { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/protected.svg"); }
+							&.final.static.public { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/public.svg"); }
+							&.final.static.private { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/private.svg"); }
+							&.final.static.protected { background-image: url("img/ui/debuger/final.svg"), url("img/ui/debuger/static.svg"), url("img/ui/debuger/method.svg"), url("img/ui/debuger/protected.svg"); }
+						}
+					}
+				}
+				.icon { width: 20px; height: 20px; background-position: center; background-size: contain; background-repeat: no-repeat; }
+			}
+		}
+	}
+}

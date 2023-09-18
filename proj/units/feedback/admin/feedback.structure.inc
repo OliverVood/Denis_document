@@ -13,8 +13,8 @@
 
 		protected Table $table_feedback;
 
-		protected function __construct() {
-			parent::__construct();
+		protected function __construct($file) {
+			parent::__construct($file);
 			$this->db = DBObject::instance();
 
 			$this->table_feedback = new Table(self::TABLES['feedback'], $this->db, 'Обратная связь');

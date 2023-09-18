@@ -14,8 +14,8 @@
 		protected Table $table_changes;
 		protected Table $table_change;
 
-		protected function __construct() {
-			parent::__construct();
+		protected function __construct($file) {
+			parent::__construct($file);
 			$this->db = DBObject::instance();
 
 			$this->table_changes = new Table(self::TABLES['changes'], $this->db, 'Список актуального');
@@ -37,6 +37,7 @@
 			$this->table_change->text('content', 'Содержимое');
 			$this->table_change->string('hash', 32, 'Хэш файла');
 			$this->table_change->string('ext', 6, 'Расширение файла');
+			$this->table_change->AddForeign('foreign', ['cid'], self::TABLES['changes'], ['id']);
 
 			$this->db->PushTables($this->table_changes, $this->table_change);
 		}

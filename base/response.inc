@@ -41,7 +41,18 @@
 		}
 
 		#[NoReturn] public static function SendJSON(): void {
-			SendJSONData(self::$stack);
+			if (DEBUGGER) self::$stack[] = ['type' => 'debugger', 'data' => \Base\Debugger::Get()];
+			self::SendJSONData(self::$stack);
+		}
+
+		#[NoReturn] public static function SendJSONData(array $data): void {
+			self::SendJSONDo(json_encode($data));
+		}
+
+		#[NoReturn] public static function SendJSONDo(string $string): void {
+			header("Cache-Control: no-cache, no-store, must-revalidate");
+			header('Content-Type: application/json; charset=utf-8');
+			die($string);
 		}
 
 	}

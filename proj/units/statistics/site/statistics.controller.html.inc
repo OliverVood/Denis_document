@@ -16,7 +16,7 @@
 		private Model\Statistics $model;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			$this->model = Model\Statistics::instance();
 

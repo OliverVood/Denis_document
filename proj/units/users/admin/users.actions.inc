@@ -12,8 +12,8 @@
 		public static Action $auth;
 		public static Action $exit;
 
-		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+		protected function __construct($file) {
+			parent::__construct($file);
 		}
 
 		public static function RegActions() {

@@ -22,7 +22,7 @@
 		use Instance;
 
 		private function __construct() {
-			parent::__construct();
+			parent::__construct(__FILE__);
 
 			self::$view->Push(self::$set_data_page, Closure::fromCallable([$this, 'SetDataPage']));
 

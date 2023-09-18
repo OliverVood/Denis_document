@@ -11,8 +11,8 @@
 	abstract class Statistics extends Units implements Consts\Statistics {
 		public static Action $out_menu;
 
-		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+		protected function __construct($file) {
+			parent::__construct($file);
 		}
 
 		public static function RegActions() {

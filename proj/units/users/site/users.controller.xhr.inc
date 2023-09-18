@@ -13,7 +13,7 @@
 		use Instance;
 
 		private function __construct() {
-			parent::__construct(self::ID, self::NAME);
+			parent::__construct(__FILE__);
 		}
 
 	}

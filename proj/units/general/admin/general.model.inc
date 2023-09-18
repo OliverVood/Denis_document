@@ -2,15 +2,17 @@
 
 	namespace Proj\Admin\Model;
 
+	use Base\Model;
 	use Base\Instance;
 	use Proj\DBObject;
 
-	class General {
+	class General extends Model {
 		use Instance;
 
 		private DBObject $db;
 
 		private function __construct() {
+			parent::__construct(__FILE__);
 			$this->db = DBObject::instance();
 		}
 

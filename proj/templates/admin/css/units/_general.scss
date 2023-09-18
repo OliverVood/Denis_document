@@ -35,7 +35,7 @@
 			> .display { padding: 5px; cursor: pointer; }
 		}
 		&.table {
-			position: absolute; border: 1px solid $color-secondary; box-shadow: $color-neutral-black 0 0 2px; cursor: default;
+			position: absolute; border: 1px solid $color-secondary; box-shadow: $color-neutral-black 0 0 2px; cursor: default; user-select: none;
 			> .drag { position: absolute; top: 5px; right: 5px; left: 5px; height: 10px; border-radius: 5px; background-color: $color-light; cursor: grab; }
 			> .header {
 				display: flex; padding-top: 20px; background-color: $color-secondary; color: $color-text-primary;
@@ -43,8 +43,49 @@
 				> .menu { padding: 5px; cursor: pointer; }
 			}
 			> .rows > div {
-				padding: 5px;
-				&:hover { background-color: $color-neutral-light; }
+				display: flex; padding: 5px;
+				> .name, > .description { flex: auto; }
+				> .key { margin-left: 20px; color: $color-neutral; }
+				&:hover {
+					background-color: $color-neutral-light;
+					> .key { color: $color-secondary; }
+				}
+				&.key {
+					font-weight: 600; position: relative;
+					&:before { position: absolute; top: 0; content: ""; width: 50px; height: 25px; background-position: 0 center; background-size: cover; background-repeat: no-repeat; }
+					&.foreign {
+						&:before { right: -50px; }
+						&.one:before { background-image: GetImageUI('relationship/from_one.svg'); }
+						&.many:before { background-image: GetImageUI('relationship/from_many.svg'); }
+						&.only_one:before { background-image: GetImageUI('relationship/from_only_one.svg'); }
+						&.zero_or_one:before { background-image: GetImageUI('relationship/from_zero_or_one.svg'); }
+						&.one_or_many:before { background-image: GetImageUI('relationship/from_one_or_many.svg'); }
+						&.zero_or_many:before { background-image: GetImageUI('relationship/from_zero_or_many.svg'); }
+					}
+					&.references {
+						&:before { left: -50px; }
+						&.one:before { background-image: GetImageUI('relationship/to_one.svg'); }
+						&.many:before { background-image: GetImageUI('relationship/to_many.svg'); }
+						&.only_one:before { background-image: GetImageUI('relationship/to_only_one.svg'); }
+						&.zero_or_one:before { background-image: GetImageUI('relationship/to_zero_or_one.svg'); }
+						&.one_or_many:before { background-image: GetImageUI('relationship/to_one_or_many.svg'); }
+						&.zero_or_many:before { background-image: GetImageUI('relationship/to_zero_or_many.svg'); }
+					}
+				}
+			}
+			> .keys > div {
+				display: flex; align-items: center; padding: 5px;
+				> .type { flex: auto; font-size: 10px; }
+				> .name { margin-left: 20px; color: $color-neutral; font-weight: 600; }
+				&:first-child { border-top: 1px dashed $color-secondary; }
+				&:hover {
+					background-color: $color-neutral-light;
+					> .name { color: $color-secondary; }
+				}
+				&.active {
+					background-color: $color-neutral;
+					> .name { color: $color-secondary; }
+				}
 			}
 		}
 	}

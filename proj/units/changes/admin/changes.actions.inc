@@ -11,8 +11,8 @@
 	abstract class Changes extends Units implements Consts\Changes {
 		public static Action $out_menu;
 
-		protected function __construct() {
-			parent::__construct(self::ID, self::NAME);
+		protected function __construct($file) {
+			parent::__construct($file);
 		}
 
 		public static function RegActions() {
