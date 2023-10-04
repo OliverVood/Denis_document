@@ -26,7 +26,7 @@ body {
 	> div {
 		flex: auto; display: flex;
 		menu {
-			position: relative; z-index: 1; flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
+			position: relative; z-index: $z-menu; flex: none; margin: 0; padding: 0; width: 200px; background-color: $color-primary; color: $color-text-primary;
 			a { color: $color-text-primary; }
 		}
 		main { flex: auto; position: relative; }
@@ -91,7 +91,7 @@ $debug_color_string: #0095b9;
 
 body.div.debugger { display: block; }
 .debugger {
-	position: absolute; right: 0; bottom: 0; left: 0; z-index: 1; color: $color-text-primary;
+	position: absolute; right: 0; bottom: 0; left: 0; z-index: $z-debugger; color: $color-text-primary;
 	> .manager {
 		position: absolute; bottom: 0; left: 0; width: 40px; height: 40px;
 		> .toggle {

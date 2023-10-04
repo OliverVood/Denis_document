@@ -70,12 +70,12 @@ namespace Base {
 
 			public static Initialization(): void {
 				Debugger.iter							= 1;
-				Debugger.open							= (getCookie('debug_open') === '1');
+				Debugger.open							= (localStorage.getItem('debug_open') === '1');
 				Debugger.data							= {};
 				Debugger.dataActive						= 0;
 				Debugger.spaceActive					= '';
-				Debugger.record							= (getCookie('debug_record') !== '0');
-				Debugger.track							= (getCookie('debug_track') !== '0');
+				Debugger.record							= (localStorage.getItem('debug_record') !== '0');
+				Debugger.track							= (localStorage.getItem('debug_track') !== '0');
 
 				Debugger.$receiver						= document.body;
 				Debugger.$container						= document.createElement('div');
@@ -176,7 +176,7 @@ namespace Base {
 					};
 
 					Debugger.$drag.onpointerup = () => {
-						setCookie('debug_height', parseInt(Debugger.$spaces.style.height));
+						localStorage.setItem('debug_height', parseInt(Debugger.$spaces.style.height).toString());
 						Debugger.$drag.onpointermove = null;
 						Debugger.$drag.onpointerup = null;
 					};
@@ -195,9 +195,9 @@ namespace Base {
 					user: new SUser(Debugger.$spaces)
 				};
 
-				this.OpenSpace('network');
+				this.OpenSpace(localStorage.getItem('debug_open_space') || 'network');
 
-				let debug_height = getCookie('debug_height');
+				let debug_height = localStorage.getItem('debug_height');
 				this.$spaces.style.height = debug_height ? `${debug_height}px` : `200px`;
 				if (Debugger.open) Debugger.$work.classList.remove('hide');
 			}
@@ -224,19 +224,19 @@ namespace Base {
 
 			private static ToggleSpase(): void {
 				Debugger.open = !Debugger.open;
-				setCookie('debug_open', Debugger.open ? '1' : '0')
+				localStorage.setItem('debug_open', Debugger.open ? '1' : '0');
 				Debugger.open ? Debugger.$work.classList.remove('hide') : Debugger.$work.classList.add('hide');
 			}
 
 			private static ToggleRecord(): void {
 				Debugger.record = !Debugger.record;
-				setCookie('debug_record', Debugger.record ? '1' : '0');
+				localStorage.setItem('debug_record', Debugger.record ? '1' : '0');
 				Debugger.record ? Debugger.$s_record.classList.add('active') : Debugger.$s_record.classList.remove('active');
 			}
 
 			private static ToggleTrack(): void {
 				Debugger.track = !Debugger.track;
-				setCookie('debug_track', Debugger.track ? '1' : '0');
+				localStorage.setItem('debug_track', Debugger.track ? '1' : '0');
 				Debugger.track ? Debugger.$s_track.classList.add('active') : Debugger.$s_track.classList.remove('active');
 			}
 
@@ -252,6 +252,7 @@ namespace Base {
 				this.spaces[name].Show();
 
 				this.spaceActive = name;
+				localStorage.setItem('debug_open_space', name);
 			}
 
 			private static ClearAll() {

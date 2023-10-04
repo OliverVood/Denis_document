@@ -125,11 +125,14 @@
 					'encoding' => $this->encoding
 				],
 				'fields' => [],
-				'keys' => []
+				'keys' => [
+					'primaries' => [],
+					'foreigners' => []
+				]
 			];
 			foreach ($this->structure as $field) $table['fields'][] = $field->Structure();
-			if ($this->primaryIndex) $table['keys'][] = $this->primaryIndex->Structure();
-			foreach ($this->foreigners as $foreigner) $table['keys'][] = $foreigner->Structure();
+			if ($this->primaryIndex) $table['keys']['primaries'][] = $this->primaryIndex->Structure();
+			foreach ($this->foreigners as $foreigner) $table['keys']['foreigners'][] = $foreigner->Structure();
 
 			return $table;
 		}

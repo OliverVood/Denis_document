@@ -2,14 +2,14 @@
 
 	namespace Proj\Admin\Templates\General;
 
-	use Base\Templates\Template;
+	use Base\Templates\Buffering;
 
 	abstract class Structure {
 
 		public static function ToVar(array $data): string {
-			Template::Start();
+			Buffering::Start();
 			self::Render($data);
-			return Template::Read();
+			return Buffering::Read();
 		}
 
 		public static function Render(array $data): void { ?>

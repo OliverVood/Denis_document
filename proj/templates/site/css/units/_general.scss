@@ -139,7 +139,7 @@
 
 .view.general.windows {
 	> .instance {
-		display: flex; align-items: center; justify-content: center; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 200;
+		display: flex; align-items: center; justify-content: center; position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: $z-window;
 		> .space { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
 		> .window {
 			position: relative; background-color: $color-light; box-shadow: $shadow;
@@ -176,7 +176,7 @@
 }
 
 .view.general.notices {
-	position: fixed; top: 1rem; right: 1rem; z-index: 300; display: grid; gap: 1rem;
+	position: fixed; top: 1rem; right: 1rem; z-index: $z-notice; display: grid; gap: 1rem;
 	> .instance {
 		display: flex; border-width: 1px; border-style: solid; border-color: $color-light; background-color: $color-light;
 		&.ok {

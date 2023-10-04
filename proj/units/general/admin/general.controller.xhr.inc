@@ -4,12 +4,14 @@
 
 	require DIR_UNITS . 'general/admin/general.actions.inc';
 	require DIR_UNITS . 'general/admin/general.model.inc';
+	require DIR_UNITS . 'general/admin/views/structure.tpl';
 
 	use JetBrains\PhpStorm\NoReturn;
 
 	use Base\Instance;
 	use Proj\Admin\Actions;
 	use Proj\Admin\Model;
+	use Proj\Admin\Templates\General AS TPL;
 	use Response;
 	use Closure;
 
@@ -36,9 +38,8 @@
 		}
 
 		#[NoReturn] private function Structure() {
-			//$this->model->Structure()
 			Response::PushHistory(self::$db_structure);
-			Response::PushSection('main', '');
+			Response::PushSection('main', TPL\Structure::ToVar($this->model->Structure()));
 			Response::SendJSON();
 		}
 

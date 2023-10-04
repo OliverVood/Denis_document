@@ -132,96 +132,134 @@ namespace Admin {
 
 		}
 
-		type StructurePrimaryKey	= { name: string, type: 'primary'; fields: string[]; }
-		type StructureForeignKey	= { name: string, type: 'foreign'; fields: string[]; references_table: string, references_fields: string[], relationship_from: number, relationship_to: number }
-		type StructureKey<T>		= T;
-		type StructureField			= { name: string, type: string; description: string; };
-		type StructureTable			= { name: string, description: string, params: {[key: string]: string}, fields: StructureField[], keys: (StructureKey<StructurePrimaryKey>|StructureKey<StructureForeignKey>)[] };
-		type StructureDB			= { name: string, tables: StructureTable[] };
-		type DisplayMode			= 'name' | 'description';
-		type ForeignReferences		= { table: Table, fields: string[], relationship: number };
+		type DisplayNames						= 1;
+		type DisplayDescriptions				= 2;
+		type DisplayMode						= DisplayNames | DisplayDescriptions;
+
+		type DataDB								= { name: string, tables: DataTable[] };
+		type DataTable							= { name: string, description: string, params: DataTableParams, fields: DataField[], keys: DataKeys };
+		type DataField							= { name: string, type: string, description: string };
+		type DataKeys							= { primaries: DataKeyPrimary[], foreigners: DataKeyForeigner[] };
+		type DataKeyPrimary						= { type: 'primary', name: string, fields: string[] };
+		type DataKeyForeigner					= { type: 'foreign', name: string, fields: string[], references_table: string, references_fields: string[], relationship_from: number, relationship_to: number };
+
+		type DataTableParams					= { encoding: string, engine: string };
+		type ForeignReferences					= { table: Table, fields: string[], relationship: number };
 
 		export class Structure {
-			db						: DB;
-			display_mode			: DisplayMode;
+			static displayNames					: DisplayNames = 1;
+			static displayDescriptions			: DisplayDescriptions = 2;
 
-			$structure				: HTMLElement;
-			$panel					: HTMLDivElement;
-			$display				: HTMLDivElement;
+			db									: DB;
+			displayMode							: DisplayMode;
+			$topElement							: HTMLElement;
 
-			constructor(data: StructureDB) {
-				this.$structure		= document.getElementById('structure');
-				this.db 			= new DB(data);
-				this.display_mode	= 'description';
+			$structure							: HTMLElement;
+			$panel								: HTMLDivElement;
+			$display							: HTMLAnchorElement;
 
-				this.$panel			= document.createElement('div'); this.$panel.className			= 'panel';
-				this.$display		= document.createElement('div'); this.$display.className		= 'display';
-				this.SwitchDisplayMode();
+			constructor(data: DataDB) {
+				this.displayMode				= Structure.displayDescriptions;
+
+				this.$structure					= document.getElementById('structure');
+				this.db 						= new DB(data, this.$structure, this);
+
+				this.RenderPanel();
+			}
+
+			private RenderPanel(): void {
+				this.$panel						= document.createElement('div'); this.$panel.className = 'panel';
+				this.$display					= document.createElement('a'); this.$display.className = 'display';
+
+				this.$structure.className = (this.displayMode === Structure.displayNames) ? 'display_name' : 'display_description';
 
 				this.$display.addEventListener('click', () => this.SwitchDisplayMode());
-				DragAndDrop(this.$panel, this.$panel);
 
-				this.$panel.append(this.$display);
 				this.$structure.append(this.$panel);
+				this.$panel.append(this.$display);
 			}
 
 			private SwitchDisplayMode(): void {
-				this.$display.innerText = (this.display_mode === 'name') ? 'D' : 'N';
-				this.display_mode = (this.display_mode === 'name') ? 'description' : 'name';
-				this.$structure.className = (this.display_mode === 'name') ? 'display_description' : 'display_name';
+				if (this.displayMode === Structure.displayNames) {
+					this.displayMode = Structure.displayDescriptions;
+					this.$structure.className = 'display_description';
+				} else {
+					this.displayMode = Structure.displayNames;
+					this.$structure.className = 'display_name';
+				}
+			}
+
+			public HoverElement($elem: HTMLElement): void {
+				if (this.$topElement) this.$topElement.style.zIndex = '0';
+				$elem.style.zIndex = '1';
+				this.$topElement = $elem;
 			}
 
 		}
 
 		class DB {
-			tables					: {[key: string]: Table};
+			private readonly tables				: {[key: string]: Table};
+			private activeKey					?: Key
 
-			constructor(data: StructureDB) {
-				this.tables			= {};
-				for (const i in data.tables) this.tables[data.tables[i].name] = new Table(data.tables[i]);
-				for (const i in data.tables) for (const j in data.tables[i].keys) {
-					// console.log(data.tables[i].keys);
-					// console.log(data.tables[i].keys[j]);
-					switch (data.tables[i].keys[j].type) {
-						case 'primary': this.SetPrimaryKey(data.tables[i].keys[j].name, this.tables[data.tables[i].name], data.tables[i].keys[j].fields); break;
-						case 'foreign': this.SetForeignKey(data.tables[i].keys[j].name, this.tables[data.tables[i].name], data.tables[i].keys[j].fields, data.tables[i].keys[j].relationship_from, {table: this.tables[data.tables[i].keys[j].references_table] ,fields: data.tables[i].keys[j].references_fields , relationship: data.tables[i].keys[j].relationship_to }); break;
-					}
+			constructor(data: DataDB, $structure: HTMLElement, structure: Structure) {
+				this.tables						= {};
+				this.activeKey					= null;
+
+				for (const table of data.tables) this.tables[table.name] = new Table(table, $structure, structure);
+				for (const table of data.tables) {
+					for (const primary of table.keys.primaries) this.SetPrimaryKey(primary.name, this.tables[table.name], primary.fields);
+					for (const foreigner of table.keys.foreigners) this.SetForeignKey(foreigner.name, this.tables[table.name], foreigner.fields, foreigner.relationship_from, {table: this.tables[foreigner.references_table] ,fields: foreigner.references_fields , relationship: foreigner.relationship_to });
 				}
 			}
 
 			private SetPrimaryKey(name: string, table: Table, fields: string[]): void {
-				let fields_objs = [];
-				for (const i in fields) fields_objs.push(table.fields[fields[i]]);
-				new Primary(name, table, fields_objs);
+				let names = [];
+				for (const field of fields) names.push(table.fields[field]);
+				new Primary(name, table, names, this);
 			}
 
-			// StructureKey<StructureForeignKey>
 			private SetForeignKey(name: string, table: Table, fields: string[], relationship: number, references: ForeignReferences): void {
-				console.log(references);
-				let fields_objs = [];
-				let references_fields_objs = [];
-				for (const i in fields) fields_objs.push(table.fields[fields[i]]);
-				for (const i in references.fields) references_fields_objs.push(references.table.fields[references.fields[i]]);
-				new Foreign(name, table, fields_objs, relationship, {table: references.table, fields: references_fields_objs, relationship: references.relationship});
+				let names = [];
+				let references_names = [];
+				for (const field of fields) names.push(table.fields[field]);
+				for (const field of references.fields) references_names.push(references.table.fields[field]);
+				new Foreign(name, table, names, relationship, {table: references.table, fields: references_names, relationship: references.relationship}, this);
+			}
+
+			public SetActiveKey(key: Key) {
+				this.activeKey = key;
+			}
+
+			public UnsetActiveKey() {
+				this.activeKey = null;
+			}
+
+			public GetActiveKey(): Key {
+				return this.activeKey;
 			}
 
 		}
 
 		class Table {
 			public fields						: {[key: string]: Field};
-			private readonly $table				: HTMLDivElement;
-			private readonly $drag				: HTMLDivElement;
-			private readonly $header			: HTMLDivElement;
-			private readonly $title				: HTMLDivElement;
-			private readonly $name				: HTMLDivElement;
-			private readonly $description		: HTMLDivElement;
-			private readonly $menu				: HTMLDivElement;
-			private readonly $rows				: HTMLDivElement;
-			private readonly $keys				: HTMLDivElement;
+			private $table						: HTMLDivElement;
+			private $drag						: HTMLDivElement;
+			private $header						: HTMLDivElement;
+			private $title						: HTMLDivElement;
+			private $name						: HTMLDivElement;
+			private $description				: HTMLDivElement;
+			private $menu						: HTMLDivElement;
+			private $rows						: HTMLDivElement;
+			private $keys						: HTMLDivElement;
 
-			constructor(data: StructureTable) {
+			constructor(data: DataTable, $structure: HTMLElement, structure: Structure) {
 				this.fields						= {};
 
+				this.Render(data, $structure, structure);
+				for (const field of data['fields']) this.fields[field.name] = new Field(field, this.$rows);
+			}
+
+			private Render(data: DataTable, $structure: HTMLElement, structure: Structure) {
 				this.$table 					= document.createElement('div'); this.$table.className			= 'table';
 				this.$drag 						= document.createElement('div'); this.$drag.className			= 'drag';
 				this.$header 					= document.createElement('div'); this.$header.className			= 'header';
@@ -240,17 +278,24 @@ namespace Admin {
 				this.$header.append(this.$title, this.$menu);
 				this.$title.append(this.$name, this.$description);
 
-				for (const i in data['fields']) this.fields[data['fields'][i]['name']] = new Field(this.$rows, data['fields'][i]);
+				$structure.append(this.$table);
 
-				document.getElementById('structure').append(this.$table);
+				DragAndDropInStructure(this.$drag, this.$table, data.name);
+				this.$table.addEventListener('mouseover', () => structure.HoverElement(this.$table));
 
-				DragAndDrop(this.$drag, this.$table, {top: 0, left: 0});
+				let left, top;
+				let position = localStorage.getItem(`structure_table_${data.name}`);
+				if (position) {
+					[left, top] = position.split(',');
+					this.$table.style.left = `${left}px`;
+					this.$table.style.top = `${top}px`;
+				}
 			}
 
 			public AddKey(type: string, name: string, key: Key): HTMLDivElement {
 				let $wrap = document.createElement('div');
-				let $type = document.createElement('div'); $type.className = 'type'; $type.innerText = type;
-				let $name = document.createElement('div'); $name.className = 'name'; $name.innerText = name;
+				let $type = document.createElement('div'); $type.className = 'key_type'; $type.innerText = type;
+				let $name = document.createElement('div'); $name.className = 'key_name'; $name.innerText = name;
 
 				this.$keys.append($wrap);
 				$wrap.append($type, $name);
@@ -263,10 +308,11 @@ namespace Admin {
 		}
 
 		class Field {
-			private readonly $wrap				: HTMLDivElement;
-			private readonly $name				: HTMLDivElement;
-			private readonly $description		: HTMLDivElement;
-			private readonly $key				: HTMLDivElement;
+			private $wrap						: HTMLDivElement;
+			private $type						: HTMLSpanElement;
+			private $name						: HTMLDivElement;
+			private $description				: HTMLDivElement;
+			private $key						: HTMLDivElement;
 
 			static ER_RELATIONSHIP = {
 				1: 'one',
@@ -277,37 +323,44 @@ namespace Admin {
 				6: 'zero_or_many'
 			};
 
-			constructor($rows: HTMLDivElement, data: StructureField) {
+			constructor(data: DataField, $rows: HTMLDivElement) {
+				this.Render(data, $rows);
+			}
+
+			private Render(data: DataField, $rows: HTMLDivElement) {
 				this.$wrap						= document.createElement('div');
+				this.$type						= document.createElement('span'); this.$type.className			= 'type';
 				this.$name						= document.createElement('div'); this.$name.className			= 'name';
 				this.$description				= document.createElement('div'); this.$description.className	= 'description';
 				this.$key						= document.createElement('div'); this.$key.className			= 'key';
 
-				this.$name.innerText			= data['name'];
-				this.$description.innerText		= data['description'];
+				this.$type.innerText			= data.type;
+				this.$name.innerText			= data.name;
+				this.$description.innerText		= data.description;
 
-				this.$wrap.append(this.$name, this.$description, this.$key);
+				this.$wrap.append(this.$type, this.$name, this.$description, this.$key);
+
 				$rows.append(this.$wrap);
 			}
 
 			public SetPrimaryKey(): void {
 				this.$key.innerText = 'Pr';
-				this.$wrap.classList.add('key', 'primary');
+				this.$wrap.classList.add('primary');
 			}
 
 			public UnsetPrimaryKey(): void {
 				this.$key.innerText = '';
-				this.$wrap.classList.remove('key', 'primary');
+				this.$wrap.classList.remove('primary');
 			}
 
 			public SetForeignKey(relationship: number): void {
 				this.$key.innerText = 'Fr';
-				this.$wrap.classList.add('key', 'foreign', Field.ER_RELATIONSHIP[relationship]);
+				this.$wrap.classList.add('foreign', Field.ER_RELATIONSHIP[relationship]);
 			}
 
 			public UnsetForeignKey(relationship: number): void {
 				this.$key.innerText = '';
-				this.$wrap.classList.remove('key', 'foreign', Field.ER_RELATIONSHIP[relationship]);
+				this.$wrap.classList.remove('foreign', Field.ER_RELATIONSHIP[relationship]);
 			}
 
 			public SetReferencesKey(relationship: number): void {
@@ -324,40 +377,56 @@ namespace Admin {
 
 		class Key {
 			name								: string
+			db									: DB;
 			table								: Table;
 			fields								: Field[];
 			display								: boolean;
 
 			$key								: HTMLDivElement;
 
-			constructor(name: string, table: Table, fields: Field[]) {
+			constructor(name: string, table: Table, fields: Field[], db) {
+				this.db							= db;
 				this.table						= table;
 				this.name						= name;
 				this.fields						= fields;
 				this.display					= false;
 			}
 
-			public Display(): void {  }
+			public Display(): void {
+				if (this.display) {
+					this.Hide();
+					this.db.UnsetActiveKey();
+					return;
+				}
+
+				this.db.GetActiveKey()?.Display();
+				this.Show();
+				this.db.SetActiveKey(this);
+			}
+
+			protected Show(): void {  }
+			protected Hide(): void {  }
 
 		}
 
 		class Primary extends Key {
 
-			constructor(name: string, table: Table, fields: Field[]) {
-				super(name, table, fields);
+			constructor(name: string, table: Table, fields: Field[], db: DB) {
+				super(name, table, fields, db);
 
 				this.$key = this.table.AddKey('primary', this.name, this);
 			}
 
-			public Display(): void {
-				this.display = !this.display;
-				if (this.display) {
-					this.$key.classList.add('active');
-					for (const i in this.fields) this.fields[i].SetPrimaryKey();
-				} else {
-					this.$key.classList.remove('active');
-					for (const i in this.fields) this.fields[i].UnsetPrimaryKey();
-				}
+			protected Show(): void {
+				this.display = true;
+				this.$key.classList.add('active');
+				for (const i in this.fields) this.fields[i].SetPrimaryKey();
+			}
+
+			protected Hide(): void {
+				this.display = false;
+				this.$key.classList.remove('active');
+				for (const i in this.fields) this.fields[i].UnsetPrimaryKey();
 			}
 
 		}
@@ -366,8 +435,8 @@ namespace Admin {
 			relationship						: number
 			references							: {table: Table, fields: Field[], relationship: number};
 
-			constructor(name: string, table: Table, fields: Field[], relationship: number, references: {table: Table, fields: Field[], relationship: number}) {
-				super(name, table, fields);
+			constructor(name: string, table: Table, fields: Field[], relationship: number, references: {table: Table, fields: Field[], relationship: number}, db: DB) {
+				super(name, table, fields, db);
 
 				this.relationship				= relationship;
 				this.references					= references;
@@ -375,67 +444,54 @@ namespace Admin {
 				this.$key = this.table.AddKey('foreign', this.name, this);
 			}
 
-			public Display(): void {
-				this.display = !this.display;
-				if (this.display) {
-					this.$key.classList.add('active');
-					for (const i in this.fields) this.fields[i].SetForeignKey(this.relationship);
-					for (const i in this.references.fields) this.references.fields[i].SetReferencesKey(this.references.relationship);
+			protected Show(): void {
+				this.display = true;
+				this.$key.classList.add('active');
+				for (const i in this.fields) this.fields[i].SetForeignKey(this.relationship);
+				for (const i in this.references.fields) this.references.fields[i].SetReferencesKey(this.references.relationship);
+			}
 
-				} else {
-					this.$key.classList.remove('active');
-					for (const i in this.fields) this.fields[i].UnsetForeignKey(this.relationship);
-					for (const i in this.references.fields) this.references.fields[i].UnsetReferencesKey(this.references.relationship);
-				}
+			protected Hide(): void {
+				this.display = false;
+				this.$key.classList.remove('active');
+				for (const i in this.fields) this.fields[i].UnsetForeignKey(this.relationship);
+				for (const i in this.references.fields) this.references.fields[i].UnsetReferencesKey(this.references.relationship);
 			}
 
 		}
 
-		function DragAndDrop(drag: HTMLElement, container: HTMLElement, scope: { top?: number, right?: number, bottom?: number, left?: number } = {}) {
-			let scope_top = (scope.top !== undefined) ? scope.top : null;
-			let scope_right = (scope.right !== undefined) ? scope.right : null;
-			let scope_bottom = (scope.bottom !== undefined) ? scope.bottom : null;
-			let scope_left = (scope.left !== undefined) ? scope.left : null;
-			drag.onmousedown = function(event) {
-				if (!drag || !container) return;
+		function DragAndDropInStructure($drag: HTMLElement, $elem: HTMLElement, name: string): void {
+			$drag.onpointerdown = event => {
+				$drag.setPointerCapture(event.pointerId);
 
-				container.style.zIndex = '1';
+				let startClientX = event.clientX;
+				let startClientY = event.clientY;
+				let startLeft = $elem.offsetLeft;
+				let startTop = $elem.offsetTop;
 
-				document.onmousemove = function(event) {
-					Move(event);
+				let left = null;
+				let top = null;
+
+				$drag.onpointermove = event => {
+					let alphaX = startClientX - event.clientX;
+					let alphaY = startClientY - event.clientY;
+
+					left = startLeft - alphaX;
+					if (left < 0) left = 0;
+					top = startTop - alphaY;
+					if (top < 0) top = 0;
+
+					$elem.style.left = `${left}px`;
+					$elem.style.top = `${top}px`;
 				};
 
-				document.onmouseup = function() {
-					document.onmousemove = null;
-					document.onmouseup = null;
+				$drag.onpointerup = () => {
+					$drag.onpointermove = null;
+					$drag.onpointerup = null;
+
+					localStorage.setItem(`structure_table_${name}`, [left, top].join(','));
 				};
-
-				function Move(event) {
-					let delta_left = parseInt(container.style.left || getComputedStyle(container)['left']);
-					if (isNaN(delta_left)) delta_left = 0;
-					let left = delta_left + event.movementX;
-
-					if (scope_right !== null) {
-						let width = parseFloat(container.style.width || getComputedStyle(container)['width']);
-						if (left > (scope_right - width)) left = scope_right - Math.ceil(width);
-					}
-					if (scope_left !== null && left < scope_left) left = scope_left;
-
-					let delta_top = parseInt(container.style.top || getComputedStyle(container)['top']);
-					if (isNaN(delta_top)) delta_top = 0;
-					let top = delta_top + event.movementY;
-
-					if (scope_bottom !== null) {
-						let height = parseFloat(container.style.height || getComputedStyle(container)['height']);
-						if (top > (scope_bottom - height)) top = scope_bottom - Math.ceil(height);
-					}
-					if (scope_top !== null && top < scope_top) top = scope_top;
-
-					container.style.left = `${left}px`;
-					container.style.top = `${top}px`;
-				}
-			}
-
+			};
 		}
 
 	}
