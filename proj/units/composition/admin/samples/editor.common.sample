@@ -1,0 +1,7 @@
+<?php
+
+	namespace Proj\Admin\Editor\Common;
+
+	trait <Sample> {
+
+	}

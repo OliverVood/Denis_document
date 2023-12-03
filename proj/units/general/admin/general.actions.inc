@@ -20,8 +20,8 @@
 
 		public static ActionOutside $site;
 
-		protected function __construct($file) {
-			parent::__construct($file);
+		protected function __construct(string $file) {
+			parent::__construct(self::ID, self::NAME, $file);
 		}
 
 		public static function RegActions() {

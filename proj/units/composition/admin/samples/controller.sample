@@ -1,0 +1,17 @@
+<?php
+
+	namespace Proj\[Route]\Units\[ENTRY];[CONTROLLER_XET_REQUIRE][MODEL_REQUIRE]
+
+	use Base\Instance;
+	use [CONTROLLER_USE];[MODEL_USE]
+
+	class <Sample> extends [CONTROLLER_EXTENDS] {
+		use Instance;[MODEL_PROPERTY]
+
+		private function __construct() {
+			parent::__construct([CONTROLLER_PARAM_ID][CONTROLLER_PARAM_NAME]__FILE__);[MODEL_INSTANCE]
+		}
+
+	}
+
+	<Sample>::init();

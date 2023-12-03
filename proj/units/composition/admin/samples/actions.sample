@@ -1,0 +1,21 @@
+<?php
+
+	namespace Proj\[Route]\Actions;
+
+	require DIR_UNITS . '<sample>/<sample>.consts.inc';
+
+	use Base\Units;
+	use Proj\Units\Consts;
+
+	abstract class <Sample> extends Units implements Consts\<Sample> {
+		protected function __construct(string $file) {
+			parent::__construct(self::ID, self::NAME, $file);
+		}
+
+		public static function RegActions() {
+			
+		}
+
+	}
+
+	<Sample>::RegActions();

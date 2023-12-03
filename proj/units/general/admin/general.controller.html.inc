@@ -47,6 +47,11 @@
 					self::$db_check->GetLinkHref('Проверить')
 				])
 			);
+			Composition::instance()->OutMenu();
+			Statistics::instance()->OutMenu();
+			News::instance()->OutMenu();
+			Changes::instance()->OutMenu();
+			Feedback::instance()->OutMenu();
 		}
 
 		private function OutFooter() {

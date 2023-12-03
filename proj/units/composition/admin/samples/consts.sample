@@ -1,0 +1,8 @@
+<?php
+
+	namespace Proj\Units\Consts;
+
+	interface <Sample> {
+		const ID						= ID_<SAMPLE>;
+		const NAME						= '<sample>';
+	}

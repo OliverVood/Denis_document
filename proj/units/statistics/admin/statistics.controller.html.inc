@@ -11,7 +11,6 @@
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
 	use Proj\Admin\Editor\HTML as Editor;
-	use Closure;
 
 	class Statistics extends Structure\Statistics {
 		use Instance;
@@ -22,13 +21,11 @@
 		private function __construct() {
 			parent::__construct(__FILE__);
 
-			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
-
 			$this->editor_ip = new Editor\Ip(self::NAME . '_ip', $this->table_ip);
 			$this->editor_act = new Editor\Actions(self::NAME . '_act', $this->table_act);
 		}
 
-		private function OutMenu() {
+		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Статистика', [
 					$this->editor_ip->select->GetLinkHref('Запросы к серверу', ['page' => 1]),

@@ -1,0 +1,25 @@
+<?php
+
+	namespace Proj\[Route]\Structure;
+
+	[STRUCTURE_REQUIRE]
+[STRUCTURE_USE_UNITS]
+//	use Base\DB\MySQLi\Table;[STRUCTURE_USE_CONSTS][STRUCTURE_USE_ACTIONS]
+//	use Proj\DBObject;
+
+	class <Sample> extends [STRUCTURE_EXTENDS] {
+//		private DBObject $db;
+
+//		protected Table $table_<sample>;
+
+		protected function __construct($file) {
+			parent::__construct([STRUCTURE_PARAM_ID][STRUCTURE_PARAM_NAME]$file);
+//			$this->db = DBObject::instance();
+
+//			$this->table_news = new Table(self::TABLES['<sample>'], $this->db, 'Имя таблицы');
+//			$this->table_news->id('id', 'Идентификатор');
+
+//			$this->db->PushTables($this->table_<sample>);
+		}
+
+	}

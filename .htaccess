@@ -6,7 +6,7 @@
 	RewriteBase /
 
     RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^(.*)\.(tpl|inc|htaccess|db)$ 404.inc [R=404,NC,L]
+    RewriteRule ^(.*)\.(htaccess|inc|tpl|db|ts|sample)$ 404.inc [R=404,NC,L]
 
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d

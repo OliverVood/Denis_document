@@ -1,0 +1,22 @@
+<?php
+
+	namespace Proj\Admin\Editor\[ENTRY];
+
+	require DIR_UNITS . '[unit]/admin/editors/<sample>/<sample>.editor.common.inc';
+	require DIR_UNITS . '[unit]/admin/editors/<sample>/<sample>.editor.model.inc';
+
+	use Base\Editor\MySQLi\[ENTRY]\Editor;
+	use Base\DB\MySQLi\Table;
+	use Proj\Admin\Editor\Common;
+	use Proj\Admin\Editor\Model;
+
+	class <Sample> extends Editor {
+		use Common\<Sample>;
+
+		public function __construct(string $name, Table $table) {
+			parent::__construct($name);
+
+			$this->model = new Model\<Sample>($table, $this->params);
+		}
+
+	}

@@ -1,0 +1,17 @@
+<?php
+
+	namespace Proj\[Route]\Model;
+
+	use Base\Model;
+	use Base\Instance;
+
+	class <Sample> extends Model {
+		use Instance;
+
+		private function __construct() {
+			parent::__construct(__FILE__);
+		}
+
+	}
+
+	<Sample>::init();

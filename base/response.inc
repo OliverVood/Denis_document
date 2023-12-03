@@ -55,4 +55,10 @@
 			die($string);
 		}
 
+		#[NoReturn] public static function SendNoticeError(string $notice):void {
+			self::$stack = [];
+			self::PushNoticeError($notice);
+			self::SendJSON();
+		}
+
 	}

@@ -1,5 +1,6 @@
 <?php
 
+	require DIR_UNITS . 'composition/admin/composition.controller.xhr.inc';
 	require DIR_UNITS . 'general/admin/general.controller.xhr.inc';
 	require DIR_UNITS . 'users/admin/users.controller.xhr.inc';
 	require DIR_UNITS . 'statistics/admin/statistics.controller.xhr.inc';

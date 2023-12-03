@@ -11,7 +11,6 @@
 	use Proj\Admin\Templates\General\Group;
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Editor\HTML as Editor;
-	use Closure;
 
 	class Changes extends Structure\Changes {
 		use Instance;
@@ -22,13 +21,11 @@
 		private function __construct() {
 			parent::__construct(__FILE__);
 
-			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
-
 			$this->editor_changes = new Editor\Changes(self::NAME, $this->table_changes);
 			$this->editor_change = new Editor\Change('change', $this->table_change);
 		}
 
-		private function OutMenu() {
+		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Актуальное', [
 					$this->editor_changes->select->GetLinkHref('Списки актуального', ['page' => 1]),

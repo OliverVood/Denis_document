@@ -10,7 +10,6 @@
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
 	use Proj\Admin\Editor\HTML as Editor;
-	use Closure;
 
 	class Feedback extends Structure\Feedback {
 		use Instance;
@@ -20,12 +19,10 @@
 		private function __construct() {
 			parent::__construct(__FILE__);
 
-			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
-
 			$this->editor_feedback = new Editor\Feedback(self::NAME, $this->table_feedback);
 		}
 
-		private function OutMenu() {
+		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Обратная связь', [
 					$this->editor_feedback->select->GetLinkHref('Список', ['page' => 1]),

@@ -10,7 +10,6 @@
 	use Proj\Admin\Templates\Layout;
 	use Proj\Admin\Templates\General\Group;
 	use Proj\Admin\Editor\HTML as Editor;
-	use Closure;
 
 	class News extends Structure\News {
 		use Instance;
@@ -20,12 +19,10 @@
 		private function __construct() {
 			parent::__construct(__FILE__);
 
-			self::$view->Push(self::$out_menu, Closure::fromCallable([$this, 'OutMenu']));
-
 			$this->editor_news = new Editor\News(self::NAME, $this->table_news);
 		}
 
-		private function OutMenu() {
+		public function OutMenu() {
 			Layout::instance()->menu->Push(
 				Group::ToVar('Новости', [
 					$this->editor_news->select->GetLinkHref('Список новостей', ['page' => 1]),

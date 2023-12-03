@@ -14,8 +14,8 @@
 		public static Action $action_certificate;
 		public static Action $action_price_list;
 
-		protected function __construct($file) {
-			parent::__construct($file);
+		protected function __construct(string $file) {
+			parent::__construct(self::ID, self::NAME, $file);
 		}
 
 		public static function RegActions() {
