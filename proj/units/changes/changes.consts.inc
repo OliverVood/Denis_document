@@ -5,6 +5,7 @@
 	interface Changes {
 		const ID						= ID_CHANGES;
 		const NAME						= 'changes';
+		const TITLE						= 'Списки актуального';
 
 		const TABLES = [
 			'changes' 				=> self::NAME,

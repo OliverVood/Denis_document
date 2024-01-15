@@ -2,18 +2,18 @@
 
 	namespace Proj\[Route]\Structure;
 
-	[STRUCTURE_REQUIRE]
-[STRUCTURE_USE_UNITS]
-//	use Base\DB\MySQLi\Table;[STRUCTURE_USE_CONSTS][STRUCTURE_USE_ACTIONS]
+	[REQUIRE]
+[USE_UNIT]
+//	use Base\DB\MySQLi\Table;[USE_CONSTS][USE_ACTIONS]
 //	use Proj\DBObject;
 
-	class <Sample> extends [STRUCTURE_EXTENDS] {
+	class <Sample> extends [EXTENDS] {
 //		private DBObject $db;
 
 //		protected Table $table_<sample>;
 
 		protected function __construct($file) {
-			parent::__construct([STRUCTURE_PARAM_ID][STRUCTURE_PARAM_NAME]$file);
+			parent::__construct([PARAM_ID][PARAM_NAME][PARAM_TITLE]$file);
 //			$this->db = DBObject::instance();
 
 //			$this->table_news = new Table(self::TABLES['<sample>'], $this->db, 'Имя таблицы');

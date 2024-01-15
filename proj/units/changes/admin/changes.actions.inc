@@ -4,15 +4,15 @@
 
 	require DIR_UNITS . 'changes/changes.consts.inc';
 
-	use Base\Units;
+	use Base\UnitAccess;
 	use Proj\Units\Consts;
 
-	abstract class Changes extends Units implements Consts\Changes {
+	abstract class Changes extends UnitAccess implements Consts\Changes {
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
-		public static function RegActions() { }
+		public static function RegActions() {  }
 
 	}
 

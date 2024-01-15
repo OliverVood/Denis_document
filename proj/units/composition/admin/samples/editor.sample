@@ -1,22 +1,250 @@
 <?php
 
-	namespace Proj\Admin\Editor\[ENTRY];
+	namespace Proj\Admin\Editor;
 
-	require DIR_UNITS . '[unit]/admin/editors/<sample>/<sample>.editor.common.inc';
 	require DIR_UNITS . '[unit]/admin/editors/<sample>/<sample>.editor.model.inc';
 
-	use Base\Editor\MySQLi\[ENTRY]\Editor;
+//	use JetBrains\PhpStorm\NoReturn;
+
+//	use Base\Controller;
+//	use Base\ActionRight;
 	use Base\DB\MySQLi\Table;
-	use Proj\Admin\Editor\Common;
+	use Base\Editor\MySQLi\Editor;
+//	use Base\Templates\Editor\Select;
+//	use Base\Templates\Editor\Browse;
+//	use Base\Templates\Editor\Create;
+//	use Base\Templates\Editor\Update;
+//	use Base\Helper\Response;
+//	use Base\Helper\Pages;
+	use Proj\Units\Consts;
 	use Proj\Admin\Editor\Model;
+//	use Closure;
 
 	class <Sample> extends Editor {
-		use Common\<Sample>;
+//		public ActionRight $you_action;
 
-		public function __construct(string $name, Table $table) {
-			parent::__construct($name);
+		public function __construct(int $id, string $name, Table $table, string $title = '') {
+			parent::__construct($id, $name, $table, $title);
 
-			$this->model = new Model\<Sample>($table, $this->params);
-		}
+//			$this->titleSelect = 'Выборка';
+//			$this->titleBrowse = 'Просмотр';
+//			$this->titleCreate = 'Создание';
+//			$this->titleUpdate = 'Редактирование';
+//			$this->titleDelete = 'Удалить?';
+//			$this->titleState = 'Изменить состояние?';
 
-	}
+//			$this->titleDoCreate = 'Создано';
+//			$this->titleDoUpdate = 'Изменено';
+//			$this->titleDoDelete = 'Удалено';
+//			$this->titleSetState = 'Состояние изменено';
+
+//			$this->errorAccess = self::TEXT_ERROR_ACCESS;
+
+//			$this->params = [];
+
+//			$this->page_entries = 10;
+
+            $this->model = new Model\<Sample>($table, $this->params);
+        }
+
+//		protected function RegAccess() {
+//			$this->AddCollection();
+//			$this->AddRight(self::ACCESS_SETTING, 'setting', 'Назначение прав');
+//			$this->AddRight(self::ACCESS_SELECT, 'select', 'Выборка');
+//			$this->AddRight(self::ACCESS_BROWSE, 'browse', 'Вывод');
+//			$this->AddRight(self::ACCESS_CREATE, 'create', 'Создание');
+//			$this->AddRight(self::ACCESS_UPDATE, 'update', 'Изменение');
+//			$this->AddRight(self::ACCESS_DELETE, 'delete', 'Удаление');
+//			$this->AddRight(self::ACCESS_STATE, 'state', 'Изменение состояния');
+//		}
+
+//		protected function RegActionSelect(): void { $this->select = new ActionRight($this->id, $this->name, 'select', "/{$this->name}/select?page=%page%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/select', {page: %page%}); return false;"); }
+//		protected function RegActionBrowse(): void { $this->browse = new ActionRight($this->id, $this->name, 'browse', "/{$this->name}/browse?id=%id%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/browse', {id: %id%}); return false;"); }
+//		protected function RegActionCreate(): void { $this->create = new ActionRight($this->id, $this->name, 'create', 'default', /* @lang JavaScript */"Base.Common.Query.Send('/{$this->name}/create'); return false;"); }
+//		protected function RegActionUpdate(): void { $this->update = new ActionRight($this->id, $this->name, 'update', "/{$this->name}/update?id=%id%", /* @lang JavaScript */"Base.Common.Query.SendData('/{$this->name}/update', {id: %id%}); return false;"); }
+//		protected function RegActionDelete(): void { $this->delete = new ActionRight($this->id, $this->name, 'delete', "/{$this->name}/delete?id=%id", /* @lang JavaScript */ "if (confirm({$this->titleDelete})) Base.Common.Query.SendData('/{$this->name}/delete', {id: %id%}); return false;"); }
+
+//		protected function RegActionDoCreate(): void { $this->do_create = new ActionRight($this->id, $this->name, 'do_create', 'default', /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this); return false;"); }
+//		protected function RegActionDoUpdate(): void { $this->do_update = new ActionRight($this->id, $this->name, 'do_update', "/{$this->name}/do_update?id=%id%", /* @lang JavaScript */ "Base.Common.Query.SubmitForm(this); return false;"); }
+//		protected function RegActionDoDelete(): void { $this->do_delete = new ActionRight($this->id, $this->name, 'do_delete', "/{$this->name}/do_delete?id=%id%", /* @lang JavaScript */ "if (confirm('{$this->titleDelete}')) Base.Common.Query.SendData('/{$this->name}/do_delete', {id: %id%}); return false;"); }
+//		protected function RegActionSetState(): void { $this->set_state = new ActionRight($this->id, $this->name, 'set_state', "/{$this->name}/set_state?id=%id%&state=%state%", /* @lang JavaScript */ "if (confirm('{$this->titleState}')) Base.Common.Query.SendData('/{$this->name}/set_state', {id: %id%, state: %state%}); return false;"); }
+
+//		protected function RegActions(): void {
+//			$this->RegActionSelect();
+//			$this->RegActionCreate();
+//			$this->RegActionUpdate();
+////			$this->RegActionDelete();
+//			$this->RegActionBrowse();
+//
+//			$this->RegActionDoCreate();
+//			$this->RegActionDoUpdate();
+//			$this->RegActionDoDelete();
+//			$this->RegActionSetState();
+//		}
+
+//		protected function SetHandlers(): void {
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->select, Closure::fromCallable([$this, 'OnSelect']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->browse, Closure::fromCallable([$this, 'OnBrowse']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->create, Closure::fromCallable([$this, 'OnCreate']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->update, Closure::fromCallable([$this, 'OnUpdate']));
+//
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->do_create, Closure::fromCallable([$this, 'DoCreate']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->do_update, Closure::fromCallable([$this, 'DoUpdate']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->do_delete, Closure::fromCallable([$this, 'DoDelete']));
+//			Controller::$view->Push([Controller::ENTRY_XHR], $this->set_state, Closure::fromCallable([$this, 'SetState']));
+//		}
+
+//		protected function FieldsSelect(): array { return []; }
+//		protected function FieldsBrowse(): array { return []; }
+//		protected function FieldsCreate(): array { return []; }
+//		protected function FieldsUpdate(): array { return []; }
+
+////		protected function PrepareOnSelect(array & $item): void {  }
+////		protected function PrepareOnBrowse(int $id, array & $item): void {  }
+////		protected function PrepareOnCreate(array & $item): void {  }
+//		protected function PrepareOnUpdate(int $id, array & $item): void {  }
+
+//		#[NoReturn] protected function OnSelect(): void {
+//			if (!$this->Allow(self::ACCESS_SELECT)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$page = GetInt('page', 1);
+//
+//			$fields				= $this->FieldsSelect();
+//			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
+//			$navigate			= $this->NavigateSelect();
+//			$manage				= $this->ManageSelect();
+//
+//			Response::PushHistory($this->select, array_merge(['page' => $page], $this->params));
+//			Response::PushSection('main', Select::ToVar($this, $fields, $items, $ext, $this->titleSelect, $navigate, $manage));
+//			Response::SendJSON();
+//		}
+
+//		#[NoReturn] protected function OnBrowse(): void {
+//			$id = GetInt('id');
+//
+//			if (!$this->Allow(self::ACCESS_BROWSE, $id)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$fields				= $this->FieldsBrowse();
+//			$navigate			= $this->NavigateBrowse();
+//
+//			$item = $this->model->GetItem($id);
+//
+//			Response::PushHistory($this->browse, array_merge(['id' => $id], $this->params));
+//			Response::PushSection('main', Browse::ToVar($this, $fields, $id, $item, "{$this->titleBrowse} #{$id}", $navigate));
+//			Response::SendJSON();
+//		}
+
+//		#[NoReturn] protected function OnCreate(): void {
+//			if (!$this->Allow(self::ACCESS_CREATE)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$fields				= $this->FieldsCreate();
+//			$navigate			= $this->NavigateCreate();
+//
+//			Response::PushHistory($this->create, $this->params);
+//			Response::PushSection('main', Create::ToVar($this, $fields, $this->titleCreate, $navigate, $this->params));
+//			Response::SendJSON();
+//		}
+
+//		#[NoReturn] protected function OnUpdate(): void {
+//			$id = GetInt('id');
+//
+//			if (!$this->Allow(self::ACCESS_UPDATE, $id)) Response::SendNoticeError('Ошибка доступа');
+//
+//			$item = $this->model->GetItem($id);
+//
+//			$this->PrepareOnUpdate($id, $item);
+//
+//			$fields				= $this->FieldsUpdate();
+//			$navigate			= $this->NavigateUpdate();
+//
+//			Response::PushHistory($this->update, array_merge(['id' => $id], $this->params));
+//			Response::PushSection('main', Update::ToVar($this, $fields, $id, $item, "{$this->titleUpdate} #{$id}", $navigate, $this->params));
+//			Response::SendJSON();
+//		}
+
+//		#[NoReturn] protected function DoCreate(): void {
+//			if (!$this->Allow(self::ACCESS_CREATE)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$data = GetParam('form', []);
+//
+//			$this->model->Create($data);
+//
+//			Response::PushNoticeOk($this->titleDoCreate);
+//			$this->OnSelect();
+//		}
+
+//		#[NoReturn] protected function DoUpdate(): void {
+//			$id = GetInt('id');
+//
+//			if (!$this->Allow(self::ACCESS_UPDATE, $id)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$data = GetParam('form', []);
+//
+//			$this->model->Update($data, $id);
+//
+//			Response::PushNoticeOk($this->titleDoUpdate);
+//			$this->OnSelect();
+//		}
+
+//		#[NoReturn] protected function DoDelete(): void {
+//			$id = GetInt('id');
+//
+//			if (!$this->Allow(self::ACCESS_DELETE, $id)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$page = GetInt('page', 1);
+//
+//			$this->model->Delete($id);
+//
+//			$fields				= $this->FieldsSelect();
+//			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
+//			$navigate			= $this->NavigateSelect();
+//			$manage				= $this->ManageSelect();
+//
+//			Response::PushNoticeOk($this->titleDoDelete);
+//			Response::PushSection('main', Select::ToVar($this, $fields, $items, $ext, $this->titleSelect, $navigate, $manage));
+//			Response::SendJSON();
+//		}
+
+//		#[NoReturn] protected function SetState(): void {
+//			$id = GetInt('id');
+//
+//			if (!$this->Allow(self::ACCESS_STATE)) Response::SendNoticeError(self::TEXT_ERROR_ACCESS);
+//
+//			$state = GetInt('state');
+//			$page = GetInt('page', 1);
+//
+//			$oldState = $this->model->GetState($id);
+//			if ($this->model->AccessState($oldState, $state)) { Response::PushNoticeError($this->errorAccess); Response::SendJSON(); }
+//
+//			$this->model->SetState($state, $id);
+//
+//			$fields				= $this->FieldsSelect();
+//			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
+//			$navigate			= $this->NavigateSelect();
+//			$manage				= $this->ManageSelect();
+//
+//			Response::PushNoticeOk($this->titleSetState);
+//			Response::PushSection('main', Select::ToVar($this, $fields, $items, $ext, $this->titleSelect, $navigate, $manage));
+//			Response::SendJSON();
+//		}
+
+//		protected function ManageSelect(): array {
+//			return [
+//				function (array $item) { return $this->browse->GetLinkHrefAllow(self::ACCESS_BROWSE, 'Просмотреть', array_merge(['id' => $item['id']], $this->params)); },
+//				function (array $item) { return $this->update->GetLinkHrefAllow(self::ACCESS_UPDATE, 'Изменить', array_merge(['id' => $item['id']], $this->params)); },
+//				function (array $item) { return $this->do_delete->GetLinkHrefAllow(self::ACCESS_DELETE, 'Удалить', array_merge(['id' => $item['id']], $this->params)); }
+//			];
+//		}
+
+//		protected function NavigateSelect(): array { return []; }
+//		protected function NavigateBrowse(): array { return [ function () { return $this->select->GetLinkHrefAllow(self::ACCESS_SELECT, "<< {$this->titleSelect}", array_merge(['page' => 1], $this->params)); } ]; }
+//		protected function NavigateCreate(): array { return [ function () { return $this->select->GetLinkHrefAllow(self::ACCESS_SELECT, "<< {$this->titleSelect}", array_merge(['page' => 1], $this->params)); } ]; }
+//		protected function NavigateUpdate(): array { return [ function () { return $this->select->GetLinkHrefAllow(self::ACCESS_SELECT, "<< {$this->titleSelect}", array_merge(['page' => 1], $this->params)); } ]; }
+
+//		public function Pages($pages): string {
+//			if (!$this->page_entries) return '';
+//
+//			return (new Pages($this->select, $pages['current'], $pages['count']))->ToString();
+//		}
+
+    }

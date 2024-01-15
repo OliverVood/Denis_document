@@ -25,13 +25,13 @@
 				<div class = "list">
 					<?php foreach ($items as $item) self::RenderItem($item); ?>
 				</div>
-				<div class = "all"><?= Actions\Changes::$list->GetLinkHref('Все изменения'); ?></div>
+				<div class = "all"><?= Actions\Pages::$changes_list->GetLinkHref('Все изменения'); ?></div>
 			</div>
 		<?php }
 
 		public static function RenderItem(array $item): void { ?>
 			<div class = "view changes item">
-				<?= Actions\Changes::$show->GetLinkHref($item['header'], ['id' => $item['id']]); ?>
+				<?= Actions\Pages::$changes_show->GetLinkHref($item['header'], ['id' => $item['id']]); ?>
 			</div>
 		<?php }
 

@@ -35,17 +35,19 @@ body {
 }
 
 menu {
+	hr { margin: 0; border-color: $color-primary-dark; }
+	.head { padding: 0.6rem; color: $color-primary-dark; }
 	li {
 		> span {
 			position: relative; display: block; padding: 0.6rem; cursor: pointer;
 			> ul { position: absolute; display: none; top: 0; left: 200px; width: 200px; background-color: $color-primary; }
 			&:hover { background-color: $color-secondary; }
 		}
-		> a {
-			display: block; padding: 0.6rem;
-			&:hover { background-color: $color-secondary; }
+		> a { display: block; padding: 0.6rem; }
+		&:hover {
+			background-color: $color-secondary;
+			> span > ul { display: block; }
 		}
-		&:hover > span > ul { display: block; }
 	}
 }
 
@@ -91,7 +93,7 @@ $debug_color_string: #0095b9;
 
 body.div.debugger { display: block; }
 .debugger {
-	position: absolute; right: 0; bottom: 0; left: 0; z-index: $z-debugger; color: $color-text-primary;
+	position: fixed; right: 0; bottom: 0; left: 0; z-index: $z-debugger; color: $color-text-primary;
 	> .manager {
 		position: absolute; bottom: 0; left: 0; width: 40px; height: 40px;
 		> .toggle {
@@ -253,3 +255,6 @@ body.div.debugger { display: block; }
 		}
 	}
 }
+
+.cn-mb-1 { margin-bottom: 1rem; }
+.cn-center { text-align: center; }

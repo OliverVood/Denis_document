@@ -4,12 +4,13 @@
 
 	require DIR_UNITS . 'general/general.consts.inc';
 
-	use Base\Units;
+	use Base\Access;
 	use Base\Action;
 	use Base\ActionOutside;
+	use Base\UnitAccess;
 	use Proj\Units\Consts;
 
-	abstract class General extends Units implements Consts\General {
+	abstract class General extends UnitAccess implements Consts\General {
 		public static Action $out_head;
 		public static Action $out_menu;
 		public static Action $out_footer;
@@ -21,7 +22,15 @@
 		public static ActionOutside $site;
 
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
+		}
+
+		protected function RegAccess(): void {
+			Access::AddCollection($this->id, $this->name, 'Основное (единица)');
+			Access::AddRight($this->id, self::ACCESS_SETTING, 'setting', 'Назначение прав');
+			Access::AddRight($this->id, self::ACCESS_DB_CHECK, 'check', 'Проверить БД');
+			Access::AddRight($this->id, self::ACCESS_DB_MAKE, 'make', 'Исправить БД');
+			Access::AddRight($this->id, self::ACCESS_DB_STRUCTURE, 'structure', 'Структура БД');
 		}
 
 		public static function RegActions() {

@@ -4,12 +4,12 @@
 
 	require DIR_UNITS . 'news/news.consts.inc';
 
-	use Base\Units;
+	use Base\UnitAccess;
 	use Proj\Units\Consts;
 
-	abstract class News extends Units implements Consts\News {
+	abstract class News extends UnitAccess implements Consts\News {
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
 		public static function RegActions() {  }

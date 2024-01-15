@@ -33,3 +33,13 @@ function setCookie(name, value, options = {}): void {
 function deleteCookie(name: string): void {
 	setCookie(name, '', {'max-age': -1});
 }
+
+function getContent(route: string = '') {
+	let url = new URL(window.location.href);
+
+	let href = url.origin;
+	let pathname = route ? url.pathname.replace(route, `${route}/xhr`) : `/xhr${url.pathname}`;
+	let params = url.search;
+
+	Base.Common.Query.Send(`${href}${pathname}${params}`, null, {request: ''});
+}

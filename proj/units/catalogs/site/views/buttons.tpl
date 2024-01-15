@@ -21,9 +21,9 @@
 					</div>
 				</div>
 				<div class = "btns">
-					<?= Actions\Catalogs::$action_estimate->GetLinkHref('Сметы »', [], ['class' => 'button']); ?>
-					<?= Actions\Catalogs::$action_certificate->GetLinkHref('Акты выполненных работ »', [], ['class' => 'button']); ?>
-					<?= Actions\Catalogs::$action_price_list->GetLinkHref('Прайс-листы »', [], ['class' => 'button']); ?>
+					<?= Actions\Pages::$estimate->GetLinkHref('Сметы »', [], ['class' => 'button']); ?>
+					<?= Actions\Pages::$certificate->GetLinkHref('Акты выполненных работ »', [], ['class' => 'button']); ?>
+					<?= Actions\Pages::$price_list->GetLinkHref('Прайс-листы »', [], ['class' => 'button']); ?>
 				</div>
 			</div>
 		<?php }

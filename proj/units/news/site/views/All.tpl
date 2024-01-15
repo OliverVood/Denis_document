@@ -34,7 +34,7 @@
 				<div class = "cover"<?= $background; ?>></div>
 				<h3 class = "header"><?= $item['header']; ?></h3>
 				<div class = "content"><?= $item['content']; ?></div>
-				<div class = "links"><?= Actions\News::$show->GetLinkHref('Читать', ['id' => $item['id']]); ?></div>
+				<div class = "links"><?= Actions\Pages::$news_show->GetLinkHref('Читать', ['id' => $item['id']]); ?></div>
 			</div>
 		<?php }
 

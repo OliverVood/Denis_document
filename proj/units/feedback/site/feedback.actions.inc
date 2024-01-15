@@ -4,16 +4,16 @@
 
 	require DIR_UNITS . 'feedback/feedback.consts.inc';
 
-	use Base\Units;
+	use Base\Unit;
 	use Base\Action;
 	use Proj\Units\Consts;
 
-	abstract class Feedback extends Units implements Consts\Feedback {
+	abstract class Feedback extends Unit implements Consts\Feedback {
 		public static Action $feedback;
 		public static Action $do_feedback;
 
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
 		public static function RegActions() {

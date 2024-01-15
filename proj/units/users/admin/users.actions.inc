@@ -4,16 +4,16 @@
 
 	require DIR_UNITS . 'users/users.consts.inc';
 
-	use Base\Units;
+	use Base\UnitAccess;
 	use Base\Action;
 	use Proj\Units\Consts;
 
-	abstract class Users extends Units implements Consts\Users {
+	abstract class Users extends UnitAccess implements Consts\Users {
 		public static Action $auth;
 		public static Action $exit;
 
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
 		public static function RegActions() {

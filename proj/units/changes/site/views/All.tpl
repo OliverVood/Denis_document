@@ -28,7 +28,7 @@
 
 		public static function RenderItem(array $item): void { ?>
 			<div class = "view changes item">
-				<?= Actions\Changes::$show->GetLinkHref($item['header'], ['id' => $item['id']]); ?>
+				<?= Actions\Pages::$changes_show->GetLinkHref($item['header'], ['id' => $item['id']]); ?>
 			</div>
 		<?php }
 

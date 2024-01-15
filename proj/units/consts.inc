@@ -10,3 +10,4 @@
 	const ID_NEWS					= 6;
 	const ID_CHANGES				= 7;
 	const ID_FEEDBACK				= 8;
+	const ID_PAGES					= 9;

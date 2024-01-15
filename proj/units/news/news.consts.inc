@@ -5,6 +5,7 @@
 	interface News {
 		const ID						= ID_NEWS;
 		const NAME						= 'news';
+		const TITLE						= 'Новости';
 
 		const TABLES = [
 			'news'						=> self::NAME

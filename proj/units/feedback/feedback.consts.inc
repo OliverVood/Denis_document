@@ -5,6 +5,7 @@
 	interface Feedback {
 		const ID						= ID_FEEDBACK;
 		const NAME						= 'feedback';
+		const TITLE						= 'Обратная связь';
 
 		const TABLES = [
 			'feedback'					=> self::NAME

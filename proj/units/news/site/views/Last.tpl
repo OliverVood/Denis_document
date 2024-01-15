@@ -26,7 +26,7 @@
 				<div class = "list grid col_3">
 					<?php foreach ($items as $item) self::RenderItem($item); ?>
 				</div>
-				<div class = "all"><?= Actions\News::$all->GetLinkHref('Все новости'); ?></div>
+				<div class = "all"><?= Actions\Pages::$news_all->GetLinkHref('Все новости'); ?></div>
 			</div>
 		<?php }
 
@@ -37,7 +37,7 @@
 				<div class = "cover"<?= $background; ?>></div>
 				<h3 class = "header"><?= $item['header']; ?></h3>
 				<div class = "content"><?= $item['content']; ?></div>
-				<div class = "links"><?= Actions\News::$show->GetLinkHref('Читать', ['id' => $item['id']]); ?></div>
+				<div class = "links"><?= Actions\Pages::$news_show->GetLinkHref('Читать', ['id' => $item['id']]); ?></div>
 			</div>
 		<?php }
 

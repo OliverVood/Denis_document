@@ -24,7 +24,7 @@
 			$uri = explode('?', $_SERVER['REQUEST_URI']);
 
 			$this->db->Insert(Consts\Statistics::TABLES['ip'], [
-				'uid' 			=> Users::GetUID(),
+				'cid' 			=> Users::GetCID(),
 				'ip'			=> $ipv6,
 				'path' 			=> $uri[0],
 				'params' 		=> $uri[1] ?? '',
@@ -33,7 +33,7 @@
 
 		public function InsertAct($uid, $object, $action, $params): void {
 			$this->db->Insert(Consts\Statistics::TABLES['act'], [
-				'uid' => $uid,
+				'cid' => $uid,
 				'object' => $object,
 				'action' => $action,
 				'params' => $params ? json_encode($params, JSON_UNESCAPED_UNICODE) : ''

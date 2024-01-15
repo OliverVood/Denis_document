@@ -4,16 +4,16 @@
 
 	require DIR_UNITS . 'statistics/statistics.consts.inc';
 
-	use Base\Units;
+	use Base\Unit;
 	use Base\Action;
 	use Proj\Units\Consts;
 
-	abstract class Statistics extends Units implements Consts\Statistics {
+	abstract class Statistics extends Unit implements Consts\Statistics {
 		public static Action $collect;
 		public static Action $act;
 
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
 		public static function RegActions() {

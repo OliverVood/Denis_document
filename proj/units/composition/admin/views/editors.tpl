@@ -7,13 +7,13 @@
 
 	abstract class Editors {
 
-		public static function ToVar(array $editors, array $units): string {
+		public static function ToVar(array $units, array $editors): string {
 			Buffering::Start();
-			self::Render($editors, $units);
+			self::Render($units, $editors);
 			return Buffering::Read();
 		}
 
-		public static function Render(array $editors, array $units): void { ?>
+		public static function Render(array $units, array $editors): void { ?>
 			<h1>Добавление редактора</h1>
 			<form action = "<?= Actions\Composition::$create_editor->GetPath(); ?>">
 				<h3>Основное</h3>
@@ -35,19 +35,33 @@
 				</table>
 				<input type = "submit" value = "Создать" onclick = "Base.Common.Query.SubmitForm(this); return false;">
 			</form>
-			<h3>Перечень инициализированных редакторов</h3>
+			<h3>Перечень инициализированных композиций</h3>
 			<table class = "select">
 				<thead>
-					<tr>
-						<th>Название</th>
-					</tr>
+				<tr>
+					<th>#</th>
+					<th>Название</th>
+					<th>Заголовок</th>
+					<th>Тип</th>
+				</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($editors as ['name' => $name]) { ?>
-						<tr>
-							<td><?= $name; ?></td>
-						</tr>
-					<?php } ?>
+				<?php foreach ($units as ['id' => $id, 'name' => $name, 'title' => $title]) { ?>
+					<tr>
+						<td><?= $id; ?></td>
+						<td><?= $name; ?></td>
+						<td><?= $title; ?></td>
+						<td><?= 'Единица'; ?></td>
+					</tr>
+				<?php } ?>
+				<?php foreach ($editors as ['id' => $id, 'name' => $name, 'title' => $title]) { ?>
+					<tr>
+						<td><?= $id; ?></td>
+						<td><?= $name; ?></td>
+						<td><?= $title; ?></td>
+						<td><?= 'Редактор'; ?></td>
+					</tr>
+				<?php } ?>
 				</tbody>
 			</table>
 		<?php }

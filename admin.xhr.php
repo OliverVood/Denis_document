@@ -1,10 +1,15 @@
 <?php
 
-	const POINT_ENTRY = 'xhr';
-	const POINT_TYPE = 'admin';
+	const ROUTE						= 'admin';
+	const ENTRY						= 'xhr';
 
-	require __DIR__ . '/consts.inc';
+	const DIR_ROOT					= __DIR__ . '/';
 
-	if (!POINT_ENTRY_ADMIN) die('Доступ запрещён');
+	require DIR_ROOT . 'consts/consts.inc';
 
-	require DIR_ROOT . 'proj/admin.xhr.inc';
+	require DIR_ROOT . 'setting.inc';
+	require DIR_PROJ . 'routes/admin/settings.inc';
+
+	if (!ENTRY_ADMIN) die('Доступ запрещён');
+
+	require DIR_PROJ . 'routes/admin/entries/xhr/entry.inc';

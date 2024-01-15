@@ -33,6 +33,7 @@ use Proj\DBObject;use Proj\Templates\Admin\Versions as AdminVersions;
 					<meta charset = "UTF-8">
 					<meta name = "viewport" content = "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 					<meta http-equiv = "X-UA-Compatible" content = "ie=edge">
+					<link type = "image/x-icon" href = "<?= DIR_REL_RESOURCE_IMAGE; ?>favicon.ico" rel = "icon">
 					<?php Template::$instance->BrowseHead(); ?>
 				</head>
 				<body>
@@ -53,6 +54,7 @@ use Proj\DBObject;use Proj\Templates\Admin\Versions as AdminVersions;
 				$(() => {
 					Base.Common.GlobalParams.Set('request', '<?= \REQUEST; ?>');
 					Base.Common.GlobalParams.Set('xhr', '<?= \XHR; ?>');
+					getContent('admin');
 					Base.Common.History.Initialization();
 					Admin.Common.Layout.Initialization();
 					Base.Common.Debugger.Initialization();

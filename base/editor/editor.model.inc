@@ -57,19 +57,28 @@
 			return (int)$this->table->SelectOneField('state', "`id` = {$id}");
 		}
 
+		protected function PrepareCreate(array & $data): void {  }
+		protected function PrepareUpdate(array & $data, int $id): void {  }
+		protected function PrepareDelete(int $id): void {  }
+		protected function PrepareSetState(int & $state, int $id): void {  }
+
 		public function Create(array $data): void {
+			$this->PrepareCreate($data);
 			$this->table->Insert($data);
 		}
 
 		public function Update(array $data, int $id): void {
+			$this->PrepareUpdate($data, $id);
 			$this->table->Update($data, "`id` = {$id}");
 		}
 
 		public function Delete(int $id): void {
+			$this->PrepareDelete($id);
 			$this->table->Update(['state' => 100], "`id` = {$id}");
 		}
 
 		public function SetState(int $state, int $id): void {
+			$this->PrepareSetState($state, $id);
 			$this->table->Update(['state' => $state], "`id` = {$id}");
 		}
 

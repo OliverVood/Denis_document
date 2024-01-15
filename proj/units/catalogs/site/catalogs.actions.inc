@@ -4,26 +4,16 @@
 
 	require DIR_UNITS . 'catalogs/catalogs.consts.inc';
 
-	use Base\Units;
-	use Base\Action;
+	use Base\Unit;
 	use Proj\Units\Consts;
 
-	abstract class Catalogs extends Units implements Consts\Catalogs {
-		public static Action $out_buttons;
-		public static Action $action_estimate;
-		public static Action $action_certificate;
-		public static Action $action_price_list;
+	abstract class Catalogs extends Unit implements Consts\Catalogs {
 
 		protected function __construct(string $file) {
-			parent::__construct(self::ID, self::NAME, $file);
+			parent::__construct(self::ID, self::NAME, self::TITLE, $file);
 		}
 
-		public static function RegActions() {
-			self::$out_buttons			= new Action('null', 'null');
-			self::$action_estimate		= new Action('estimate', 'null', '/estimate');
-			self::$action_certificate	= new Action('certificate', 'null', '/certificate');
-			self::$action_price_list	= new Action('price_list', 'null', '/price_list');
-		}
+		public static function RegActions() { }
 
 	}
 

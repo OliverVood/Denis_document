@@ -1,10 +1,15 @@
 <?php
 
-	const POINT_ENTRY = 'xhr';
-	const POINT_TYPE = 'site';
+	const ROUTE						= 'site';
+	const ENTRY						= 'xhr';
 
-	require __DIR__ . '/consts.inc';
+	const DIR_ROOT					= __DIR__ . '/';
 
-	if (!POINT_ENTRY_SITE) die('Доступ запрещён');
+	require DIR_ROOT . 'consts/consts.inc';
 
-	require DIR_ROOT . 'proj/site.xhr.inc';
+	require DIR_ROOT . 'setting.inc';
+	require DIR_PROJ . 'routes/site/settings.inc';
+
+	if (!ENTRY_SITE) die('Доступ запрещён');
+
+	require DIR_PROJ . 'routes/site/entries/xhr/entry.inc';

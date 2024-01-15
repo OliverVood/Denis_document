@@ -18,7 +18,7 @@
 			$this->db = DBQuery::instance();
 		}
 
-		public function GetLastNews(?int $count): array {
+		public function GetLastNews(?int $count = null): array {
 			$state = Consts\News::STATES['active'];
 
 			$result = $this->db->Select(Consts\News::TABLES['news'], ['id', 'datecr', 'header', 'content'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $count, ["CONCAT(`hash`, '.', `id`, '.', `ext`) AS `cover`"]);

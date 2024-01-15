@@ -18,7 +18,7 @@
 			$this->db = DBQuery::instance();
 		}
 
-		public function GetLatestChanges(?int $count): array {
+		public function GetLatestChanges(?int $count = null): array {
 			$state = Consts\Changes::STATES['active'];
 
 			$result = $this->db->Select(Consts\Changes::TABLES['changes'], ['id', 'header'], "(`state` = {$state}) AND (`datepb` < NOW())", '`datepb` DESC, `id`', $count);
