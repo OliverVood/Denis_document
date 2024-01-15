@@ -41,4 +41,4 @@
 
 	}
 
-	VersionsControl::init(DIR_RESOURCE . 'versions.db');
+	VersionsControl::init(DIR_FILES . 'versions.db');
