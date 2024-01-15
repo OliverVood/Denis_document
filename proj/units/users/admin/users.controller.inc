@@ -8,7 +8,7 @@
 	require DIR_UNITS . 'users/admin/editors/groups/groups.editor.inc';
 	require DIR_UNITS . 'users/admin/editors/users/users.editor.inc';
 	require DIR_UNITS . 'users/admin/editors/accessGroups/accessGroups.editor.inc';
-	require DIR_UNITS . 'users/admin/editors/AccessUsers/AccessUsers.editor.inc';
+	require DIR_UNITS . 'users/admin/editors/accessUsers/accessUsers.editor.inc';
 
 	use JetBrains\PhpStorm\NoReturn;
 

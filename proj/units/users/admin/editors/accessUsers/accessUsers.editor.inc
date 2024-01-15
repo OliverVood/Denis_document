@@ -2,8 +2,8 @@
 
 	namespace Proj\Admin\Editor;
 
-	require DIR_UNITS . 'users/admin/editors/AccessUsers/AccessUsers.editor.model.inc';
-	require DIR_UNITS . 'users/admin/editors/AccessUsers/views/update.tpl';
+	require DIR_UNITS . 'users/admin/editors/accessUsers/accessUsers.editor.model.inc';
+	require DIR_UNITS . 'users/admin/editors/accessUsers/views/update.tpl';
 
 	use JetBrains\PhpStorm\NoReturn;
 
