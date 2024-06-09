@@ -6,15 +6,18 @@ function getCookie(name: string): string | null {
 	return matches ? decodeURIComponent(matches[1]) : null;
 }
 
-function setCookie(name, value, options = {}): void {
+type optionsIn = { expires?: Date, 'max-age'?: number };
+type options = { path: string, expires?: Date | string, 'max-age'?: number };
 
-	options = {
+function setCookie(name: string, value: string, optionsIn: optionsIn = {}): void {
+
+	let options: options = {
 		path: '/',
-		...options
+		...optionsIn
 	};
 
 	if (options.expires && options.expires instanceof Date) {
-		options.expires = options.expires.toUTCString();
+		options.expires = optionsIn.expires.toUTCString();
 	}
 
 	let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);

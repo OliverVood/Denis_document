@@ -14,7 +14,7 @@ namespace Site {
 					/* Check structure */
 					request.onupgradeneeded = event => {
 						DB.EXECUTE = 'version';
-						if (execute.includes('version')) resolve(event.target.result);
+						if (execute.includes('version')) resolve((event.target as IDBOpenDBRequest).result);
 					}
 
 					request.onsuccess = event => {
@@ -24,7 +24,7 @@ namespace Site {
 						};
 
 						DB.EXECUTE = 'transaction';
-						if (execute.includes('transaction')) resolve(event.target.result);
+						if (execute.includes('transaction')) resolve((event.target as IDBOpenDBRequest).result);
 					}
 
 					request.onerror = event => {
@@ -46,7 +46,7 @@ namespace Site {
 					let request = store.get(id);
 
 					request.onsuccess = event => {
-						resolve(event.target.result);
+						resolve((event.target as IDBRequest).result);
 					}
 
 					request.onerror = event => {
@@ -63,7 +63,7 @@ namespace Site {
 				let request = store.openCursor();
 
 				request.onsuccess = event => {
-					let cursor = event.target.result;
+					let cursor = (event.target as IDBRequest).result;
 
 					if (!cursor) { if (funcEnd) funcEnd(); return; }
 
@@ -86,7 +86,7 @@ namespace Site {
 				let request = index.openCursor(range);
 
 				request.onsuccess = event => {
-					let cursor = event.target.result;
+					let cursor = (event.target as IDBRequest).result;
 
 					if (!cursor) { if (funcEnd) funcEnd(); return; }
 

@@ -35,7 +35,7 @@
 					<?php } ?>
 					</tbody>
 				</table>
-				<input type = "submit" value = "Изменить" onclick = "<?= $editor->do_update->GetClick(); ?>">
+				<input type = "submit" value = "<?= $editor->btnUpdate; ?>" onclick = "<?= $editor->do_update->GetClick(); ?>">
 			</form>
 		<?php }
 

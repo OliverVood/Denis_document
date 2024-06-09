@@ -22,22 +22,26 @@
 				->order('id', 'DESC');
 		}
 
-		public function Create(array $data): void {
+		public function Create(array $data, array $params =[]): bool {
 			$id = $this->table->Insert($data);
 
 			if ($_FILES['form']['tmp_name']['cover']) {
 				[$hash, $ext] = $this->SaveCover($id);
 				$this->table->Update(['hash' => $hash, 'ext' => $ext], "`id` = {$id}");
 			}
+
+			return true;
 		}
 
-		public function Update(array $data, int $id): void {
+		public function Update(array $data, int $id): bool {
 			if ($_FILES['form']['tmp_name']['cover']) {
 				$this->DeleteCover($id);
 				[$data['hash'], $data['ext']] = $this->SaveCover($id);
 			}
 
 			$this->table->Update($data, "`id` = {$id}");
+
+			return true;
 		}
 
 		private function SaveCover(int $id): array {

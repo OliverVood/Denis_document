@@ -38,7 +38,13 @@
 		protected string $titleDoDelete = 'Удалено';
 		protected string $titleSetState = 'Состояние изменено';
 
+		public string $btnUpdate = 'Изменить';
+
 		protected string $errorAccess = self::TEXT_ERROR_ACCESS;
+		protected string $errorCreate = 'Ошибка сохранения';
+		protected string $errorUpdate = 'Ошибка обновления';
+		protected string $errorDelete = 'Ошибка удаления';
+		protected string $errorSetState = 'Ошибка установки состояния';
 
 		protected array $params = [];
 
@@ -135,7 +141,7 @@
 
 			$data = GetParam('form', []);
 
-			$this->model->Create($data);
+			if (!$this->model->Create($data)) Response::SendNoticeError($this->errorCreate);
 
 			Response::PushNoticeOk($this->titleDoCreate);
 			$this->OnSelect();
@@ -148,7 +154,7 @@
 
 			$data = GetParam('form', []);
 
-			$this->model->Update($data, $id);
+			if (!$this->model->Update($data, $id)) Response::SendNoticeError($this->errorUpdate);
 
 			Response::PushNoticeOk($this->titleDoUpdate);
 			$this->OnSelect();
@@ -161,7 +167,7 @@
 
 			$page = GetInt('page', 1);
 
-			$this->model->Delete($id);
+			if (!$this->model->Delete($id)) Response::SendNoticeError($this->errorDelete);
 
 			$fields				= $this->FieldsSelect();
 			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);
@@ -184,7 +190,7 @@
 			$oldState = $this->model->GetState($id);
 			if ($this->model->AccessState($oldState, $state)) { Response::PushNoticeError($this->errorAccess); Response::SendJSON(); }
 
-			$this->model->SetState($state, $id);
+			if (!$this->model->SetState($state, $id)) Response::SendNoticeError($this->errorSetState);
 
 			$fields				= $this->FieldsSelect();
 			[$items, $ext]		= $this->model->SelectData($page, $this->page_entries);

@@ -7,8 +7,8 @@
 
 		public function __construct() {  }
 
-		public function Push(string $content): void {
-			$this->content[] = $content;
+		public function Push(string ...$contents): void {
+			foreach ($contents as $content) $this->content[] = $content;
 		}
 
 		public function Browse(): void {

@@ -21,7 +21,7 @@
 		}
 
 		public function AccessState(int $from, int $to): bool {
-			return (!isset($this->states[$from]) || !in_array($to, $this->states[$from]));
+			return (isset($this->states[$from]) && in_array($to, $this->states[$from]));
 		}
 
 		public function SelectData(int $page_current = 1, int $page_entries = 0): array {
@@ -57,29 +57,37 @@
 			return (int)$this->table->SelectOneField('state', "`id` = {$id}");
 		}
 
-		protected function PrepareCreate(array & $data): void {  }
+		protected function PrepareCreate(array & $data, array & $params = []): void {  }
 		protected function PrepareUpdate(array & $data, int $id): void {  }
 		protected function PrepareDelete(int $id): void {  }
 		protected function PrepareSetState(int & $state, int $id): void {  }
 
-		public function Create(array $data): void {
-			$this->PrepareCreate($data);
+		public function Create(array $data, array $params = []): bool {
+			$this->PrepareCreate($data,$params);
 			$this->table->Insert($data);
+
+			return true;
 		}
 
-		public function Update(array $data, int $id): void {
+		public function Update(array $data, int $id): bool {
 			$this->PrepareUpdate($data, $id);
 			$this->table->Update($data, "`id` = {$id}");
+
+			return true;
 		}
 
-		public function Delete(int $id): void {
+		public function Delete(int $id): bool {
 			$this->PrepareDelete($id);
 			$this->table->Update(['state' => 100], "`id` = {$id}");
+
+			return true;
 		}
 
-		public function SetState(int $state, int $id): void {
+		public function SetState(int $state, int $id): bool {
 			$this->PrepareSetState($state, $id);
 			$this->table->Update(['state' => $state], "`id` = {$id}");
+
+			return true;
 		}
 
 	}

@@ -6,6 +6,8 @@
 		private array $fields			= [];
 		private array $calc				= [];
 		private string $table			= '';
+		private string $as				= '';
+		private string $join			= '';
 		private array $where			= [];
 		private array $group			= [];
 		private array $order			= [];
@@ -23,8 +25,15 @@
 			return $this;
 		}
 
-		public function table(string $table): self {
+		public function table(string $table, string $as = ''): self {
 			$this->table = $table;
+			if ($as) $this->as = " `{$as}`";
+			return $this;
+		}
+
+		public function join(string $join, string $table, string $as = '', string $on = ''): self {
+			$as = " `{$as}`";
+			$this->join = " {$join} `{$table}` `{$as}` ON ({$on})";
 			return $this;
 		}
 
@@ -33,8 +42,8 @@
 			return $this;
 		}
 
-		public function order(string $field, string $direction = 'ASC'): self {
-			$this->order[] = [$field, $direction];
+		public function order(string $field, string $direction = 'ASC', $escape = true): self {
+			$this->order[] = [$field, $direction, $escape];
 			return $this;
 		}
 
@@ -62,13 +71,13 @@
 
 			$order = '';
 			if ($this->order) {
-				$order = []; foreach ($this->order as [$field, $direction]) $order[] = "`{$field}` {$direction}";
+				$order = []; foreach ($this->order as [$field, $direction, $escape]) $order[] = $escape ? "`{$field}` {$direction}" : "{$field} {$direction}";
 				$order = ' ORDER BY ' . implode(', ', $order);
 			}
 
 			$group = $this->group ? ' GROUP BY `' . implode('`, `', $this->group) . '`' : '';
 
-			return "SELECT {$fields} FROM `{$this->table}`{$where}{$order}{$group}{$limit}";
+			return "SELECT {$fields} FROM `{$this->table}`{$this->as}{$this->join}{$where}{$order}{$group}{$limit}";
 		}
 
 	}

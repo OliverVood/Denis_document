@@ -22,7 +22,7 @@
 				->order('id', 'DESC');
 		}
 
-		protected function PrepareCreate(array & $data): void {
+		protected function PrepareCreate(array & $data, array & $params = []): void {
 			$data['password'] = \Proj\Admin\Model\Users::instance()->PasswordHash($data['password']);
 		}
 
